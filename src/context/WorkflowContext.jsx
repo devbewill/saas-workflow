@@ -24,7 +24,7 @@ export const THEMES = {
     id: 'antigravity',
     name: 'Antigravity',
     icon: ShieldCheck,
-    font: 'font-["IBM_Plex_Sans"]',
+    font: 'font-["IBM_Plex_Sans",sans-serif]',
     bg: 'bg-[#FAFBFC]',
     card: 'bg-white/80 backdrop-blur-sm border border-slate-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.04)]',
     cardHover: 'hover:bg-white hover:border-slate-300/50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-200',

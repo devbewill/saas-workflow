@@ -38,11 +38,11 @@ export function Sidebar() {
                 theme.radius,
                 isActive
                   ? cn(
-                      currentTheme === 'antigravity' ? 'bg-gradient-to-r from-indigo-50 to-indigo-100/50 text-indigo-700 border-l-2 border-indigo-500 shadow-sm' :
+                      currentTheme === 'antigravity' ? 'bg-gradient-to-r from-indigo-50/80 to-indigo-100/30 text-indigo-700 border-l-[3px] border-indigo-500/80 shadow-[0_1px_2px_rgba(99,102,241,0.05)]' :
                       currentTheme === 'quantum' ? 'bg-white/10 text-white border border-white/10' :
                       'bg-slate-100 text-slate-900'
                     )
-                  : cn("text-slate-500 hover:text-slate-700 hover:bg-slate-50/50", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
+                  : cn("text-slate-500 hover:text-slate-700 hover:bg-slate-50/80 hover:pl-5", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
               )}
             >
               <IconComponent size={18} className={cn("transition-transform group-hover:scale-110")} />
