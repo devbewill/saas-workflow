@@ -66,7 +66,7 @@ export function TimelinePanel({ isOpen, onClose }) {
                       <div key={stepGroup.category} className="space-y-3">
                          <div className={cn(
                            "flex items-center justify-between font-semibold text-xs uppercase tracking-wider",
-                           isFuture ? "text-slate-300" : hasCurrent ? "text-violet-600" : "text-slate-400"
+                           isFuture ? "text-slate-300" : hasCurrent ? "text-blue-600" : "text-slate-400"
                          )}>
                             <span className="flex items-center gap-2">
                                {stepGroup.category}
@@ -87,9 +87,9 @@ export function TimelinePanel({ isOpen, onClose }) {
                                         setStatus(step.fullName);
                                         onClose();
                                       }}
-                                      className={cn(
-                                        "w-full flex items-start gap-3 border-b border-slate-100 transition-all text-left group ",
-                                        isCurrent ? "bg-violet-50 border-violet-100 shadow-sm" : "hover:bg-slate-50",
+                                        className={cn(
+                                        "w-full flex items-start gap-4 py-3 border-b border-slate-50 transition-all text-left group px-2 rounded-lg my-1",
+                                        isCurrent ? "bg-blue-50/50 border-blue-100/50" : "hover:bg-slate-50 border-transparent",
                                         isFutureStep && "opacity-40 grayscale-[0.5]"
                                       )}
                                     >
@@ -99,16 +99,16 @@ export function TimelinePanel({ isOpen, onClose }) {
                                                 <Check size={12} strokeWidth={3} />
                                              </div>
                                           ) : isCurrent ? (
-                                             <div className="w-5 h-5 rounded-full bg-violet-600 border-2 border-white shadow-lg shadow-violet-200 ring-2 ring-violet-500 animate-pulse"></div>
+                                             <div className="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow-md shadow-blue-200 ring-2 ring-blue-500 animate-pulse"></div>
                                           ) : (
-                                             <div className="w-5 h-5 rounded-full border-2 border-slate-200 bg-white group-hover:border-slate-300"></div>
+                                             <div className="w-5 h-5 rounded-full border-2 border-slate-300 bg-white group-hover:border-slate-400"></div>
                                           )}
                                        </div>
                                         <div className="flex-1 min-w-0">
                                            <div className={cn(
-                                              "text-sm font-medium transition-colors leading-tight",
-                                              isCurrent ? "text-violet-900 font-semibold" :
-                                              isCompleted ? "text-slate-700" : "text-slate-400 group-hover:text-slate-600"
+                                              "text-sm transition-colors leading-tight",
+                                              isCurrent ? "text-blue-900 font-bold" :
+                                              isCompleted ? "text-slate-700 font-medium" : "text-slate-500 group-hover:text-slate-700"
                                            )}>
                                               {step.subState || step.fullName}
                                            </div>
