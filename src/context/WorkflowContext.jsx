@@ -22,20 +22,20 @@ export const FONTS = {
 export const THEMES = {
   antigravity: {
     id: 'antigravity',
-    name: 'Antigravity',
+    name: 'Antigravity (Nexus)',
     icon: ShieldCheck,
-    font: 'font-["IBM_Plex_Sans",sans-serif]',
-    bg: 'bg-slate-50', // Was bg-[#FAFBFC] - going slightly darker for contrast with white cards
-    card: 'bg-white border border-slate-200 shadow-sm', // Removed transparency/blur to make it solid/clean professional
-    cardHover: 'hover:border-slate-300 hover:shadow-md transition-all duration-200',
-    sidebar: 'bg-white border-r border-slate-200', // Solid white, solid border
-    topbar: 'bg-white/90 backdrop-blur-sm border-b border-slate-200',
-    text: 'text-slate-900', // Was text-slate-700 - going darker for professional readability
-    textMuted: 'text-slate-500', // Was text-slate-400
-    primary: 'bg-slate-800 hover:bg-slate-900', // Darker primary actions
-    accentColor: 'indigo',
-    radius: 'rounded-lg', // Slightly tighter radius for "professional" look (vs xl)
-    badge: 'bg-slate-100 text-slate-700 border border-slate-200 font-medium'
+    font: 'font-["Inter",sans-serif]', // Back to Inter - The Enterprise Standard
+    bg: 'bg-slate-50/90', // Cool Gray background for separation
+    card: 'bg-white border border-slate-200 shadow-[0_1px_2px_rgba(0,0,0,0.05)]', // Precise, subtle shadow
+    cardHover: 'hover:border-blue-200 hover:shadow-md transition-all duration-200',
+    sidebar: 'bg-white border-r border-slate-200', // Solid light sidebar
+    topbar: 'bg-white/80 backdrop-blur-md border-b border-slate-200',
+    text: 'text-slate-900', // High contrast
+    textMuted: 'text-slate-500', // Medium contrast metadata
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm', // Sapphire Blue - Trust
+    accentColor: 'blue',
+    radius: 'rounded-lg', // 8px - Engineered look
+    badge: 'bg-slate-100 text-slate-700 border border-slate-200 font-medium px-2 py-0.5' // Clean technical badges
   },
   quantum: {
     id: 'quantum',
@@ -110,7 +110,7 @@ export function WorkflowProvider({ children }) {
   const steps = workflowData.workflow.steps;
   const [currentStatusName, setCurrentStatusName] = useState("Aperta – verifica preliminare");
   const [currentTheme, setCurrentTheme] = useState('antigravity');
-  const [currentFont, setCurrentFont] = useState('ibmPlex');
+  const [currentFont, setCurrentFont] = useState('inter');
 
   const theme = { ...THEMES[currentTheme], font: FONTS[currentFont].class };
 

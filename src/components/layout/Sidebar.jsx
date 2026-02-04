@@ -10,17 +10,14 @@ export function Sidebar() {
   return (
     <div className={cn("w-64 h-screen flex flex-col fixed left-0 top-0 z-20 transition-all duration-300", theme.sidebar)}>
       {/* Logo Area */}
-      <div className="p-8">
+      <div className="px-6 py-6 border-b border-slate-100 mb-2">
         <div className="flex items-center gap-3">
-           <div className="grid grid-cols-2 gap-1 w-8">
-              <div className="w-3.5 h-3.5 bg-red-500 rounded-sm shadow-sm transition-transform hover:scale-110"></div>
-              <div className="w-3.5 h-3.5 bg-amber-400 rounded-sm shadow-sm transition-transform hover:scale-110"></div>
-              <div className="w-3.5 h-3.5 bg-blue-500 rounded-sm shadow-sm transition-transform hover:scale-110"></div>
-              <div className="w-3.5 h-3.5 border border-slate-100 rounded-sm"></div>
+           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 text-white shadow-sm">
+             <div className="w-4 h-4 border-2 border-white rounded-sm"></div>
            </div>
-           <div className="flex flex-col leading-tight">
-              <span className={cn("text-xl font-semibold tracking-tight", theme.text)}>HD</span>
-              <span className={cn("text-[10px] font-medium uppercase tracking-[0.15em]", theme.textMuted)}>Vision 2026</span>
+           <div className="flex flex-col leading-none">
+              <span className={cn("text-lg font-bold tracking-tight text-slate-900")}>Nexus</span>
+              <span className={cn("text-[10px] font-semibold text-slate-500 uppercase tracking-widest mt-0.5")}>Enterprise</span>
            </div>
         </div>
       </div>
@@ -34,18 +31,17 @@ export function Sidebar() {
               key={item.path}
               to={item.path}
               className={({ isActive }) => cn(
-                "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all group",
-                theme.radius,
+                "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-all group rounded-md mx-2",
                 isActive
                   ? cn(
-                      currentTheme === 'antigravity' ? 'bg-gradient-to-r from-indigo-50 to-indigo-100/40 text-indigo-900 border-l-[3px] border-indigo-500 shadow-sm' :
+                      currentTheme === 'antigravity' ? 'bg-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-200' :
                       currentTheme === 'quantum' ? 'bg-white/10 text-white border border-white/10' :
                       'bg-slate-100 text-slate-900'
                     )
-                  : cn("text-slate-500 hover:text-slate-900 hover:bg-slate-50 hover:pl-4", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
+                  : cn("text-slate-600 hover:text-slate-900 hover:bg-slate-100", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
               )}
             >
-              <IconComponent size={18} className={cn("transition-transform group-hover:scale-110")} />
+              <IconComponent size={16} className={cn("transition-transform group-hover:scale-105 opacity-80 group-hover:opacity-100")} />
               <span className="tracking-tight">{item.label}</span>
             </NavLink>
           );

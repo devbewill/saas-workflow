@@ -11,22 +11,15 @@ export function Topbar() {
   const { userRole, theme, currentTheme } = useWorkflow();
 
   return (
-    <header className={cn("h-16 flex items-center justify-between px-8 sticky top-0 z-30 transition-all duration-300", theme.topbar)}>
-      {/* Search */}
-      <div className="flex-1 max-w-md">
-         <div className="relative group">
-            <Search className={cn("absolute left-4 top-1/2 -translate-y-1/2 transition-colors", theme.textMuted)} size={16} />
-            <input
-               type="text"
-               placeholder="Cerca pratica..."
-               className={cn(
-                 "w-full pl-11 pr-4 py-2 text-sm outline-none transition-all placeholder:text-slate-400",
-                 currentTheme === 'antigravity' ? 'bg-transparent' : 'bg-slate-50 border border-transparent focus:bg-white focus:border-slate-200 rounded-full'
-               )}
-            />
-         </div>
+    <div className={cn("fixed top-0 right-0 left-64 h-16 z-20 flex items-center justify-between px-6 transition-all duration-300", theme.topbar)}>
+      {/* Left: Breadcrumbs / Page Title */}
+      <div className="flex items-center gap-3">
+         <span className="text-slate-400 font-medium text-sm">Portal</span>
+         <span className="text-slate-300 text-sm">/</span>
+         <span className={cn("text-sm font-semibold", theme.text)}>Dashboard</span>
       </div>
 
+      {/* Right: Actions */}
       <div className="flex items-center gap-4">
          <button className={cn("p-2 rounded-full transition-all relative", currentTheme === 'quantum' ? 'text-white hover:bg-white/10' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50')}>
             <Bell size={18} />
@@ -85,6 +78,6 @@ export function Topbar() {
             </AnimatePresence>
          </div>
       </div>
-    </header>
+    </div>
   );
 }

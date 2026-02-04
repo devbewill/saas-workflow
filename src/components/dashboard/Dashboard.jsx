@@ -69,49 +69,47 @@ export default function Dashboard() {
       </div>
 
       <div className="space-y-6 max-w-[1400px] mx-auto">
-        {/* Header */}
-        <div className="flex flex-col gap-1">
-          <h1 className={cn("text-4xl font-semibold tracking-tight", theme.text)}>Dashboard</h1>
-          <p className={cn("text-sm font-normal opacity-60", theme.text)}>Bentornato, {USER.name}. Hai 3 notifiche da gestire.</p>
-        </div>
+      <div className="flex flex-col gap-1.5 mb-8 border-b border-slate-200 pb-6">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+        <p className="text-sm text-slate-500">Bentornato, {USER.name}. Hai 3 notifiche da gestire.</p>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Stats Grid - Nexus Enterprise Style */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {STATS.map((stat, i) => (
-            <div key={i} className={cn("p-6 flex flex-col justify-between transition-all duration-300 group hover:-translate-y-1", theme.card, theme.radius, theme.cardHover)}>
-               <div className="flex justify-between items-start mb-4">
-                  <div className={cn("p-2 rounded-lg transition-colors", currentTheme === 'antigravity' ? 'bg-slate-50 group-hover:bg-indigo-50 text-slate-500 group-hover:text-indigo-600' : 'bg-slate-100/50')}>
-                    <stat.icon size={18} />
-                  </div>
-                  <span className={cn("text-[10px] font-bold px-2 py-1 rounded", stat.trend === 'up' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600')}>
+            <div key={i} className="bg-white p-5 rounded-lg border border-slate-200 shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:border-blue-300 hover:shadow-md transition-all">
+               <div className="flex justify-between items-start mb-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{stat.label}</span>
+                  <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1",
+                    stat.trend === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50')}>
                     {stat.change}
                   </span>
                </div>
-               <div>
-                 <h3 className={cn("text-2xl font-bold tracking-tight mb-1", theme.text)}>{stat.value}</h3>
-                 <p className={cn("text-xs font-medium uppercase tracking-wider opacity-50", theme.text)}>{stat.label}</p>
+               <div className="flex items-end gap-2">
+                 <h3 className="text-2xl font-bold text-slate-900 leading-none">{stat.value}</h3>
                </div>
             </div>
           ))}
         </div>
 
-        {/* Top Section: Notifications & Actions */}
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Notifications */}
           <div className="lg:col-span-2">
-            <section className={cn("p-6 h-full flex flex-col transition-all duration-500", theme.card, theme.radius, theme.cardHover)}>
-              <div className="flex items-center justify-between mb-8">
-                <h3 className={cn("text-[11px] font-medium uppercase tracking-wide", currentTheme === 'antigravity' ? 'text-slate-400' : theme.text)}>
-                  <span className="flex items-center gap-2">
-                    <Bell size={14} className={theme.accentColor === 'indigo' ? 'text-indigo-600' : 'text-violet-500'} /> Ultime Notifiche
-                  </span>
+            <section className="bg-white rounded-lg border border-slate-200 shadow-sm h-full flex flex-col">
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                  <Bell size={14} className="text-blue-600" /> Ultime Notifiche
                 </h3>
-                <span className={cn("px-2.5 py-1 text-[10px] font-medium transition-all", theme.badge)}>3 NUOVE</span>
+                <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-50 text-blue-700 rounded-full border border-blue-100">3 NUOVE</span>
               </div>
-              <div className={cn("divide-y flex-1", currentTheme === 'antigravity' ? 'divide-slate-100' : 'divide-slate-100/10')}>
-                 <div className="py-4 first:pt-0">
-                    <p className={cn("text-base font-semibold", theme.text)}>Verifica la pratica Condominio - Giambellino 12</p>
-                    <p className={cn("text-sm mt-1 font-normal opacity-50 leading-relaxed", theme.text)}>La pratica è in attesa dei dati necessari per procedere.</p>
+              <div className="divide-y divide-slate-100 flex-1">
+                 <div className="p-5 hover:bg-slate-50/50 transition-colors">
+                    <div className="flex justify-between items-start">
+                      <p className="text-sm font-semibold text-slate-900">Verifica la pratica Condominio - Giambellino 12</p>
+                      <span className="text-[10px] text-slate-400">10:30</span>
+                    </div>
+                    <p className="text-sm mt-1 text-slate-500 leading-relaxed">La pratica è in attesa dei dati necessari per procedere.</p>
                  </div>
                  <div className="py-4">
                     <p className={cn("text-base font-semibold", theme.text)}>Aggiornamento Status - Piazza Napoli 2</p>
@@ -146,96 +144,74 @@ export default function Dashboard() {
               </h3>
               <div className={cn("relative pl-6 border-l space-y-8 flex-1", currentTheme === 'antigravity' ? 'border-slate-100' : 'border-slate-200/20')}>
                 {RECENT_ACTIONS.map(action => (
-                  <div key={action.id} className="relative">
-                    <div className={cn("absolute -left-[29px] top-1 w-1.5 h-1.5 rounded-full ring-4 transition-all shadow-sm",
-                      currentTheme === 'quantum' ? 'bg-violet-500 ring-[#050510]' : 'bg-white ring-white shadow-slate-200',
-                      currentTheme === 'antigravity' ? 'bg-slate-900 ring-white' : 'bg-slate-900 ring-slate-100')}></div>
-                    <p className={cn("text-base font-semibold", theme.text)}>{action.text}</p>
-                    <div className="flex items-center gap-3 mt-2">
-                      <span className={cn("text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-widest", theme.badge)}>{action.target}</span>
-                      <span className={cn("text-[9px] font-semibold opacity-30 uppercase tracking-[0.2em]", theme.text)}>{action.time}</span>
-                    </div>
-                  </div>
+                     <div key={action.id} className={cn("p-4 border border-slate-100 rounded-lg hover:border-blue-100 hover:bg-slate-50 transition-all", action.type === 'status_change' ? 'border-l-2 border-l-blue-500' : '')}>
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{action.time}</span>
+                          <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-semibold">{action.target}</span>
+                        </div>
+                        <p className="text-sm font-medium text-slate-900 leading-snug">{action.text}</p>
+                     </div>
                 ))}
               </div>
-              <button className={cn("w-full mt-12 py-4 text-[10px] font-black uppercase tracking-[0.3em] transition-all",
-                theme.primary, "text-white shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95",
-                theme.radius)}>
-                Vedi Storico
+              <button className="w-full mt-6 py-2.5 text-xs font-semibold bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm">
+                Vedi Storico Completo
               </button>
             </section>
           </div>
         </div>
 
-        {/* Bottom Section: Full Width Table */}
-        <section className={cn("p-6 transition-all duration-500", theme.card, theme.radius, theme.cardHover)}>
-           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-              <div className="space-y-1">
-                <h3 className={cn("text-2xl font-semibold tracking-tight", theme.text)}>Pratiche in carico</h3>
-                <p className={cn("text-sm font-normal opacity-50", theme.text)}>Gestisci e monitora le tue attività correnti</p>
+        {/* Bottom Section: Full Width Table - Nexus Style */}
+        <section className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+           <div className="px-6 py-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/50">
+              <div className="space-y-0.5">
+                <h3 className="text-lg font-bold text-slate-900">Pratiche in carico</h3>
+                <p className="text-sm text-slate-500">Gestisci e monitora le tue attività correnti</p>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                   <div className="relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                    <input
-                        type="text"
-                        placeholder="Cerca pratica..."
-                        className={cn("pl-12 pr-6 py-3.5 border text-sm font-medium focus:outline-none transition-all w-[340px]",
-                          currentTheme === 'quantum' ? 'bg-white/5 border-white/10 text-white placeholder:text-white/20' : 'bg-slate-50/50 border-slate-100 placeholder:text-slate-400 focus:bg-white focus:border-slate-200',
-                          theme.radius)}
-                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                    <input type="text" placeholder="Filtra..." className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none w-64 bg-white" />
                   </div>
-                  <button
-                    onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    className={cn("flex items-center gap-3 px-8 py-3.5 border text-xs font-black uppercase tracking-widest transition-all",
-                      currentTheme === 'quantum' ? 'bg-white/5 border-white/10 text-white hover:bg-white/10 font-semibold' : 'bg-white border-slate-100 text-slate-600 hover:bg-slate-50 hover:text-slate-900',
-                      theme.radius)}
-                  >
-                    <Filter size={16} />
-                    <span>Filtri</span>
+                  <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                     <Filter size={14} /> Filtri
                   </button>
               </div>
            </div>
 
-           <FilterPanel isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
-
-           <div className="overflow-hidden">
+           <div className="p-0">
              <Table>
-                <TableHeader>
-                   <TableRow className="border-none hover:bg-transparent">
-                      <TableHead className={cn("font-black uppercase tracking-[0.2em] text-[10px] opacity-30", theme.text)}>Id</TableHead>
-                      <TableHead className={cn("font-black uppercase tracking-[0.2em] text-[10px] opacity-30", theme.text)}>Nome Pratica</TableHead>
-                      <TableHead className={cn("font-black uppercase tracking-[0.2em] text-[10px] opacity-30", theme.text)}>Stato Corrente</TableHead>
-                      <TableHead className={cn("font-black uppercase tracking-[0.2em] text-[10px] opacity-30", theme.text)}>Ultimo Aggiornamento</TableHead>
-                      <TableHead className={cn("font-black uppercase tracking-[0.2em] text-[10px] opacity-30", theme.text)}>Owner</TableHead>
-                      <TableHead></TableHead>
+               <TableHeader>
+                 <TableRow className="bg-slate-50/80 hover:bg-slate-50/80 border-b border-slate-200">
+                   <TableHead className="w-[100px] font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">ID</TableHead>
+                   <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Pratica</TableHead>
+                   <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Stato</TableHead>
+                   <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Data</TableHead>
+                   <TableHead className="text-right font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Azioni</TableHead>
+                 </TableRow>
+               </TableHeader>
+               <TableBody>
+                 {PRACTICES.map((practice) => (
+                   <TableRow key={practice.id} className="hover:bg-blue-50/30 transition-colors border-b border-slate-100 last:border-0 group cursor-pointer" onClick={() => navigate('/pratica/' + practice.id)}>
+                     <TableCell className="font-mono text-xs text-slate-500">{practice.displayId}</TableCell>
+                     <TableCell>
+                       <div className="font-medium text-sm text-slate-900 group-hover:text-blue-700 transition-colors">{practice.name}</div>
+                     </TableCell>
+                     <TableCell>
+                       <span className={cn("inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border",
+                         practice.statusCategory === 'Aperta' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-slate-100 text-slate-600 border-slate-200')}>
+                         {practice.status}
+                       </span>
+                     </TableCell>
+                     <TableCell className="text-sm text-slate-500">{practice.updated}</TableCell>
+                     <TableCell className="text-right">
+                       <button className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
+                         <Edit size={14} />
+                       </button>
+                     </TableCell>
                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                   {PRACTICES.map((p) => (
-                      <TableRow
-                        key={p.id}
-                        className={cn("cursor-pointer border-slate-100/5 transition-all group", currentTheme === 'quantum' ? 'hover:bg-white/5 border-white/5' : 'hover:bg-slate-50/50')}
-                        onClick={() => navigate(`/pratiche/${p.id}`)}
-                      >
-                         <TableCell className={cn("font-mono text-xs opacity-40 group-hover:opacity-100 transition-opacity", theme.text)}>{p.displayId}</TableCell>
-                         <TableCell className={cn("font-semibold text-base tracking-tight", theme.text)}>{p.name}</TableCell>
-                         <TableCell>
-                            <span className={cn("px-4 py-1.5 text-[9px] font-black tracking-[0.1em] uppercase shadow-sm", theme.badge)}>
-                              {p.status}
-                            </span>
-                         </TableCell>
-                         <TableCell className={cn("text-xs font-semibold opacity-40 group-hover:opacity-100 transition-opacity", theme.text)}>{p.updated}</TableCell>
-                         <TableCell className={cn("text-xs font-semibold opacity-40 group-hover:opacity-100 transition-opacity", theme.text)}>{p.owner}</TableCell>
-                         <TableCell className="text-right">
-                            <button className={cn("p-2.5 rounded-xl transition-all", currentTheme === 'quantum' ? 'text-white/20 hover:text-white hover:bg-white/10' : 'text-slate-300 hover:text-slate-900 hover:bg-white hover:shadow-sm')}>
-                               <Edit size={16} />
-                            </button>
-                         </TableCell>
-                      </TableRow>
-                   ))}
-                </TableBody>
+                 ))}
+               </TableBody>
              </Table>
            </div>
         </section>
