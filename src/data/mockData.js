@@ -1,4 +1,4 @@
-import { Share2, FileText, Calendar, Globe, LayoutDashboard } from "lucide-react";
+import { Share2, FileText, Calendar, Globe, Home } from "lucide-react";
 
 export const USER = {
   name: "Marzia",
@@ -6,7 +6,7 @@ export const USER = {
 };
 
 export const MENU_ITEMS = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: Home, label: "Dashboard", path: "/" },
   { icon: Share2, label: "Reti", path: "/reti" },
   { icon: FileText, label: "Pratiche", path: "/pratiche" },
   { icon: Calendar, label: "Appuntamenti", path: "/appuntamenti" },

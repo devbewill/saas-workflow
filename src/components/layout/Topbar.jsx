@@ -8,44 +8,47 @@ import { useWorkflow } from '@/context/WorkflowContext';
 
 export function Topbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { userRole } = useWorkflow();
+  const { userRole, theme, currentTheme } = useWorkflow();
 
   return (
-    <header className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-30">
+    <header className={cn("h-16 flex items-center justify-between px-8 sticky top-0 z-30 transition-all duration-300", theme.topbar)}>
       {/* Search */}
       <div className="flex-1 max-w-md">
          <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-violet-500 transition-colors" size={18} />
+            <Search className={cn("absolute left-4 top-1/2 -translate-y-1/2 transition-colors", theme.textMuted)} size={16} />
             <input
                type="text"
                placeholder="Cerca pratica..."
-               className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-transparent rounded-full text-sm focus:bg-white focus:border-violet-200 focus:ring-4 focus:ring-violet-50/50 outline-none transition-all placeholder:text-slate-400"
+               className={cn(
+                 "w-full pl-11 pr-4 py-2 text-sm outline-none transition-all placeholder:text-slate-400",
+                 currentTheme === 'antigravity' ? 'bg-transparent' : 'bg-slate-50 border border-transparent focus:bg-white focus:border-slate-200 rounded-full'
+               )}
             />
          </div>
       </div>
 
       <div className="flex items-center gap-4">
-         <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors relative">
-            <Bell size={20} />
-            <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></div>
+         <button className={cn("p-2 rounded-full transition-all relative", currentTheme === 'quantum' ? 'text-white hover:bg-white/10' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50')}>
+            <Bell size={18} />
+            <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full ring-2 ring-white"></div>
          </button>
 
-         <div className="w-px h-8 bg-slate-100 mx-2"></div>
+         <div className={cn("w-px h-6 mx-2", currentTheme === 'quantum' ? 'bg-white/10' : 'bg-slate-200')}></div>
 
          {/* User Menu */}
          <div className="relative">
             <button
                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-               className="flex items-center gap-3 hover:bg-slate-50 rounded-full pl-1 pr-3 py-1 transition-colors border border-transparent hover:border-slate-100"
+               className={cn("flex items-center gap-3 rounded-full pl-1 pr-3 py-1 transition-all border border-transparent", currentTheme === 'quantum' ? 'hover:bg-white/10' : 'hover:bg-slate-50 hover:border-slate-100')}
             >
-               <div className="w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-bold text-sm">
+               <div className={cn("w-8 h-8 rounded-full flex items-center justify-center font-semibold text-xs shadow-sm", currentTheme === 'quantum' ? 'bg-violet-600 text-white' : 'bg-slate-900 text-white')}>
                   {USER.name.charAt(0)}
                </div>
                <div className="hidden md:block text-left">
-                  <p className="text-sm font-medium text-slate-700 leading-none">{USER.name}</p>
-                  <p className="text-[10px] text-slate-400 leading-none mt-1 uppercase tracking-tight font-bold">{userRole}</p>
+                  <p className={cn("text-xs font-medium leading-none", theme.text)}>{USER.name}</p>
+                  <p className={cn("text-[9px] leading-none mt-1 uppercase tracking-wider font-medium opacity-40", theme.text)}>{userRole}</p>
                </div>
-               <ChevronDown size={14} className="text-slate-400" />
+               <ChevronDown size={12} className={theme.textMuted} />
             </button>
 
             {/* Dropdown */}
@@ -60,21 +63,21 @@ export function Topbar() {
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 p-2 z-50 origin-top-right"
+                        className={cn("absolute right-0 top-full mt-2 w-56 shadow-xl p-2 z-50 origin-top-right transition-all", theme.card, theme.radius)}
                      >
                         <div className="px-3 py-2 border-b border-slate-50 mb-1">
-                           <p className="text-sm font-medium text-slate-900">{USER.name}</p>
-                           <p className="text-xs text-slate-500">{userRole}</p>
+                           <p className={cn("text-sm font-semibold", theme.text)}>{USER.name}</p>
+                           <p className={cn("text-xs opacity-50", theme.text)}>{userRole}</p>
                         </div>
-                        <button className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg flex items-center gap-2">
-                           <User size={16} /> Profilo
+                        <button className={cn("w-full text-left px-3 py-2 text-xs font-semibold hover:bg-slate-50 rounded-lg flex items-center gap-2", theme.text)}>
+                           <User size={14} /> Profilo
                         </button>
-                        <button className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg flex items-center gap-2">
-                           <Settings size={16} /> Impostazioni
+                        <button className={cn("w-full text-left px-3 py-2 text-xs font-semibold hover:bg-slate-50 rounded-lg flex items-center gap-2", theme.text)}>
+                           <Settings size={14} /> Impostazioni
                         </button>
                         <div className="h-px bg-slate-50 my-1"></div>
-                        <button className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2">
-                           <LogOut size={16} /> Esci
+                        <button className="w-full text-left px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2">
+                           <LogOut size={14} /> Esci
                         </button>
                      </motion.div>
                   </>

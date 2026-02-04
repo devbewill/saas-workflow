@@ -63,7 +63,7 @@ export default function PraticaDetail() {
          <div className="flex items-start justify-between">
             <div>
                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl font-bold text-slate-900">Pratica {practiceData.displayId}</h1>
+                  <h1 className="text-2xl font-semibold text-slate-900">Pratica {practiceData.displayId}</h1>
                   <button
                     onClick={() => setIsTimelineOpen(true)}
                     className={cn(
@@ -137,7 +137,7 @@ export default function PraticaDetail() {
                               <button className="p-1 hover:bg-slate-100 rounded text-slate-400"><Edit size={14} /></button>
                            </TableCell>
                            <TableCell>
-                              <span className={cn("px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider", doc.statusColor)}>
+                              <span className={cn("px-2 py-1 rounded text-[10px] font-semibold uppercase tracking-wider", doc.statusColor)}>
                                  {doc.status}
                               </span>
                            </TableCell>
@@ -163,12 +163,12 @@ export default function PraticaDetail() {
             <div className="space-y-8">
               <div className="flex items-center justify-between">
                  <div>
-                   <h3 className="text-xl font-bold text-slate-900 leading-tight">Documenti in lavorazione</h3>
+                   <h3 className="text-xl font-semibold text-slate-900 leading-tight">Documenti in lavorazione</h3>
                    <p className="text-sm text-slate-500 mt-1 italic leading-relaxed">Gestisci i raggruppamenti di documenti per questa pratica.</p>
                  </div>
                  <button
                    onClick={() => { setEditingFascicolo(null); setIsFascicoloOpen(true); }}
-                   className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-200"
+                   className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-semibold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-200"
                  >
                    <Plus size={18} /> Crea nuovo fascicolo
                  </button>
@@ -197,15 +197,15 @@ export default function PraticaDetail() {
                               <FileText size={28} className="text-slate-400 group-hover:text-white transition-colors" />
                             </div>
                             {bundle.isSignatureEnabled && (
-                              <div className="px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 border border-violet-200 shadow-sm">
+                              <div className="px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5 border border-violet-200 shadow-sm">
                                 <ShieldCheck size={14} className="text-violet-600" /> Signature
                               </div>
                             )}
                           </div>
                           <div className="relative z-10">
-                             <h4 className="font-bold text-lg text-slate-900 group-hover:text-violet-700 transition-colors line-clamp-1">{bundle.name}</h4>
+                             <h4 className="font-semibold text-lg text-slate-900 group-hover:text-violet-700 transition-colors line-clamp-1">{bundle.name}</h4>
                              <div className="flex items-center gap-3 mt-2">
-                                <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded uppercase tracking-wider group-hover:bg-violet-100 group-hover:text-violet-600 transition-colors">
+                                <span className="text-[11px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded uppercase tracking-wider group-hover:bg-violet-100 group-hover:text-violet-600 transition-colors">
                                   {bundle.documentIds.length} docs
                                 </span>
                                 <span className="w-1 h-1 rounded-full bg-slate-200" />

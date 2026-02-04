@@ -38,7 +38,7 @@ export function RecentActionsOffcanvas({ isOpen, onClose }) {
           >
              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
                 <div>
-                   <h2 className="font-bold text-xl text-slate-900">Attività Recenti</h2>
+                   <h2 className="font-semibold text-xl text-slate-900">Attività Recenti</h2>
                    <p className="text-sm text-slate-500">Ultime operazioni eseguite</p>
                 </div>
                 <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full text-slate-400 text-slate-600">
@@ -50,7 +50,7 @@ export function RecentActionsOffcanvas({ isOpen, onClose }) {
 
                 {/* Timeline Actions */}
                 <section>
-                   <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                   <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
                       <Clock size={14} /> Ultime Azioni
                    </h3>
                    <div className="relative pl-4 border-l-2 border-slate-100 space-y-6">
@@ -67,14 +67,14 @@ export function RecentActionsOffcanvas({ isOpen, onClose }) {
 
                 {/* Worked Practices */}
                 <section>
-                   <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                   <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
                       <FileText size={14} /> Pratiche Lavorate
                    </h3>
                    <div className="space-y-3">
                       {lastWorked.map(p => (
                          <div key={p.id} className="p-3 bg-slate-50 rounded-lg border border-slate-100 hover:border-violet-200 hover:shadow-sm transition-all cursor-pointer group">
                             <div className="flex justify-between items-start mb-1">
-                               <span className="font-bold text-slate-900 text-sm group-hover:text-violet-700">{p.displayId}</span>
+                               <span className="font-semibold text-slate-900 text-sm group-hover:text-violet-700">{p.displayId}</span>
                                <span className="text-[10px] bg-white border border-slate-200 px-1.5 py-0.5 rounded text-slate-500">
                                   {p.statusCategory}
                                </span>

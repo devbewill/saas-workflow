@@ -76,7 +76,7 @@ export function FascicoloOffcanvas({ isOpen, onClose, onSave, onDelete, initialD
             {/* Header */}
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <h2 className="font-bold text-xl text-slate-900">
+                <h2 className="font-semibold text-xl text-slate-900">
                   {initialData ? 'Modifica Fascicolo' : 'Nuovo Fascicolo'}
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">Raggruppa i documenti della pratica</p>
@@ -107,7 +107,7 @@ export function FascicoloOffcanvas({ isOpen, onClose, onSave, onDelete, initialD
                     <ShieldCheck className="text-violet-600" size={20} />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-violet-900">Abilita firma digitale</p>
+                    <p className="text-sm font-semibold text-violet-900">Abilita firma digitale</p>
                     <p className="text-[11px] text-violet-600">Richiedi la firma per tutti i documenti selezionati</p>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export function FascicoloOffcanvas({ isOpen, onClose, onSave, onDelete, initialD
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-semibold text-slate-700">Documenti da inserire</label>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                     {selectedDocs.length} selezionati
                   </span>
                 </div>
@@ -213,7 +213,7 @@ export function FascicoloOffcanvas({ isOpen, onClose, onSave, onDelete, initialD
               </button>
               <button
                 onClick={handleSave}
-                className="flex-[2] px-6 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 shadow-lg shadow-slate-200 transition-all flex items-center justify-center gap-2"
+                className="flex-[2] px-6 py-3 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 shadow-lg shadow-slate-200 transition-all flex items-center justify-center gap-2"
               >
                 {initialData ? 'Aggiorna Fascicolo' : 'Salva Fascicolo'}
               </button>

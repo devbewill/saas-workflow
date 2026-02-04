@@ -113,7 +113,7 @@ export function OperatorAssistant({ isOpen, onClose }) {
               {/* Header */}
               <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-white">
                 <div>
-                  <h2 className="font-bold text-lg text-slate-900">Supporto attività</h2>
+                  <h2 className="font-semibold text-lg text-slate-900">Supporto attività</h2>
                 </div>
                 <button onClick={onClose} className="p-2 hover:bg-white rounded-full text-slate-400 transition-colors">
                   <X size={20} />
@@ -130,7 +130,7 @@ export function OperatorAssistant({ isOpen, onClose }) {
                   </div>
 
                   <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-                    <h3 className="font-bold text-slate-900">{config.title}</h3>
+                    <h3 className="font-semibold text-slate-900">{config.title}</h3>
                     <p className="text-sm text-slate-600 leading-relaxed">
                       {config.description}
                     </p>
@@ -232,7 +232,7 @@ export function OperatorAssistant({ isOpen, onClose }) {
               <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-bold text-lg text-slate-900">Manda pratica in KO</h3>
+                    <h3 className="font-semibold text-lg text-slate-900">Manda pratica in KO</h3>
                     <p className="text-sm text-slate-500 mt-1">Inserisci il motivo del rifiuto</p>
                   </div>
                   <button

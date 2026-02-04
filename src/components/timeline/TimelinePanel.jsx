@@ -45,7 +45,7 @@ export function TimelinePanel({ isOpen, onClose }) {
             className="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50 flex flex-col"
           >
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="font-bold text-xl text-slate-900">Stato avanzamento pratica</h2>
+              <h2 className="font-semibold text-xl text-slate-900">Stato avanzamento pratica</h2>
               <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full text-slate-400">
                 <X size={20} />
               </button>
@@ -65,7 +65,7 @@ export function TimelinePanel({ isOpen, onClose }) {
                    return (
                       <div key={stepGroup.category} className="space-y-3">
                          <div className={cn(
-                           "flex items-center justify-between font-bold text-xs uppercase tracking-wider",
+                           "flex items-center justify-between font-semibold text-xs uppercase tracking-wider",
                            isFuture ? "text-slate-300" : hasCurrent ? "text-violet-600" : "text-slate-400"
                          )}>
                             <span className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export function TimelinePanel({ isOpen, onClose }) {
                                         <div className="flex-1 min-w-0">
                                            <div className={cn(
                                               "text-sm font-medium transition-colors leading-tight",
-                                              isCurrent ? "text-violet-900 font-bold" :
+                                              isCurrent ? "text-violet-900 font-semibold" :
                                               isCompleted ? "text-slate-700" : "text-slate-400 group-hover:text-slate-600"
                                            )}>
                                               {step.subState || step.fullName}

@@ -13,7 +13,7 @@ const Table = React.forwardRef(({ className, ...props }, ref) => (
 Table.displayName = "Table"
 
 const TableHeader = React.forwardRef(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("bg-white text-slate-900 font-bold border-b border-slate-100", className)} {...props} />
+  <thead ref={ref} className={cn("bg-white text-slate-900 font-semibold border-b border-slate-100", className)} {...props} />
 ))
 TableHeader.displayName = "TableHeader"
 
@@ -54,7 +54,7 @@ const TableHead = React.forwardRef(({ className, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(
-      "px-6 py-1.5 text-left font-bold text-slate-900 text-xs uppercase tracking-wider",
+      "px-6 py-1.5 text-left font-semibold text-slate-900 text-xs uppercase tracking-wider",
       className
     )}
     {...props}

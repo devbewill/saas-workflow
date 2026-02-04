@@ -98,7 +98,7 @@ export function AMLVerificationView() {
       {/* Left Panel: Verifica AML */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-slate-900">Verifica AML - Profilo di rischio</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Verifica AML - Profilo di rischio</h3>
           <AlertTriangle size={20} className="text-amber-500" />
         </div>
 
@@ -106,7 +106,7 @@ export function AMLVerificationView() {
         <div className="flex items-center justify-center py-8">
           <div className="flex flex-col items-center gap-3">
             <div className={cn(
-              "w-20 h-20 rounded-full flex items-center justify-center shadow-lg text-white font-bold text-2xl",
+              "w-20 h-20 rounded-full flex items-center justify-center shadow-lg text-white font-semibold text-2xl",
               riskConfig.color
             )}>
               {riskConfig.icon}
@@ -209,7 +209,7 @@ export function AMLVerificationView() {
       {/* Right Panel: Controllo Banche Dati */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-slate-900">Controllo Banche dati</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Controllo Banche dati</h3>
           <CheckCircle size={20} className="text-green-500" />
         </div>
 
@@ -217,7 +217,7 @@ export function AMLVerificationView() {
         <div className="flex items-center justify-center py-8">
           <div className="flex flex-col items-center gap-3">
             <div className={cn(
-              "w-20 h-20 rounded-full flex items-center justify-center shadow-lg text-white font-bold text-2xl",
+              "w-20 h-20 rounded-full flex items-center justify-center shadow-lg text-white font-semibold text-2xl",
               dbConfig.color
             )}>
               {dbConfig.icon}

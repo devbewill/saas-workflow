@@ -1,10 +1,19 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { MENU_ITEMS } from '@/data/mockData';
 import { useWorkflow } from '@/context/WorkflowContext';
+import { Home, Share2, FileText, Calendar, Globe } from 'lucide-react';
 
-export function Sidebar() {
+// Hardcoded menu items to test
+const TEST_MENU_ITEMS = [
+  { icon: Home, label: "Dashboard", path: "/" },
+  { icon: Share2, label: "Reti", path: "/reti" },
+  { icon: FileText, label: "Pratiche", path: "/pratiche" },
+  { icon: Calendar, label: "Appuntamenti", path: "/appuntamenti" },
+  { icon: Globe, label: "Traduzioni", path: "/traduzioni" },
+];
+
+export function SidebarTest() {
   const { theme, currentTheme } = useWorkflow();
 
   return (
@@ -19,30 +28,30 @@ export function Sidebar() {
               <div className="w-3.5 h-3.5 border border-slate-100 rounded-sm"></div>
            </div>
            <div className="flex flex-col leading-tight">
-              <span className={cn("text-xl font-semibold tracking-tight", theme.text)}>HD</span>
-              <span className={cn("text-[10px] font-medium uppercase tracking-[0.15em]", theme.textMuted)}>Vision 2026</span>
+              <span className={cn("text-xl font-black tracking-tighter", theme.text)}>HD</span>
+              <span className={cn("text-[10px] font-semibold uppercase tracking-[0.2em]", theme.textMuted)}>Vision 2026</span>
            </div>
         </div>
       </div>
 
       {/* Menu */}
       <nav className="flex-1 px-4 space-y-1.5 py-6">
-        {MENU_ITEMS.map((item) => {
+        {TEST_MENU_ITEMS.map((item) => {
           const IconComponent = item.icon;
           return (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) => cn(
-                "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all group",
+                "flex items-center gap-3 px-4 py-3 text-sm font-semibold transition-all group",
                 theme.radius,
                 isActive
                   ? cn(
-                      currentTheme === 'antigravity' ? 'bg-gradient-to-r from-indigo-50 to-indigo-100/50 text-indigo-700 border-l-2 border-indigo-500 shadow-sm' :
+                      currentTheme === 'antigravity' ? 'bg-slate-900 text-white shadow-xl' :
                       currentTheme === 'quantum' ? 'bg-white/10 text-white border border-white/10' :
                       'bg-slate-100 text-slate-900'
                     )
-                  : cn("text-slate-500 hover:text-slate-700 hover:bg-slate-50/50", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
+                  : cn("text-slate-400 hover:text-slate-900", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : 'hover:bg-slate-50')
               )}
             >
               <IconComponent size={18} className={cn("transition-transform group-hover:scale-110")} />
