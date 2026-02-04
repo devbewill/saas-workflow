@@ -68,18 +68,38 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="space-y-12 max-w-[1400px] mx-auto">
+      <div className="space-y-6 max-w-[1400px] mx-auto">
         {/* Header */}
         <div className="flex flex-col gap-1">
           <h1 className={cn("text-4xl font-semibold tracking-tight", theme.text)}>Dashboard</h1>
           <p className={cn("text-sm font-normal opacity-60", theme.text)}>Bentornato, {USER.name}. Hai 3 notifiche da gestire.</p>
         </div>
 
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {STATS.map((stat, i) => (
+            <div key={i} className={cn("p-6 flex flex-col justify-between transition-all duration-300 group hover:-translate-y-1", theme.card, theme.radius, theme.cardHover)}>
+               <div className="flex justify-between items-start mb-4">
+                  <div className={cn("p-2 rounded-lg transition-colors", currentTheme === 'antigravity' ? 'bg-slate-50 group-hover:bg-indigo-50 text-slate-500 group-hover:text-indigo-600' : 'bg-slate-100/50')}>
+                    <stat.icon size={18} />
+                  </div>
+                  <span className={cn("text-[10px] font-bold px-2 py-1 rounded", stat.trend === 'up' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600')}>
+                    {stat.change}
+                  </span>
+               </div>
+               <div>
+                 <h3 className={cn("text-2xl font-bold tracking-tight mb-1", theme.text)}>{stat.value}</h3>
+                 <p className={cn("text-xs font-medium uppercase tracking-wider opacity-50", theme.text)}>{stat.label}</p>
+               </div>
+            </div>
+          ))}
+        </div>
+
         {/* Top Section: Notifications & Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Notifications */}
           <div className="lg:col-span-2">
-            <section className={cn("p-8 h-full flex flex-col transition-all duration-500", theme.card, theme.radius, theme.cardHover)}>
+            <section className={cn("p-6 h-full flex flex-col transition-all duration-500", theme.card, theme.radius, theme.cardHover)}>
               <div className="flex items-center justify-between mb-8">
                 <h3 className={cn("text-[11px] font-medium uppercase tracking-wide", currentTheme === 'antigravity' ? 'text-slate-400' : theme.text)}>
                   <span className="flex items-center gap-2">
@@ -89,11 +109,11 @@ export default function Dashboard() {
                 <span className={cn("px-2.5 py-1 text-[10px] font-medium transition-all", theme.badge)}>3 NUOVE</span>
               </div>
               <div className={cn("divide-y flex-1", currentTheme === 'antigravity' ? 'divide-slate-100' : 'divide-slate-100/10')}>
-                 <div className="py-6 first:pt-0">
+                 <div className="py-4 first:pt-0">
                     <p className={cn("text-base font-semibold", theme.text)}>Verifica la pratica Condominio - Giambellino 12</p>
                     <p className={cn("text-sm mt-1 font-normal opacity-50 leading-relaxed", theme.text)}>La pratica è in attesa dei dati necessari per procedere.</p>
                  </div>
-                 <div className="py-6">
+                 <div className="py-4">
                     <p className={cn("text-base font-semibold", theme.text)}>Aggiornamento Status - Piazza Napoli 2</p>
                     <div className="flex items-center gap-2 mt-3">
                       <span className={cn("px-2.5 py-1 rounded text-[10px] font-semibold bg-slate-100 text-slate-500")}>Bozza</span>
@@ -101,7 +121,7 @@ export default function Dashboard() {
                       <span className={cn("px-2.5 py-1 rounded text-[10px] font-semibold", theme.badge)}>Verifica preliminare</span>
                     </div>
                  </div>
-                 <div className="py-6 last:pb-0">
+                 <div className="py-4 last:pb-0">
                     <p className={cn("text-base font-semibold", theme.text)}>Esito Negativo - Roma 123</p>
                     <div className="flex items-center gap-2 mt-3">
                       <span className={cn("px-2.5 py-1 rounded text-[10px] font-black uppercase", theme.badge)}>AML</span>
@@ -120,11 +140,11 @@ export default function Dashboard() {
 
           {/* Right Column: Recent Actions */}
           <div className="lg:col-span-1">
-            <section className={cn("p-8 h-full transition-all duration-500 flex flex-col", theme.card, theme.radius, theme.cardHover)}>
-              <h3 className={cn("text-[10px] font-semibold uppercase tracking-[0.2em] mb-10 flex items-center gap-2", currentTheme === 'antigravity' ? 'text-slate-400' : theme.text)}>
+            <section className={cn("p-6 h-full transition-all duration-500 flex flex-col", theme.card, theme.radius, theme.cardHover)}>
+              <h3 className={cn("text-[10px] font-semibold uppercase tracking-[0.2em] mb-6 flex items-center gap-2", currentTheme === 'antigravity' ? 'text-slate-400' : theme.text)}>
                 <Clock size={16} className={theme.accentColor === 'indigo' ? 'text-indigo-600' : 'text-violet-500'} /> Attività Recenti
               </h3>
-              <div className={cn("relative pl-6 border-l space-y-12 flex-1", currentTheme === 'antigravity' ? 'border-slate-100' : 'border-slate-200/20')}>
+              <div className={cn("relative pl-6 border-l space-y-8 flex-1", currentTheme === 'antigravity' ? 'border-slate-100' : 'border-slate-200/20')}>
                 {RECENT_ACTIONS.map(action => (
                   <div key={action.id} className="relative">
                     <div className={cn("absolute -left-[29px] top-1 w-1.5 h-1.5 rounded-full ring-4 transition-all shadow-sm",
@@ -148,7 +168,7 @@ export default function Dashboard() {
         </div>
 
         {/* Bottom Section: Full Width Table */}
-        <section className={cn("p-10 transition-all duration-500", theme.card, theme.radius, theme.cardHover)}>
+        <section className={cn("p-6 transition-all duration-500", theme.card, theme.radius, theme.cardHover)}>
            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div className="space-y-1">
                 <h3 className={cn("text-2xl font-semibold tracking-tight", theme.text)}>Pratiche in carico</h3>

@@ -34,15 +34,15 @@ export function Sidebar() {
               key={item.path}
               to={item.path}
               className={({ isActive }) => cn(
-                "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all group",
+                "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all group",
                 theme.radius,
                 isActive
                   ? cn(
-                      currentTheme === 'antigravity' ? 'bg-gradient-to-r from-indigo-50/80 to-indigo-100/30 text-indigo-700 border-l-[3px] border-indigo-500/80 shadow-[0_1px_2px_rgba(99,102,241,0.05)]' :
+                      currentTheme === 'antigravity' ? 'bg-gradient-to-r from-indigo-50 to-indigo-100/40 text-indigo-900 border-l-[3px] border-indigo-500 shadow-sm' :
                       currentTheme === 'quantum' ? 'bg-white/10 text-white border border-white/10' :
                       'bg-slate-100 text-slate-900'
                     )
-                  : cn("text-slate-500 hover:text-slate-700 hover:bg-slate-50/80 hover:pl-5", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
+                  : cn("text-slate-500 hover:text-slate-900 hover:bg-slate-50 hover:pl-4", currentTheme === 'quantum' ? 'hover:bg-white/5 text-slate-500' : '')
               )}
             >
               <IconComponent size={18} className={cn("transition-transform group-hover:scale-110")} />

@@ -25,17 +25,17 @@ export const THEMES = {
     name: 'Antigravity',
     icon: ShieldCheck,
     font: 'font-["IBM_Plex_Sans",sans-serif]',
-    bg: 'bg-[#FAFBFC]',
-    card: 'bg-white/80 backdrop-blur-sm border border-slate-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.04)]',
-    cardHover: 'hover:bg-white hover:border-slate-300/50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-200',
-    sidebar: 'bg-white/60 backdrop-blur-xl border-r border-slate-200/30',
-    topbar: 'bg-white/70 backdrop-blur-xl border-b border-slate-200/30',
-    text: 'text-slate-700',
-    textMuted: 'text-slate-400',
-    primary: 'bg-slate-600 hover:bg-slate-700',
+    bg: 'bg-slate-50', // Was bg-[#FAFBFC] - going slightly darker for contrast with white cards
+    card: 'bg-white border border-slate-200 shadow-sm', // Removed transparency/blur to make it solid/clean professional
+    cardHover: 'hover:border-slate-300 hover:shadow-md transition-all duration-200',
+    sidebar: 'bg-white border-r border-slate-200', // Solid white, solid border
+    topbar: 'bg-white/90 backdrop-blur-sm border-b border-slate-200',
+    text: 'text-slate-900', // Was text-slate-700 - going darker for professional readability
+    textMuted: 'text-slate-500', // Was text-slate-400
+    primary: 'bg-slate-800 hover:bg-slate-900', // Darker primary actions
     accentColor: 'indigo',
-    radius: 'rounded-xl',
-    badge: 'bg-slate-100/80 text-slate-600 border border-slate-200/40 font-medium tracking-normal'
+    radius: 'rounded-lg', // Slightly tighter radius for "professional" look (vs xl)
+    badge: 'bg-slate-100 text-slate-700 border border-slate-200 font-medium'
   },
   quantum: {
     id: 'quantum',
