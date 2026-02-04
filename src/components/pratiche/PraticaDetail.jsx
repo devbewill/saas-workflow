@@ -22,8 +22,12 @@ const DOCUMENTS = [
   { id: 7, name: "Preventivo spese", file: "Preventivo:spese.pdf", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700" },
 ];
 
-// Local Helper Component for Data Grids
-const DataGroup = ({ title, data, columns = 2 }) => (
+const DataGroup = ({ title, data, columns = 2 }) => {
+  if (!Array.isArray(data)) {
+    console.error(`DataGroup Error: data for ${title} is not an array`, data);
+    return null;
+  }
+  return (
   <div className="bg-slate-50 border border-slate-200 rounded-lg overflow-hidden">
     <div className="px-4 py-2 bg-slate-100/50 border-b border-slate-200 font-semibold text-xs uppercase tracking-wider text-slate-500">
       {title.replace('_', ' ')}
@@ -37,11 +41,13 @@ const DataGroup = ({ title, data, columns = 2 }) => (
       ))}
     </div>
   </div>
-);
+)};
 
 export default function PraticaDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  // ... existing code ...
+
   const practiceData = PRACTICES.find(p => p.id === id) || PRACTICES[0];
   const { currentStatusName, currentStep, getStatusColor, setStatus } = useWorkflow();
   const [activeTab, setActiveTab] = useState("Documenti");
@@ -139,9 +145,9 @@ export default function PraticaDetail() {
                    <h3 className="font-semibold text-slate-900 text-lg">Dati Condominio</h3>
                  </div>
 
-                 {Object.entries(CONDOMINIUM_DATA).map(([key, data]) => (
+                 {CONDOMINIUM_DATA ? Object.entries(CONDOMINIUM_DATA).map(([key, data]) => (
                    <DataGroup key={key} title={key} data={data} columns={key === 'anagrafica' ? 4 : 2} />
-                 ))}
+                 )) : <p className="text-red-500">Errore caricamento dati condominio</p>}
                </div>
 
                {/* Right Column: Financial Data */}
@@ -153,9 +159,9 @@ export default function PraticaDetail() {
                    <h3 className="font-semibold text-slate-900 text-lg">Prodotto Finanziario</h3>
                  </div>
 
-                 {Object.entries(FINANCIAL_DATA).map(([key, data]) => (
+                 {FINANCIAL_DATA ? Object.entries(FINANCIAL_DATA).map(([key, data]) => (
                     <DataGroup key={key} title={key} data={data} columns={key === 'durata_tassi' ? 3 : 2} />
-                 ))}
+                 )) : <p className="text-red-500">Errore caricamento dati finanziari</p>}
                </div>
             </div>
           )}
