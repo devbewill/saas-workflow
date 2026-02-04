@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PRACTICES, CONDOMINIUM_DATA, FINANCIAL_DATA } from '@/data/mockData';
-import { ArrowLeft, Clock, Info, Upload, Edit, FileText, CloudUpload, Headset, FileSignature, ShieldCheck, Plus } from 'lucide-react';
+import { ArrowLeft, Clock, Info, Upload, Edit, FileText, CloudUpload, Headset, FileSignature, ShieldCheck, Plus, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TimelinePanel } from '../timeline/TimelinePanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../ui/Table';
