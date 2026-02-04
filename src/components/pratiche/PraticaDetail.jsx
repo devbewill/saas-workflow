@@ -45,6 +45,7 @@ export default function PraticaDetail() {
   const practiceData = PRACTICES.find(p => p.id === id) || PRACTICES[0];
   const { currentStatusName, currentStep, getStatusColor, setStatus } = useWorkflow();
   const [activeTab, setActiveTab] = useState("Documenti");
+
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState(true);
 
@@ -97,7 +98,7 @@ export default function PraticaDetail() {
                   <span>Importo da finanziare: <strong className="text-slate-700">€ {practiceData.amount?.toLocaleString()}</strong></span>
                   <span>Pratica Broker: <strong className="text-slate-700">{practiceData.brokerId}</strong></span>
                   <span>Pratica OCS: <strong className="text-slate-700">{practiceData.ocsId}</strong></span>
-                  <a href="#" className="text-slate-400 underline decoration-dotted hover:text-slate-600">Mostra dati completi</a>
+                  <button onClick={() => setActiveTab("Dati Completi")} className="text-slate-400 underline decoration-dotted hover:text-blue-600 hover:decoration-blue-600 transition-all">Mostra dati completi</button>
                </div>
             </div>
          </div>
