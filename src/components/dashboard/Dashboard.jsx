@@ -173,11 +173,16 @@ export default function Dashboard() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
                     <input type="text" placeholder="Filtra..." className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none w-64 bg-white" />
                   </div>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-                     <Filter size={14} /> Filtri
-                  </button>
+                   <button
+                     onClick={() => setIsFilterOpen(true)}
+                     className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                   >
+                      <Filter size={14} /> Filtri
+                   </button>
               </div>
-           </div>
+            </div>
+
+           <FilterPanel isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
 
            <div className="p-0">
              <Table>
