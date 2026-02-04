@@ -15,8 +15,8 @@ export default function Dashboard() {
   return (
     <div className={cn("transition-all duration-700", theme.font)}>
 
-      {/* Theme Switcher Floating Bar */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-2xl flex items-center gap-1">
+      {/* Theme Switcher Floating Bar - HIDDEN */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-2xl flex items-center gap-1" style={{ display: 'none' }}>
         <div className="px-3 border-r border-white/10 mr-1 flex items-center gap-2">
            <Zap size={14} className="text-yellow-400" />
            <span className="text-[10px] text-white font-semibold uppercase tracking-widest">Vision 2026</span>

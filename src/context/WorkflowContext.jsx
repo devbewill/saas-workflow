@@ -24,7 +24,7 @@ export const THEMES = {
     id: 'antigravity',
     name: 'Antigravity',
     icon: ShieldCheck,
-    font: 'font-["Inter"]',
+    font: 'font-["IBM_Plex_Sans"]',
     bg: 'bg-[#FAFBFC]',
     card: 'bg-white/80 backdrop-blur-sm border border-slate-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.04)]',
     cardHover: 'hover:bg-white hover:border-slate-300/50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-200',
@@ -110,7 +110,7 @@ export function WorkflowProvider({ children }) {
   const steps = workflowData.workflow.steps;
   const [currentStatusName, setCurrentStatusName] = useState("Aperta – verifica preliminare");
   const [currentTheme, setCurrentTheme] = useState('antigravity');
-  const [currentFont, setCurrentFont] = useState('inter');
+  const [currentFont, setCurrentFont] = useState('ibmPlex');
 
   const theme = { ...THEMES[currentTheme], font: FONTS[currentFont].class };
 
