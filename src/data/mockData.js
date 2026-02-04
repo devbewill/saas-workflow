@@ -1,4 +1,4 @@
-import { Share2, FileText, Calendar, Globe, Home } from "lucide-react";
+import { Share2, FileText, Calendar, Globe, Home, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 export const USER = {
   name: "Marzia",
@@ -90,10 +90,10 @@ export const WORKFLOW_STEPS = [
 ];
 
 export const STATS = [
-  { name: "Istruttoria", value: 30, color: "#22d3ee" }, // Cyan
-  { name: "Bozza", value: 47, color: "#1e293b" }, // Slate 900
-  { name: "Aperta", value: 90, color: "#8b5cf6" }, // Violet 500
-  { name: "KO", value: 12, color: "#ef4444" }, // Red 500
+  { label: "Pratiche Totali", value: "1,240", change: "+12%", trend: "up", icon: FileText, color: "indigo" },
+  { label: "In Lavorazione", value: "95", change: "+5%", trend: "up", icon: Clock, color: "violet" },
+  { label: "Approvate", value: "842", change: "+18%", trend: "up", icon: CheckCircle, color: "emerald" },
+  { label: "Da Revisionare", value: "12", change: "-2%", trend: "down", icon: AlertCircle, color: "rose" },
 ];
 
 export const RECENT_ACTIONS = [
