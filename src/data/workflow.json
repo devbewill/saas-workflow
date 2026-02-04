@@ -1,0 +1,156 @@
+{
+  "workflow": {
+    "name": "Flusso Pratica Standard (aggiornato)",
+    "description": "Processo dalla bozza alla liquidazione",
+    "version": "2.0",
+    "steps": [
+      {
+        "id": 1,
+        "fullName": "Bozza",
+        "state": "Bozza",
+        "subState": null,
+        "owner": "Supervisor",
+        "nextPossible": ["Aperta – verifica preliminare"],
+        "isStart": true,
+        "isFinal": false
+      },
+      {
+        "id": 2,
+        "fullName": "Aperta – Verifica preliminare",
+        "state": "Aperta",
+        "subState": "Verifica preliminare",
+        "owner": "Front office",
+        "nextPossible": ["Aperta - Validazione documenti"],
+        "isFinal": false
+      },
+      {
+        "id": 3,
+        "fullName": "Aperta - Validazione documenti",
+        "state": "Aperta",
+        "subState": "Validazione documenti",
+        "owner": "Back office",
+        "nextPossible": ["Caricata - Lavorazione AML e Banche Dati"],
+        "isFinal": false
+      },
+      {
+        "id": 4,
+        "fullName": "Caricata - Lavorazione AML e Banche Dati",
+        "state": "Caricata",
+        "subState": "Lavorazione AML e Banche Dati",
+        "owner": "Back office",
+        "nextPossible": ["Caricata - Valutazione istruttoria"],
+        "isFinal": false
+      },
+      {
+        "id": 5,
+        "fullName": "Caricata - Valutazione istruttoria",
+        "state": "Caricata",
+        "subState": "Valutazione istruttoria",
+        "owner": "Middle office",
+        "nextPossible": ["Caricata - Valutazione rating condominio", "Caricata - Valutazione crediti"],
+        "isFinal": false
+      },
+      {
+        "id": 6,
+        "fullName": "Caricata - Valutazione rating condominio",
+        "state": "Caricata",
+        "subState": "Valutazione rating condominio",
+        "owner": "Back office",
+        "nextPossible": ["Caricata - Valutazione crediti"],
+        "isFinal": false,
+        "note": "stato probabilmente automatico / senza assegnatario fisso"
+      },
+      {
+        "id": 7,
+        "fullName": "Caricata - Valutazione crediti",
+        "state": "Caricata",
+        "subState": "Valutazione crediti",
+        "owner": "Ufficio crediti",
+        "nextPossible": ["Esame - Valutazione organo deliberante"],
+        "isFinal": false
+      },
+      {
+        "id": 8,
+        "fullName": "Esame - Valutazione organo deliberante",
+        "state": "Esame",
+        "subState": "Valutazione organo deliberante",
+        "owner": "Organo deliberante",
+        "nextPossible": ["Approvata - Delibera OK"],
+        "isFinal": false
+      },
+      {
+        "id": 9,
+        "fullName": "Approvata - Delibera OK",
+        "state": "Approvata",
+        "subState": "Delibera OK",
+        "owner": "Middle office",
+        "nextPossible": ["In attesa - Esecuzione lavori in corso"],
+        "isFinal": false
+      },
+      {
+        "id": 10,
+        "fullName": "In attesa - Esecuzione lavori in corso",
+        "state": "In attesa",
+        "subState": "Esecuzione lavori in corso",
+        "owner": "Front office",
+        "nextPossible": ["Approvata – Valutazione post fine lavori"],
+        "isFinal": false
+      },
+      {
+        "id": 11,
+        "fullName": "Approvata – Valutazione post fine lavori",
+        "state": "Approvata",
+        "subState": "Valutazione post fine lavori",
+        "owner": "Middle office",
+        "nextPossible": ["Approvata – Pronta per stampa contratto"],
+        "isFinal": false
+      },
+      {
+        "id": 12,
+        "fullName": "Approvata – Pronta per stampa contratto",
+        "state": "Approvata",
+        "subState": "Pronta per stampa contratto",
+        "owner": "Middle office",
+        "nextPossible": ["Approvata – Inviato contratto in firma"],
+        "isFinal": false
+      },
+      {
+        "id": 13,
+        "fullName": "Approvata – Inviato contratto in firma",
+        "state": "Approvata",
+        "subState": "Inviato contratto in firma",
+        "owner": "Amministratore",
+        "nextPossible": ["Approvata – Contratto firmato"],
+        "isFinal": false
+      },
+      {
+        "id": 14,
+        "fullName": "Approvata – Contratto firmato",
+        "state": "Approvata",
+        "subState": "Contratto firmato",
+        "owner": "Middle office",
+        "nextPossible": ["Perfezionata – Da liquidare"],
+        "isFinal": false
+      },
+      {
+        "id": 15,
+        "fullName": "Perfezionata – Da liquidare",
+        "state": "Perfezionata",
+        "subState": "Da liquidare",
+        "owner": "Back office",
+        "nextPossible": ["Perfezionata – Liquidata"],
+        "isFinal": false
+      },
+      {
+        "id": 16,
+        "fullName": "Perfezionata – Liquidata",
+        "state": "Perfezionata",
+        "subState": "Liquidata",
+        "owner": "Back office",
+        "isFinal": true,
+        "isSuccess": true,
+        "note": ""
+      }
+    ]
+  }
+}
