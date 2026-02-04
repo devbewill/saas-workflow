@@ -59,7 +59,7 @@ export default function PraticaDetail() {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
 
       {/* Header Card */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm mb-8">
+      <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm mb-8">
          <div className="flex items-start justify-between">
             <div>
                <div className="flex items-center gap-3 mb-2">
@@ -104,7 +104,7 @@ export default function PraticaDetail() {
               >
                 {tab}
                 {activeTab === tab && (
-                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-900 rounded-full" />
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full" />
                 )}
               </button>
             ))}
@@ -142,7 +142,7 @@ export default function PraticaDetail() {
                               </span>
                            </TableCell>
                            <TableCell className="text-right flex items-center justify-end gap-2">
-                               <button className="p-1.5 text-slate-400 hover:text-violet-600 transition-colors" title="Manda in firma"><FileSignature size={16} /></button>
+                               <button className="p-1.5 text-slate-400 hover:text-blue-600 transition-colors" title="Manda in firma"><FileSignature size={16} /></button>
                               {doc.status === "Da caricare" ? (
                                  <button className="p-1.5 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors"><CloudUpload size={16} /></button>
                               ) : (
@@ -166,12 +166,12 @@ export default function PraticaDetail() {
                    <h3 className="text-xl font-semibold text-slate-900 leading-tight">Documenti in lavorazione</h3>
                    <p className="text-sm text-slate-500 mt-1 italic leading-relaxed">Gestisci i raggruppamenti di documenti per questa pratica.</p>
                  </div>
-                 <button
-                   onClick={() => { setEditingFascicolo(null); setIsFascicoloOpen(true); }}
-                   className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-semibold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-200"
-                 >
-                   <Plus size={18} /> Crea nuovo fascicolo
-                 </button>
+                  <button
+                    onClick={() => { setEditingFascicolo(null); setIsFascicoloOpen(true); }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-all flex items-center gap-2 shadow-sm"
+                  >
+                    <Plus size={16} /> Crea nuovo fascicolo
+                  </button>
               </div>
 
               {bundles.length === 0 ? (
@@ -184,36 +184,35 @@ export default function PraticaDetail() {
                  </div>
               ) : (
                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {bundles.map(bundle => (
-                       <button
-                          key={bundle.id}
-                          onClick={() => { setEditingFascicolo(bundle); setIsFascicoloOpen(true); }}
-                          className="bg-white border border-slate-100 p-6 rounded-[32px] hover:border-violet-200 hover:shadow-2xl hover:shadow-violet-200/20 transition-all text-left flex flex-col gap-6 group relative overflow-hidden"
-                       >
-                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-violet-500/5 to-transparent rounded-bl-full translate-x-12 -translate-y-12" />
+                     {bundles.map(bundle => (
+                        <button
+                           key={bundle.id}
+                           onClick={() => { setEditingFascicolo(bundle); setIsFascicoloOpen(true); }}
+                           className="bg-white border border-slate-200 p-5 rounded-lg hover:border-blue-300 hover:shadow-md transition-all text-left flex flex-col gap-4 group relative overflow-hidden"
+                        >
+                           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-transparent rounded-bl-full translate-x-12 -translate-y-12" />
 
-                          <div className="flex items-center justify-between w-full relative z-10">
-                            <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-violet-500 group-hover:text-white transition-all duration-300">
-                              <FileText size={28} className="text-slate-400 group-hover:text-white transition-colors" />
-                            </div>
-                            {bundle.isSignatureEnabled && (
-                              <div className="px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5 border border-violet-200 shadow-sm">
-                                <ShieldCheck size={14} className="text-violet-600" /> Signature
-                              </div>
-                            )}
-                          </div>
-                          <div className="relative z-10">
-                             <h4 className="font-semibold text-lg text-slate-900 group-hover:text-violet-700 transition-colors line-clamp-1">{bundle.name}</h4>
-                             <div className="flex items-center gap-3 mt-2">
-                                <span className="text-[11px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded uppercase tracking-wider group-hover:bg-violet-100 group-hover:text-violet-600 transition-colors">
-                                  {bundle.documentIds.length} docs
-                                </span>
-                                <span className="w-1 h-1 rounded-full bg-slate-200" />
-                                <span className="text-[11px] text-slate-400 font-medium">Aggiornato il {bundle.updatedAt}</span>
+                           <div className="flex items-center justify-between w-full relative z-10">
+                             <div className="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 border border-slate-100">
+                               <FileText size={20} className="text-slate-400 group-hover:text-white transition-colors" />
                              </div>
-                          </div>
-                       </button>
-                    ))}
+                             {bundle.isSignatureEnabled && (
+                               <div className="px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border border-blue-100">
+                                 <ShieldCheck size={12} className="text-blue-600" /> Signature
+                               </div>
+                             )}
+                           </div>
+                           <div className="relative z-10 w-full">
+                              <h4 className="font-semibold text-base text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1">{bundle.name}</h4>
+                              <div className="flex items-center gap-3 mt-2 border-t border-slate-50 pt-3 w-full">
+                                 <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                                   {bundle.documentIds.length} docs
+                                 </span>
+                                 <span className="text-[10px] text-slate-400 font-medium ml-auto">Aggiornato: {bundle.updatedAt}</span>
+                              </div>
+                           </div>
+                        </button>
+                     ))}
                  </div>
               )}
             </div>
@@ -234,10 +233,10 @@ export default function PraticaDetail() {
           animate={{ scale: 1 }}
           exit={{ scale: 0 }}
           onClick={() => setIsAssistantOpen(true)}
-          className="fixed bottom-8 right-8 w-16 h-16 bg-violet-600 text-white rounded-full shadow-2xl hover:bg-violet-700 transition-all flex items-center justify-center z-30 group hover:scale-110"
+          className="fixed bottom-8 right-8 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-900/20 hover:bg-blue-700 transition-all flex items-center justify-center z-30 group hover:scale-105"
         >
-          <Headset size={28} className="group-hover:animate-pulse" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></span>
+          <Headset size={24} className="group-hover:animate-pulse" />
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white animate-pulse"></span>
         </motion.button>
       )}
 

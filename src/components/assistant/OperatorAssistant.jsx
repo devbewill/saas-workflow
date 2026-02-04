@@ -111,7 +111,7 @@ export function OperatorAssistant({ isOpen, onClose }) {
 
 
               {/* Header */}
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-white">
+              <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                 <div>
                   <h2 className="font-semibold text-lg text-slate-900">Supporto attività</h2>
                 </div>
@@ -185,7 +185,7 @@ export function OperatorAssistant({ isOpen, onClose }) {
                   className={cn(
                     "w-full px-4 py-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2",
                     allRequirementsMet
-                      ? "bg-violet-600 text-white hover:bg-violet-700 shadow-lg shadow-violet-200"
+                      ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200"
                       : "bg-slate-200 text-slate-400 cursor-not-allowed"
                   )}
                 >
