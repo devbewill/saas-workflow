@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PRACTICES } from '@/data/mockData';
+import { PRACTICES, CONDOMINIUM_DATA, FINANCIAL_DATA } from '@/data/mockData';
 import { ArrowLeft, Clock, Info, Upload, Edit, FileText, CloudUpload, Headset, FileSignature, ShieldCheck, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TimelinePanel } from '../timeline/TimelinePanel';
@@ -21,6 +21,23 @@ const DOCUMENTS = [
   { id: 6, name: "Presentazione Condominio", file: "PresentazioneCondominio.pdf", date: "23/05/25", status: "Caricato", statusColor: "bg-green-200 text-green-700" },
   { id: 7, name: "Preventivo spese", file: "Preventivo:spese.pdf", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700" },
 ];
+
+// Local Helper Component for Data Grids
+const DataGroup = ({ title, data, columns = 2 }) => (
+  <div className="bg-slate-50 border border-slate-200 rounded-lg overflow-hidden">
+    <div className="px-4 py-2 bg-slate-100/50 border-b border-slate-200 font-semibold text-xs uppercase tracking-wider text-slate-500">
+      {title.replace('_', ' ')}
+    </div>
+    <div className={cn("grid p-4 gap-y-4 gap-x-6", columns === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4")}>
+      {data.map((item, i) => (
+        <div key={i} className="flex flex-col gap-0.5">
+          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">{item.label}</span>
+          <span className="text-sm font-medium text-slate-900 truncate" title={item.value}>{item.value}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 export default function PraticaDetail() {
   const { id } = useParams();
@@ -93,7 +110,7 @@ export default function PraticaDetail() {
         <div>
           {/* Tabs */}
           <div className="flex gap-8 border-b border-slate-100 mb-6 font-medium">
-            {["Documenti", "Fascicoli", "Team di lavoro"].map(tab => (
+            {["Documenti", "Dati Completi", "Fascicoli", "Team di lavoro"].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -109,6 +126,38 @@ export default function PraticaDetail() {
               </button>
             ))}
           </div>
+
+          {activeTab === "Dati Completi" && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+               {/* Left Column: Condominium Data */}
+               <div className="space-y-6">
+                 <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
+                   <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                     <Home size={16} />
+                   </div>
+                   <h3 className="font-semibold text-slate-900 text-lg">Dati Condominio</h3>
+                 </div>
+
+                 {Object.entries(CONDOMINIUM_DATA).map(([key, data]) => (
+                   <DataGroup key={key} title={key} data={data} columns={key === 'anagrafica' ? 4 : 2} />
+                 ))}
+               </div>
+
+               {/* Right Column: Financial Data */}
+               <div className="space-y-6">
+                 <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
+                   <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                     <FileText size={16} />
+                   </div>
+                   <h3 className="font-semibold text-slate-900 text-lg">Prodotto Finanziario</h3>
+                 </div>
+
+                 {Object.entries(FINANCIAL_DATA).map(([key, data]) => (
+                    <DataGroup key={key} title={key} data={data} columns={key === 'durata_tassi' ? 3 : 2} />
+                 ))}
+               </div>
+            </div>
+          )}
 
           {/* Tab Content */}
           {activeTab === "Documenti" && (
