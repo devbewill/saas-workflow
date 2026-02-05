@@ -80,10 +80,6 @@ export default function Dashboard() {
             <div key={i} className="bg-white p-5 rounded-lg border border-slate-200 shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:border-blue-300 hover:shadow-md transition-all">
                <div className="flex justify-between items-start mb-2">
                   <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{stat.label}</span>
-                  <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1",
-                    stat.trend === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50')}>
-                    {stat.change}
-                  </span>
                </div>
                <div className="flex items-end gap-2">
                  <h3 className="text-2xl font-bold text-slate-900 leading-none">{stat.value}</h3>
@@ -136,15 +132,16 @@ export default function Dashboard() {
             </section>
           </div>
 
-          {/* Right Column: Recent Actions */}
           <div className="lg:col-span-1">
-            <section className={cn("p-6 h-full transition-all duration-500 flex flex-col", theme.card, theme.radius, theme.cardHover)}>
-              <h3 className={cn("text-[10px] font-semibold uppercase tracking-[0.2em] mb-6 flex items-center gap-2", currentTheme === 'antigravity' ? 'text-slate-400' : theme.text)}>
-                <Clock size={16} className={theme.accentColor === 'indigo' ? 'text-indigo-600' : 'text-violet-500'} /> Attività Recenti
-              </h3>
-              <div className={cn("relative pl-6 border-l space-y-8 flex-1", currentTheme === 'antigravity' ? 'border-slate-100' : 'border-slate-200/20')}>
+            <section className="bg-white rounded-lg border border-slate-200 shadow-sm h-full flex flex-col">
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                  <Clock size={14} className="text-blue-600" /> Attività Recenti
+                </h3>
+              </div>
+              <div className={cn("relative pl-6 border-l space-y-8 flex-1 ml-6 my-6 border-slate-200/20")}>
                 {RECENT_ACTIONS.map(action => (
-                     <div key={action.id} className={cn("p-4 border border-slate-100 rounded-lg hover:border-blue-100 hover:bg-slate-50 transition-all", action.type === 'status_change' ? 'border-l-2 border-l-blue-500' : '')}>
+                     <div key={action.id} className="p-4 border border-slate-100 rounded-lg hover:border-blue-100 hover:bg-slate-50 transition-all">
                         <div className="flex justify-between items-start mb-1">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{action.time}</span>
                           <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-semibold">{action.target}</span>
@@ -153,19 +150,18 @@ export default function Dashboard() {
                      </div>
                 ))}
               </div>
-              <button className="w-full mt-6 py-2.5 text-xs font-semibold bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm">
+              <button className="w-full mt-6 mx-6 mb-6 py-2.5 text-xs font-semibold bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm max-w-[calc(100%-48px)]">
                 Vedi Storico Completo
               </button>
             </section>
           </div>
         </div>
 
-        {/* Bottom Section: Full Width Table - Nexus Style */}
         <section className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-           <div className="px-6 py-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/50">
-              <div className="space-y-0.5">
-                <h3 className="text-lg font-bold text-slate-900">Pratiche in carico</h3>
-                <p className="text-sm text-slate-500">Gestisci e monitora le tue attività correnti</p>
+           <div className="px-6 py-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                 <FileText size={14} className="text-blue-600" />
+                 <h3 className="text-sm font-semibold text-slate-800">Pratiche in carico</h3>
               </div>
 
               <div className="flex gap-3">
