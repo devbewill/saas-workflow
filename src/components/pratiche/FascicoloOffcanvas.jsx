@@ -96,7 +96,7 @@ export function FascicoloOffcanvas({ isOpen, onClose, onSave, onDelete, initialD
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="es. Fascicolo per Firma Amministratore"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-100 focus:border-violet-300 transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300 transition-all"
                 />
               </div>
 

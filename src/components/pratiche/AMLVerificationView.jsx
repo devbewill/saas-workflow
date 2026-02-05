@@ -123,7 +123,7 @@ export function AMLVerificationView() {
           <select
             value={amlOutcome}
             onChange={(e) => setAmlOutcome(e.target.value)}
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-100 focus:border-violet-300"
+            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300"
           >
             <option>Rosso - KO</option>
             <option>Arancione - Forzante</option>
@@ -140,7 +140,7 @@ export function AMLVerificationView() {
             onChange={(e) => setAmlNotes(e.target.value)}
             placeholder="Richiesta adeguata verifica rafforzata"
             rows={4}
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-100 focus:border-violet-300 resize-none"
+            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300 resize-none"
           />
         </div>
 
@@ -197,7 +197,7 @@ export function AMLVerificationView() {
                 >
                   <Trash2 size={16} />
                 </button>
-                <button className="p-2 hover:bg-slate-100 rounded-lg text-violet-600 transition-colors">
+                <button className="p-2 hover:bg-slate-100 rounded-lg text-primary-600 transition-colors">
                   <Eye size={16} />
                 </button>
               </div>
@@ -234,7 +234,7 @@ export function AMLVerificationView() {
           <select
             value={dbOutcome}
             onChange={(e) => setDbOutcome(e.target.value)}
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-100 focus:border-violet-300"
+            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300"
           >
             <option>Verde - Positivo</option>
             <option>Arancione - Da verificare</option>
@@ -250,7 +250,7 @@ export function AMLVerificationView() {
             onChange={(e) => setDbNotes(e.target.value)}
             placeholder="Inserire eventuali note a supporto dell'esito"
             rows={4}
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-100 focus:border-violet-300 resize-none"
+            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300 resize-none"
           />
         </div>
 
@@ -294,7 +294,7 @@ export function AMLVerificationView() {
                 >
                   <Trash2 size={16} />
                 </button>
-                <button className="p-2 hover:bg-slate-100 rounded-lg text-violet-600 transition-colors">
+                <button className="p-2 hover:bg-slate-100 rounded-lg text-primary-600 transition-colors">
                   <Eye size={16} />
                 </button>
               </div>
