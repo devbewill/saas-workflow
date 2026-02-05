@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PRACTICES, STATS, USER, RECENT_ACTIONS } from '@/data/mockData';
-import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type } from 'lucide-react';
+import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FilterPanel } from '../filters/FilterPanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../ui/Table';
