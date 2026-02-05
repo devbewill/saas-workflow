@@ -102,13 +102,13 @@ export default function Dashboard() {
               <div className="divide-y divide-slate-100 flex-1">
                  <div className="p-5 hover:bg-slate-50/50 transition-colors">
                     <div className="flex justify-between items-start">
-                      <p className="text-sm font-semibold text-slate-900">Verifica la pratica Condominio - Giambellino 12</p>
+                      <p className="text-sm font-medium text-slate-900 leading-snug">Verifica la pratica Condominio - Giambellino 12</p>
                       <span className="text-[10px] text-slate-400">10:30</span>
                     </div>
                     <p className="text-sm mt-1 text-slate-500 leading-relaxed">La pratica è in attesa dei dati necessari per procedere.</p>
                  </div>
                  <div className="p-5 hover:bg-slate-50/50 transition-colors">
-                    <p className={cn("text-base font-semibold", theme.text)}>Aggiornamento Status - Piazza Napoli 2</p>
+                    <p className={cn("text-sm font-medium text-slate-900 leading-snug", theme.text)}>Aggiornamento Status - Piazza Napoli 2</p>
                     <div className="flex items-center gap-2 mt-3">
                       <span className={cn("px-2.5 py-1 rounded text-[10px] font-semibold bg-slate-100 text-slate-500")}>Bozza</span>
                       <Zap size={10} className="opacity-20" />
@@ -116,7 +116,7 @@ export default function Dashboard() {
                     </div>
                  </div>
                  <div className="p-5 last:pb-0 hover:bg-slate-50/50 transition-colors">
-                    <p className={cn("text-base font-semibold", theme.text)}>Esito Negativo - Roma 123</p>
+                    <p className={cn("text-sm font-medium text-slate-900 leading-snug", theme.text)}>Esito Negativo - Roma 123</p>
                     <div className="flex items-center gap-2 mt-3">
                       <span className={cn("px-2.5 py-1 rounded text-[10px] font-black uppercase", theme.badge)}>AML</span>
                       <Zap size={10} className="opacity-20" />
@@ -139,7 +139,7 @@ export default function Dashboard() {
                   <Clock size={14} className="text-blue-600" /> Attività Recenti
                 </h3>
               </div>
-              <div className={cn("relative pl-6 border-l space-y-8 flex-1 ml-6 my-6 border-slate-200/20")}>
+              <div className={cn("relative p-4 space-y-4 flex-1 border-slate-200/20")}>
                 {RECENT_ACTIONS.map(action => (
                      <div key={action.id} className="p-4 border border-slate-100 rounded-lg hover:border-blue-100 hover:bg-slate-50 transition-all">
                         <div className="flex justify-between items-start mb-1">
