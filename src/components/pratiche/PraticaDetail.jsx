@@ -53,7 +53,7 @@ export default function PraticaDetail() {
   const [activeTab, setActiveTab] = useState("Documenti");
 
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
-  const [isAssistantOpen, setIsAssistantOpen] = useState(true);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
 
   // Fascicoli State
   const [bundles, setBundles] = useState([
