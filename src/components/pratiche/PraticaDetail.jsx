@@ -87,11 +87,11 @@ export default function PraticaDetail() {
          <div className="flex items-start justify-between">
             <div>
                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl font-semibold text-slate-900">Pratica {practiceData.displayId}</h1>
+                  <h1 className=" font-bold text-slate-900">Pratica {practiceData.displayId}</h1>
                   <button
                     onClick={() => setIsTimelineOpen(true)}
                     className={cn(
-                      "px-3 py-1 rounded-md text-sm font-medium transition-colors hover:opacity-80 shadow-sm",
+                      "px-2 py-1 rounded text-[10px] font-semibold uppercase tracking-wider",
                       getStatusColor(currentStep.state)
                     )}
                   >
@@ -254,7 +254,7 @@ export default function PraticaDetail() {
                              </div>
                              {bundle.isSignatureEnabled && (
                                <div className="px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border border-blue-100">
-                                 <ShieldCheck size={12} className="text-blue-600" /> Signature
+                                 <ShieldCheck size={12} className="text-blue-600" /> Da firmare
                                </div>
                              )}
                            </div>

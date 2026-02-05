@@ -16,8 +16,8 @@ export function Sidebar() {
              <div className="w-4 h-4 border-2 border-white rounded-sm"></div>
            </div>
            <div className="flex flex-col leading-none">
-              <span className={cn("text-lg font-bold tracking-tight text-slate-900")}>Nexus</span>
-              <span className={cn("text-[10px] font-semibold text-slate-500 uppercase tracking-widest mt-0.5")}>Enterprise</span>
+              <span className={cn("text-lg font-bold tracking-tight text-slate-900")}>WHITELBL</span>
+              <span className={cn("text-[10px] font-semibold text-slate-500 uppercase tracking-widest mt-0.5")}>Platform</span>
            </div>
         </div>
       </div>

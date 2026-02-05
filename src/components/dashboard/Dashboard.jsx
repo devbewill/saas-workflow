@@ -5,74 +5,20 @@ import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type,
 import { cn } from '@/lib/utils';
 import { FilterPanel } from '../filters/FilterPanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../ui/Table';
-import { useWorkflow, THEMES, FONTS } from '@/context/WorkflowContext';
+import { useWorkflow } from '@/context/WorkflowContext';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-  const { currentTheme, theme, setTheme, currentFont, setFont } = useWorkflow();
+  const { theme } = useWorkflow();
 
   return (
     <div className={cn("transition-all duration-700", theme.font)}>
-
-      {/* Theme Switcher Floating Bar - HIDDEN */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-2xl flex items-center gap-1" style={{ display: 'none' }}>
-        <div className="px-3 border-r border-white/10 mr-1 flex items-center gap-2">
-           <Zap size={14} className="text-yellow-400" />
-           <span className="text-[10px] text-white font-semibold uppercase tracking-widest">Vision 2026</span>
-        </div>
-        {Object.entries(THEMES).map(([key, t]) => (
-          <button
-            key={key}
-            onClick={() => setTheme(key)}
-            className={cn(
-              "px-4 py-2 rounded-full text-[10px] font-semibold transition-all flex items-center gap-2 uppercase tracking-tight",
-              currentTheme === key
-                ? "bg-white text-slate-900 shadow-lg scale-105"
-                : "text-white/40 hover:text-white hover:bg-white/5"
-            )}
-          >
-            <t.icon size={12} />
-            {t.name}
-          </button>
-        ))}
-
-        {/* Font Selector */}
-        <div className="relative group ml-1 pl-3 border-l border-white/10">
-          <button className="px-4 py-2 rounded-full text-[10px] font-semibold transition-all flex items-center gap-2 uppercase tracking-tight text-white/60 hover:text-white hover:bg-white/5">
-            <Type size={12} />
-            {FONTS[currentFont].name}
-          </button>
-
-          {/* Dropdown */}
-          <div className="absolute bottom-full left-0 mb-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-            <div className="bg-white rounded-2xl shadow-2xl border border-slate-200/50 p-2 min-w-[200px] backdrop-blur-xl">
-              {Object.entries(FONTS).map(([key, font]) => (
-                <button
-                  key={key}
-                  onClick={() => setFont(key)}
-                  className={cn(
-                    "w-full text-left px-4 py-2.5 rounded-xl transition-all text-sm group/item",
-                    currentFont === key
-                      ? "bg-indigo-50 text-indigo-700"
-                      : "text-slate-600 hover:bg-slate-50"
-                  )}
-                  style={{ fontFamily: font.name }}
-                >
-                  <div className="font-medium">{font.name}</div>
-                  <div className="text-[10px] opacity-50 mt-0.5">{font.description}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="space-y-6 max-w-[1400px] mx-auto">
-      <div className="flex flex-col gap-1.5 mb-8 border-b border-slate-200 pb-6">
+      {/* <div className="flex flex-col gap-1.5 mb-8 border-b border-slate-200 pb-6">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
         <p className="text-sm text-slate-500">Bentornato, {USER.name}. Hai 3 notifiche da gestire.</p>
-      </div>
+      </div> */}
 
         {/* Stats Grid - Nexus Enterprise Style */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -125,7 +71,7 @@ export default function Dashboard() {
                  </div>
               </div>
               <button className={cn("w-full mt-10 py-4 text-[10px] font-black uppercase tracking-[0.3em] border transition-all",
-                currentTheme === 'quantum' ? 'border-white/10 hover:bg-white/5 text-white' : 'border-slate-100 text-slate-400 hover:bg-slate-50 hover:text-slate-900',
+                'border-slate-100 text-slate-400 hover:bg-slate-50 hover:text-slate-900',
                 theme.radius)}>
                 Segna tutte come lette
               </button>
