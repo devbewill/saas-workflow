@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PRACTICES, STATS, RECENT_ACTIONS } from '@/data/mockData';
+import { PROJECTS, STATS, RECENT_ACTIONS } from '@/data/mockData';
 import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FilterPanel } from '../filters/FilterPanel';
@@ -101,7 +101,7 @@ export default function Dashboard() {
           <div className="px-6 py-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <FileText size={14} className="text-blue-600" />
-              <h3 className="text-sm font-semibold text-slate-800">Pratiche in carico</h3>
+              <h3 className="text-sm font-semibold text-slate-800">Progetti in carico</h3>
             </div>
 
             <div className="flex gap-3">
@@ -125,26 +125,26 @@ export default function Dashboard() {
               <TableHeader>
                 <TableRow className="bg-slate-50/80 hover:bg-slate-50/80 border-b border-slate-200">
                   <TableHead className="w-[100px] font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">ID</TableHead>
-                  <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Pratica</TableHead>
+                  <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Progetto</TableHead>
                   <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Stato</TableHead>
                   <TableHead className="font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Data</TableHead>
                   <TableHead className="text-right font-semibold text-slate-500 text-xs uppercase tracking-wider h-10">Azioni</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {PRACTICES.map((practice) => (
-                  <TableRow key={practice.id} className="hover:bg-blue-50/30 transition-colors border-b border-slate-100 last:border-0 group cursor-pointer" onClick={() => navigate('/pratiche/' + practice.id)}>
-                    <TableCell className="font-mono text-xs text-slate-500">{practice.displayId}</TableCell>
+                {PROJECTS.map((project) => (
+                  <TableRow key={project.id} className="hover:bg-blue-50/30 transition-colors border-b border-slate-100 last:border-0 group cursor-pointer" onClick={() => navigate('/projects/' + project.id)}>
+                    <TableCell className="font-mono text-xs text-slate-500">{project.displayId}</TableCell>
                     <TableCell>
-                      <div className="font-medium text-sm text-slate-900 group-hover:text-blue-700 transition-colors">{practice.name}</div>
+                      <div className="font-medium text-sm text-slate-900 group-hover:text-blue-700 transition-colors">{project.name}</div>
                     </TableCell>
                     <TableCell>
                       <span className={cn("inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border",
-                        practice.statusCategory === 'Aperta' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-slate-100 text-slate-600 border-slate-200')}>
-                        {practice.status}
+                        project.statusCategory === 'Aperta' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-slate-100 text-slate-600 border-slate-200')}>
+                        {project.status}
                       </span>
                     </TableCell>
-                    <TableCell className="text-sm text-slate-500">{practice.updated}</TableCell>
+                    <TableCell className="text-sm text-slate-500">{project.updated}</TableCell>
                     <TableCell className="text-right">
                       <button className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
                         <Edit size={14} />

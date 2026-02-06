@@ -26,7 +26,7 @@ export function AppHeader() {
         <Search className="h-4 w-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Cerca pratica..."
+          placeholder="Cerca progetto..."
           className="h-9 w-64 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
       </div>

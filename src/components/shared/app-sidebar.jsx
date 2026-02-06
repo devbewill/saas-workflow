@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-  { icon: FileText, label: 'Pratiche', path: '/pratiche' },
+  { icon: FileText, label: 'Progetti', path: '/projects' },
   { icon: Users, label: 'Clienti', path: '/clienti' },
   { icon: BarChart3, label: 'Report', path: '/report' },
   { icon: Settings, label: 'Impostazioni', path: '/settings' },

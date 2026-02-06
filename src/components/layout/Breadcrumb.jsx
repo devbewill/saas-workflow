@@ -2,35 +2,35 @@ import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { PRACTICES } from '@/data/mockData';
+import { PROJECTS } from '@/data/mockData';
 
 export function Breadcrumb() {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   const resolveName = (segment, index, arr) => {
-     // Check if it's a practice ID
-     if (arr[index-1] === 'pratiche') {
-        const practice = PRACTICES.find(p => p.id === segment);
-        return practice ? `Pratica ${practice.displayId}` : segment;
-     }
+    // Check if it's a project ID
+    if (arr[index - 1] === 'projects') {
+      const project = PROJECTS.find(p => p.id === segment);
+      return project ? `Progetto ${project.displayId}` : segment;
+    }
 
-     // Static mapping
-     const map = {
-        'pratiche': 'Gestione Pratiche',
-        'trattative': 'Trattative',
-        'documenti': 'Documenti',
-        'dashboard': 'Dashboard'
-     };
+    // Static mapping
+    const map = {
+      'projects': 'Gestione Progetti',
+      'trattative': 'Trattative',
+      'documenti': 'Documenti',
+      'dashboard': 'Dashboard'
+    };
 
-     return map[segment] || segment.charAt(0).toUpperCase() + segment.slice(1);
+    return map[segment] || segment.charAt(0).toUpperCase() + segment.slice(1);
   };
 
   return (
     <nav className="flex items-center text-sm text-slate-500 mb-4 animate-in fade-in duration-300">
       <Link to="/" className="hover:text-violet-600 transition-colors flex items-center gap-2">
-         <Home size={14} />
-         <span className="font-medium">Dashboard</span>
+        <Home size={14} />
+        <span className="font-medium">Dashboard</span>
       </Link>
       {pathnames.length > 0 && <ChevronRight size={14} className="mx-2 text-slate-300" />}
 

@@ -1,7 +1,7 @@
 import { Share2, FileText, Calendar, Globe, Home, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 
-export const PRACTICES = [
+export const PROJECTS = [
   {
     id: "PRA-2024-001",
     displayId: "99",
@@ -55,7 +55,7 @@ export const PRACTICES = [
 
 
 export const STATS = [
-  { label: "Pratiche Totali", value: "1,240", change: "+12%", trend: "up", icon: FileText, color: "indigo" },
+  { label: "Progetti Totali", value: "1,240", change: "+12%", trend: "up", icon: FileText, color: "indigo" },
   { label: "In Lavorazione", value: "95", change: "+5%", trend: "up", icon: Clock, color: "violet" },
   { label: "Approvate", value: "842", change: "+18%", trend: "up", icon: CheckCircle, color: "emerald" },
   { label: "Da Revisionare", value: "12", change: "-2%", trend: "down", icon: AlertCircle, color: "rose" },

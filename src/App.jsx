@@ -2,13 +2,10 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AppShell from './components/layout/app-shell';
 import Dashboard from './components/dashboard/Dashboard';
-// import PraticheList from './components/pratiche/PraticheList';
-import AtomicPraticaDetail from './components/pratiche/AtomicPraticaDetail';
 
-// Placeholders for now
-// const Dashboard = () => <div>Dashboard Content</div>;
-import PratichesList from './components/pratiche/PratichesList';
-// const Detail = () => <div>Detail Content</div>;
+// Feature-based imports
+import ProjectsList from './features/projects/pages/ProjectsList';
+import ProjectDetailPage from './features/projects/pages/ProjectDetailPage';
 
 import { WorkflowProvider } from './context/WorkflowContext';
 
@@ -18,8 +15,11 @@ function App() {
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/pratiche" element={<PratichesList />} />
-          <Route path="/pratiche/:id" element={<AtomicPraticaDetail />} />
+          <Route path="/projects" element={<ProjectsList />} />
+          <Route path="/projects/:id" element={<ProjectDetailPage />} />
+          {/* Legacy routes redirect */}
+          <Route path="/pratiche" element={<Navigate to="/projects" replace />} />
+          <Route path="/pratiche/:id" element={<Navigate to="/projects/:id" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
