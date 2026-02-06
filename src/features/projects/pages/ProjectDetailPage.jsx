@@ -139,7 +139,7 @@ export default function ProjectDetailPage() {
             {/* Project Info Summary */}
             <Card>
                 <CardContent className="p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div className="space-y-1">
                             <span className="text-xs text-muted-foreground uppercase font-bold">Nome Progetto</span>
                             <p className="text-sm font-medium">{projectData.name}</p>
@@ -149,12 +149,46 @@ export default function ProjectDetailPage() {
                             <p className="text-sm font-medium">{projectData.displayId}</p>
                         </div>
                         <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Importo</span>
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Importo Finanziabile</span>
                             <p className="text-sm font-medium">124.500,00 €</p>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Pratica Broker</span>
+                            <p className="text-sm font-medium">{projectData.brokerId || '123456'}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Pratica OCS</span>
+                            <p className="text-sm font-medium">{projectData.ocsId || '345342'}</p>
                         </div>
                         <div className="space-y-1">
                             <span className="text-xs text-muted-foreground uppercase font-bold">Prodotto</span>
                             <p className="text-sm font-medium">Cefin - Finanziamento Esposto 5,8%</p>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Rating</span>
+                            <div><Badge variant="outline" className="bg-green-100 text-green-700 border-green-200">Positiva</Badge></div>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Data Creazione</span>
+                            <p className="text-sm font-medium">{projectData.created || '12/01/2026'}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Ultima Modifica</span>
+                            <p className="text-sm font-medium">{projectData.updated || '04/02/2026'}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Amministratore</span>
+                            <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">AI</div>
+                                <p className="text-sm font-medium">Andrea Ippolito</p>
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Gestito da</span>
+                            <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold">MR</div>
+                                <p className="text-sm font-medium">{projectData.owner || 'Marco Rossi'}</p>
+                            </div>
                         </div>
                     </div>
                 </CardContent>
