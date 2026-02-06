@@ -103,6 +103,7 @@ export function DocumentsTable({ projectId }) {
                     <TableHeader>
                         <TableRow className="bg-slate-50">
                             <TableHead className="w-[60px]">ID</TableHead>
+                            <TableHead>Categoria</TableHead>
                             <TableHead className="w-[400px]">Documento</TableHead>
                             <TableHead>Data</TableHead>
                             <TableHead>Stato</TableHead>
@@ -110,87 +111,75 @@ export function DocumentsTable({ projectId }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {Object.entries(groupedDocuments).map(([category, docs]) => (
-                            <React.Fragment key={category}>
-                                {/* Category Header Row */}
-                                <TableRow className="bg-slate-100/50">
-                                    <TableCell colSpan={5} className="py-2">
-                                        <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                                            {category}
-                                        </span>
-                                        <Badge variant="outline" className="ml-2 text-[10px]">
-                                            {docs.length} documenti
-                                        </Badge>
-                                    </TableCell>
-                                </TableRow>
-
-                                {/* Document Rows */}
-                                {docs.map(doc => (
-                                    <TableRow key={doc.id} className="hover:bg-blue-50/30">
-                                        <TableCell>
-                                            <span className="text-xs font-mono text-slate-500">{doc.id}</span>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex items-start gap-3">
-                                                <div className={cn(
-                                                    "mt-0.5 p-1.5 rounded-md border",
-                                                    doc.status === "Da caricare"
-                                                        ? "bg-gray-50 border-dashed border-gray-300 text-gray-400"
-                                                        : "bg-blue-50 border-blue-100 text-blue-600"
-                                                )}>
-                                                    {doc.status === "Da caricare" ? (
-                                                        <CloudUpload className="w-4 h-4" />
-                                                    ) : (
-                                                        <Eye className="w-4 h-4" />
-                                                    )}
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-slate-900 truncate">{doc.name}</p>
-                                                    {doc.file !== '--' && (
-                                                        <p className="text-xs text-slate-500 mt-0.5">{doc.file}</p>
-                                                    )}
-                                                </div>
+                        {filteredDocuments.map(doc => (
+                            <TableRow key={doc.id} className="hover:bg-blue-50/30">
+                                <TableCell>
+                                    <span className="text-xs font-mono text-slate-500">{doc.id}</span>
+                                </TableCell>
+                                <TableCell>
+                                    <Badge variant="outline" className="text-xs font-medium">
+                                        {doc.category}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex items-start gap-3">
+                                        <div className={cn(
+                                            "mt-0.5 p-1.5 rounded-md border",
+                                            doc.status === "Da caricare"
+                                                ? "bg-gray-50 border-dashed border-gray-300 text-gray-400"
+                                                : "bg-blue-50 border-blue-100 text-blue-600"
+                                        )}>
+                                            {doc.status === "Da caricare" ? (
+                                                <CloudUpload className="w-4 h-4" />
+                                            ) : (
+                                                <Eye className="w-4 h-4" />
+                                            )}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-medium text-slate-900 truncate">{doc.name}</p>
+                                            {doc.file !== '--' && (
+                                                <p className="text-xs text-slate-500 mt-0.5">{doc.file}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <span className="text-sm text-slate-500">{doc.date}</span>
+                                </TableCell>
+                                <TableCell>{getStatusBadge(doc.status)}</TableCell>
+                                <TableCell className="text-right">
+                                    <div className="flex items-center justify-end gap-2">
+                                        {doc.isTemplate && (
+                                            <div className="p-1 rounded-md bg-indigo-50 text-indigo-600" title="Richiede compilazione">
+                                                <FilePenLine className="h-4 w-4" />
                                             </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span className="text-sm text-slate-500">{doc.date}</span>
-                                        </TableCell>
-                                        <TableCell>{getStatusBadge(doc.status)}</TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                {doc.isTemplate && (
-                                                    <div className="p-1 rounded-md bg-indigo-50 text-indigo-600" title="Richiede compilazione">
-                                                        <FilePenLine className="h-4 w-4" />
-                                                    </div>
-                                                )}
-                                                {doc.signature && (
-                                                    <div className="p-1 rounded-md bg-amber-50 text-amber-600" title="Richiede firma digitale">
-                                                        <FileSignature className="h-4 w-4" />
-                                                    </div>
-                                                )}
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" className="h-8 w-8 p-0">
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem>Carica</DropdownMenuItem>
-                                                        <DropdownMenuItem>Valida</DropdownMenuItem>
-                                                        <DropdownMenuItem>Sostituisci</DropdownMenuItem>
-                                                        <DropdownMenuItem>Aggiungi nota</DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                        )}
+                                        {doc.signature && (
+                                            <div className="p-1 rounded-md bg-amber-50 text-amber-600" title="Richiede firma digitale">
+                                                <FileSignature className="h-4 w-4" />
                                             </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </React.Fragment>
+                                        )}
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem>Carica</DropdownMenuItem>
+                                                <DropdownMenuItem>Valida</DropdownMenuItem>
+                                                <DropdownMenuItem>Sostituisci</DropdownMenuItem>
+                                                <DropdownMenuItem>Aggiungi nota</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
                         ))}
 
                         {filteredDocuments.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                                     Nessun documento trovato
                                 </TableCell>
                             </TableRow>
