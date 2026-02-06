@@ -10,15 +10,13 @@ import { cn } from '@/lib/utils';
 import { FilterPanel } from '@/components/filters/FilterPanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/Table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useTheme } from '@/context/ThemeContext';
 
 export default function ProjectsList() {
     const navigate = useNavigate();
     const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-    const { theme } = useTheme();
 
     return (
-        <div className={cn("transition-all duration-700", theme.font)}>
+        <div className="transition-all duration-700">
             <div className="space-y-6 max-w-[1400px] mx-auto p-6">
 
                 {/* Stats Grid */}

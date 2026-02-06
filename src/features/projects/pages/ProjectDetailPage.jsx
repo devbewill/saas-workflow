@@ -125,7 +125,7 @@ export default function ProjectDetailPage() {
                 <div className="flex gap-2">
                     {viewConfig.showAssistant && (
                         <Button onClick={() => setIsAssistantOpen(true)}>
-                            <Hand className="w-4 h-4 mr-2" /> Assistenza
+                            <Hand className="w-4 h-4 mr-2" /> Supporto
                         </Button>
                     )}
                     {viewConfig.showTimeline && (

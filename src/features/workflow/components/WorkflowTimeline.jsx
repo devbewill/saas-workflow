@@ -47,10 +47,7 @@ export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onT
                                 </Badge>
                             </div>
 
-                            <div className="relative pl-6 space-y-4">
-                                {/* Vertical line */}
-                                <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-200" />
-
+                            <div className="space-y-2 ml-2">
                                 {stateSteps.map((step) => {
                                     const stepIndex = steps.findIndex(s => s.id === step.id);
                                     const status = getStepStatus(step, stepIndex);
@@ -60,28 +57,28 @@ export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onT
                                             key={step.id}
                                             onClick={() => handleStepClick(step)}
                                             className={cn(
-                                                "relative flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer",
-                                                status === 'current' && "bg-blue-50 border border-blue-200",
+                                                "flex items-center gap-3 py-2 rounded-lg transition-all cursor-pointer",
+                                                status === 'current' && "",
                                                 status === 'completed' && "hover:bg-green-50",
                                                 status === 'future' && "hover:bg-slate-50"
                                             )}
                                         >
-                                            {/* Step indicator */}
                                             <div className={cn(
-                                                "absolute -left-6 mt-0.5 h-6 w-6 rounded-full border-2 flex items-center justify-center bg-white transition-all",
+                                                "flex-shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center bg-white",
                                                 status === 'current' && "border-blue-500",
                                                 status === 'completed' && "border-green-500 bg-green-500",
-                                                status === 'future' && "border-slate-300"
+                                                status === 'future' && "bg-slate-100 border-slate-10    0"
                                             )}>
                                                 {status === 'completed' ? (
                                                     <CheckCircle className="h-4 w-4 text-white" />
                                                 ) : status === 'current' ? (
-                                                    <Circle className="h-3 w-3 fill-blue-500 text-blue-500" />
+                                                    <Circle className="h-4 w-4 fill-blue-500 text-blue-500" />
                                                 ) : (
-                                                    <Circle className="h-3 w-3 text-slate-300" />
+                                                    <Circle className="h-4 w-4 text-slate-300" />
                                                 )}
                                             </div>
 
+                                            {/* Content */}
                                             <div className="flex-1 min-w-0">
                                                 <p className={cn(
                                                     "text-sm font-medium",

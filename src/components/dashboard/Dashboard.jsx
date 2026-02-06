@@ -5,15 +5,13 @@ import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type,
 import { cn } from '@/lib/utils';
 import { FilterPanel } from '../filters/FilterPanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../ui/Table';
-import { useTheme } from '@/context/ThemeContext';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-  const { theme } = useTheme();
 
   return (
-    <div className={cn("transition-all duration-700", theme.font)}>
+    <div className="transition-all duration-700">
       <div className="space-y-6 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {STATS.map((stat, i) => (
@@ -48,25 +46,23 @@ export default function Dashboard() {
                   <p className="text-sm mt-1 text-slate-500 leading-relaxed">La pratica è in attesa dei dati necessari per procedere.</p>
                 </div>
                 <div className="p-5 hover:bg-slate-50/50 transition-colors">
-                  <p className={cn("text-sm font-medium text-slate-900 leading-snug", theme.text)}>Aggiornamento Status - Piazza Napoli 2</p>
+                  <p className="text-sm font-medium text-slate-900 leading-snug">Aggiornamento Status - Piazza Napoli 2</p>
                   <div className="flex items-center gap-2 mt-3">
                     <span className={cn("px-2.5 py-1 rounded text-[10px] font-semibold bg-slate-100 text-slate-500")}>Bozza</span>
                     <Zap size={10} className="opacity-20" />
-                    <span className={cn("px-2.5 py-1 rounded text-[10px] font-semibold", theme.badge)}>Verifica preliminare</span>
+                    <span className="px-2.5 py-1 rounded text-[10px] font-semibold">Verifica preliminare</span>
                   </div>
                 </div>
                 <div className="p-5 last:pb-0 hover:bg-slate-50/50 transition-colors">
-                  <p className={cn("text-sm font-medium text-slate-900 leading-snug", theme.text)}>Esito Negativo - Roma 123</p>
+                  <p className="text-sm font-medium text-slate-900 leading-snug">Esito Negativo - Roma 123</p>
                   <div className="flex items-center gap-2 mt-3">
-                    <span className={cn("px-2.5 py-1 rounded text-[10px] font-black uppercase", theme.badge)}>AML</span>
+                    <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase">AML</span>
                     <Zap size={10} className="opacity-20" />
                     <span className={cn("px-2.5 py-1 rounded text-[10px] font-black bg-red-50 text-red-500 uppercase tracking-wider")}>Ko tecnico</span>
                   </div>
                 </div>
               </div>
-              <button className={cn("w-full mt-10 py-4 text-[10px] font-black uppercase tracking-[0.3em] border transition-all",
-                'border-slate-100 text-slate-400 hover:bg-slate-50 hover:text-slate-900',
-                theme.radius)}>
+              <button className="w-full mt-10 py-4 text-[10px] font-black uppercase tracking-[0.3em] border transition-all border-slate-100 text-slate-400 hover:bg-slate-50 hover:text-slate-900 rounded-lg">
                 Segna tutte come lette
               </button>
             </section>
