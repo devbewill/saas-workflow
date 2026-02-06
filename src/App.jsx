@@ -1,17 +1,17 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import AppShell from './components/layout/app-shell';
+import AppShell from './components/shared/app-shell';
 import Dashboard from './components/dashboard/Dashboard';
 
 // Feature-based imports
 import ProjectsList from './features/projects/pages/ProjectsList';
 import ProjectDetailPage from './features/projects/pages/ProjectDetailPage';
 
-import { WorkflowProvider } from './context/WorkflowContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
-    <WorkflowProvider>
+    <ThemeProvider>
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<Dashboard />} />
@@ -23,7 +23,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
-    </WorkflowProvider>
+    </ThemeProvider>
   );
 }
 

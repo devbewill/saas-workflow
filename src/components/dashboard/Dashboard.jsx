@@ -5,12 +5,12 @@ import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type,
 import { cn } from '@/lib/utils';
 import { FilterPanel } from '../filters/FilterPanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../ui/Table';
-import { useWorkflow } from '@/context/WorkflowContext';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-  const { theme } = useWorkflow();
+  const { theme } = useTheme();
 
   return (
     <div className={cn("transition-all duration-700", theme.font)}>

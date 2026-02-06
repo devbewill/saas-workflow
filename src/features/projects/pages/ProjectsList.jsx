@@ -10,12 +10,12 @@ import { cn } from '@/lib/utils';
 import { FilterPanel } from '@/components/filters/FilterPanel';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/Table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useWorkflow } from '@/context/WorkflowContext';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function ProjectsList() {
     const navigate = useNavigate();
     const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-    const { theme } = useWorkflow();
+    const { theme } = useTheme();
 
     return (
         <div className={cn("transition-all duration-700", theme.font)}>
