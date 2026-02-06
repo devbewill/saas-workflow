@@ -28,6 +28,7 @@ const StandardView = lazy(() => import('@/features/projects/views/StandardView')
 const DocumentsView = lazy(() => import('@/features/projects/views/DocumentsView'));
 const AMLVerificationView = lazy(() => import('@/features/projects/views/AMLVerificationView'));
 const FascicoliView = lazy(() => import('@/features/projects/views/FascicoliView'));
+const TeamView = lazy(() => import('@/features/projects/views/TeamView'));
 const CreditCheckView = lazy(() => import('@/features/projects/views/CreditCheckView'));
 const ApprovalView = lazy(() => import('@/features/projects/views/ApprovalView'));
 const ContractView = lazy(() => import('@/features/projects/views/ContractView'));
@@ -41,7 +42,7 @@ const TAB_VIEW_MAP = {
     crediti: CreditCheckView,
     delibera: ApprovalView,
     contratto: ContractView,
-    team: StandardView, // Team uses StandardView for now
+    team: TeamView,
     finanziario: StandardView, // Financial uses StandardView for now
     lavori: StandardView, // Works uses StandardView for now
     storico: StandardView, // History uses StandardView for now
