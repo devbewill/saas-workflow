@@ -1,181 +1,310 @@
 /**
  * AMLVerificationView - View for AML check states
- * Dedicated interface for anti-money laundering verification
+ * Two-column side-by-side layout for Verifica AML and Controllo Banche Dati
  */
 import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import {
-    ShieldCheck,
-    AlertTriangle,
-    CheckCircle,
-    XCircle,
-    FileText,
-    Upload,
-    Database,
-    Search
-} from 'lucide-react';
+import { AlertTriangle, CheckCircle, Upload, Eye, Trash2, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const AML_OUTCOMES = [
-    { id: 'green', label: 'Verde - Nessun rischio', color: 'bg-green-100 text-green-800 border-green-200', icon: CheckCircle },
-    { id: 'yellow', label: 'Giallo - Rischio basso', color: 'bg-yellow-100 text-yellow-800 border-yellow-200', icon: AlertTriangle },
-    { id: 'orange', label: 'Arancione - Forzante', color: 'bg-orange-100 text-orange-800 border-orange-200', icon: AlertTriangle },
-    { id: 'red', label: 'Rosso - KO', color: 'bg-red-100 text-red-800 border-red-200', icon: XCircle },
-];
-
-const DATABASE_CHECKS = [
-    { id: 'crif', name: 'CRIF', status: 'completed', result: 'Negativo' },
-    { id: 'cerved', name: 'CERVED', status: 'completed', result: 'Negativo' },
-    { id: 'protesti', name: 'Protesti', status: 'pending', result: null },
-    { id: 'pregiudizievoli', name: 'Pregiudizievoli', status: 'pending', result: null },
-];
-
 export default function AMLVerificationView({ project }) {
-    const [selectedOutcome, setSelectedOutcome] = useState(null);
-    const [hawkUploaded, setHawkUploaded] = useState(false);
+    const [amlOutcome, setAmlOutcome] = useState('Rosso - Alto');
+    const [dbOutcome, setDbOutcome] = useState('Verde - Positivo');
+    const [amlNotes, setAmlNotes] = useState('');
+    const [dbNotes, setDbNotes] = useState('');
+    const [hawkDocument, setHawkDocument] = useState(null);
+    const [dbDocument, setDbDocument] = useState({
+        name: 'Esito_banche_dati.pdf',
+        date: '03/02/2026'
+    });
+
+    // Dynamic risk configuration based on selection
+    const getRiskConfig = (outcome) => {
+        if (outcome.includes('Rosso')) {
+            return {
+                color: 'bg-red-500',
+                textColor: 'text-red-500',
+                label: 'KO',
+                icon: '✕'
+            };
+        } else if (outcome.includes('Arancione')) {
+            return {
+                color: 'bg-orange-500',
+                textColor: 'text-orange-500',
+                label: 'Forzante',
+                icon: '⚠'
+            };
+        } else {
+            // Verde - Medio or Verde - Basso
+            const isMedio = outcome.includes('Medio');
+            return {
+                color: 'bg-green-500',
+                textColor: 'text-green-500',
+                label: isMedio ? 'Rischio Medio' : 'Rischio Basso',
+                icon: '✓'
+            };
+        }
+    };
+
+    const riskConfig = getRiskConfig(amlOutcome);
+    const showWarning = amlOutcome === 'Arancione - Forzante';
+
+    // Dynamic database check configuration
+    const getDbConfig = (outcome) => {
+        if (outcome.includes('Rosso')) {
+            return {
+                color: 'bg-red-500',
+                textColor: 'text-red-500',
+                label: 'KO',
+                icon: '✕'
+            };
+        } else if (outcome.includes('Arancione')) {
+            return {
+                color: 'bg-orange-500',
+                textColor: 'text-orange-500',
+                label: 'Da verificare',
+                icon: '⚠'
+            };
+        } else {
+            return {
+                color: 'bg-green-500',
+                textColor: 'text-green-500',
+                label: 'Positivo',
+                icon: '✓'
+            };
+        }
+    };
+
+    const dbConfig = getDbConfig(dbOutcome);
+
+    // File upload handlers
+    const handleHawkUpload = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setHawkDocument({
+                name: file.name,
+                date: new Date().toLocaleDateString('it-IT')
+            });
+        }
+    };
+
+    const handleDbUpload = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setDbDocument({
+                name: file.name,
+                date: new Date().toLocaleDateString('it-IT')
+            });
+        }
+    };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Main AML Panel */}
-            <div className="lg:col-span-2 space-y-6">
-                {/* HAWK Document Upload */}
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-2">
-                            <FileText className="h-5 w-5 text-blue-600" />
-                            <CardTitle>Documento HAWK</CardTitle>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Panel: Verifica AML */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-slate-900">Verifica AML - Profilo di rischio</h3>
+                    <AlertTriangle size={20} className="text-amber-500" />
+                </div>
+
+                {/* Risk Status Indicator - Dynamic */}
+                <div className="flex items-center justify-center py-8">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className={cn(
+                            "w-20 h-20 rounded-full flex items-center justify-center shadow-lg text-white font-semibold text-2xl",
+                            riskConfig.color
+                        )}>
+                            {riskConfig.icon}
                         </div>
-                        <CardDescription>Carica il report di verifica HAWK</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        {hawkUploaded ? (
-                            <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                                <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span className={cn("text-sm font-semibold", riskConfig.textColor)}>
+                            {riskConfig.label}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Outcome Selector */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Esito controllo</label>
+                    <select
+                        value={amlOutcome}
+                        onChange={(e) => setAmlOutcome(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300"
+                    >
+                        <option>Rosso - KO</option>
+                        <option>Arancione - Forzante</option>
+                        <option>Verde - Medio</option>
+                        <option>Verde - Basso</option>
+                    </select>
+                </div>
+
+                {/* Notes Section */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Motivazione / Note forzature</label>
+                    <textarea
+                        value={amlNotes}
+                        onChange={(e) => setAmlNotes(e.target.value)}
+                        placeholder="Richiesta adeguata verifica rafforzata"
+                        rows={4}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300 resize-none"
+                    />
+                </div>
+
+                {/* Warning Alert - Conditional */}
+                {showWarning && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
+                        <AlertTriangle size={20} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                        <div className="text-sm">
+                            <p className="font-semibold text-amber-900">Adeguata verifica rafforzata in corso</p>
+                            <p className="text-amber-700 mt-1">
+                                Sono necessarie ulteriori informazioni per poter proseguire con il processo
+                            </p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Document Upload/Display */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Documento HAWK</label>
+
+                    {!hawkDocument ? (
+                        <label className="block cursor-pointer">
+                            <input
+                                type="file"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                onChange={handleHawkUpload}
+                                className="hidden"
+                            />
+                            <div className="border-2 border-dashed border-red-300 bg-red-50 rounded-lg p-8 text-center hover:border-red-400 hover:bg-red-100 transition-colors">
+                                <Upload size={32} className="mx-auto text-red-400 mb-3" />
+                                <p className="text-sm text-slate-600 font-medium">
+                                    Trascina qui il file o clicca per selezionare
+                                </p>
+                                <p className="text-xs text-slate-400 mt-1">
+                                    Caricare il report/screenshot/esito generato da HAWK (PDF)
+                                </p>
+                            </div>
+                        </label>
+                    ) : (
+                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center">
+                                    <FileText className="w-5 h-5 text-red-500" />
+                                </div>
                                 <div>
-                                    <p className="font-medium text-green-800">Report HAWK caricato</p>
-                                    <p className="text-sm text-green-600">hawk_report_2024.pdf</p>
+                                    <p className="text-sm font-medium text-slate-900">{hawkDocument.name}</p>
+                                    <p className="text-xs text-slate-500">Caricato il {hawkDocument.date}</p>
                                 </div>
                             </div>
-                        ) : (
-                            <button
-                                onClick={() => setHawkUploaded(true)}
-                                className="w-full p-8 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer"
-                            >
-                                <div className="flex flex-col items-center gap-2 text-slate-500">
-                                    <Upload className="h-8 w-8" />
-                                    <span className="font-medium">Clicca per caricare il report HAWK</span>
-                                    <span className="text-sm">PDF, max 10MB</span>
-                                </div>
-                            </button>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Database Checks */}
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-2">
-                            <Database className="h-5 w-5 text-violet-600" />
-                            <CardTitle>Verifiche Banche Dati</CardTitle>
-                        </div>
-                        <CardDescription>Stato delle interrogazioni alle banche dati esterne</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-3">
-                            {DATABASE_CHECKS.map((check) => (
-                                <div
-                                    key={check.id}
-                                    className={cn(
-                                        "flex items-center justify-between p-4 rounded-lg border",
-                                        check.status === 'completed' ? 'bg-slate-50' : 'bg-amber-50 border-amber-200'
-                                    )}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setHawkDocument(null)}
+                                    className="p-2 hover:bg-slate-100 rounded-lg text-red-500 transition-colors"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        {check.status === 'completed' ? (
-                                            <CheckCircle className="h-5 w-5 text-green-600" />
-                                        ) : (
-                                            <Search className="h-5 w-5 text-amber-600 animate-pulse" />
-                                        )}
-                                        <span className="font-medium">{check.name}</span>
-                                    </div>
-                                    <div>
-                                        {check.status === 'completed' ? (
-                                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                                                {check.result}
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-                                                In corso...
-                                            </Badge>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
+                                    <Trash2 size={16} />
+                                </button>
+                                <button className="p-2 hover:bg-slate-100 rounded-lg text-primary-600 transition-colors">
+                                    <Eye size={16} />
+                                </button>
+                            </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    )}
+                </div>
             </div>
 
-            {/* Right Column - AML Outcome Selection */}
-            <div className="space-y-6">
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-2">
-                            <ShieldCheck className="h-5 w-5 text-emerald-600" />
-                            <CardTitle>Esito AML</CardTitle>
-                        </div>
-                        <CardDescription>Seleziona l'esito della verifica antiriciclaggio</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-3">
-                            {AML_OUTCOMES.map((outcome) => {
-                                const Icon = outcome.icon;
-                                return (
-                                    <button
-                                        key={outcome.id}
-                                        onClick={() => setSelectedOutcome(outcome.id)}
-                                        className={cn(
-                                            "w-full flex items-center gap-3 p-4 rounded-lg border-2 transition-all text-left",
-                                            selectedOutcome === outcome.id
-                                                ? `${outcome.color} border-current`
-                                                : "border-slate-200 hover:border-slate-300"
-                                        )}
-                                    >
-                                        <Icon className="h-5 w-5" />
-                                        <span className="font-medium">{outcome.label}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
+            {/* Right Panel: Controllo Banche Dati */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-slate-900">Controllo Banche dati</h3>
+                    <CheckCircle size={20} className="text-green-500" />
+                </div>
 
-                        <Button
-                            className="w-full mt-6"
-                            disabled={!selectedOutcome || !hawkUploaded}
-                        >
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Conferma Esito AML
-                        </Button>
-                    </CardContent>
-                </Card>
+                {/* Database Status Indicator - Dynamic */}
+                <div className="flex items-center justify-center py-8">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className={cn(
+                            "w-20 h-20 rounded-full flex items-center justify-center shadow-lg text-white font-semibold text-2xl",
+                            dbConfig.color
+                        )}>
+                            {dbConfig.icon}
+                        </div>
+                        <span className={cn("text-sm font-semibold", dbConfig.textColor)}>
+                            {dbConfig.label}
+                        </span>
+                    </div>
+                </div>
 
-                {/* Warning for Orange outcome */}
-                {selectedOutcome === 'orange' && (
-                    <Card className="border-orange-200 bg-orange-50">
-                        <CardContent className="pt-6">
-                            <div className="flex gap-3">
-                                <AlertTriangle className="h-5 w-5 text-orange-600 shrink-0" />
+                {/* Outcome Selector */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Esito controllo</label>
+                    <select
+                        value={dbOutcome}
+                        onChange={(e) => setDbOutcome(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300"
+                    >
+                        <option>Verde - Positivo</option>
+                        <option>Arancione - Da verificare</option>
+                        <option>Rosso - KO</option>
+                    </select>
+                </div>
+
+                {/* Notes Section */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Note</label>
+                    <textarea
+                        value={dbNotes}
+                        onChange={(e) => setDbNotes(e.target.value)}
+                        placeholder="Inserire eventuali note a supporto dell'esito"
+                        rows={4}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-300 resize-none"
+                    />
+                </div>
+
+                {/* Document Upload/Display */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Documento esito Banche dati</label>
+
+                    {!dbDocument ? (
+                        <label className="block cursor-pointer">
+                            <input
+                                type="file"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                onChange={handleDbUpload}
+                                className="hidden"
+                            />
+                            <div className="border-2 border-dashed border-slate-300 bg-slate-50 rounded-lg p-8 text-center hover:border-slate-400 hover:bg-slate-100 transition-colors">
+                                <Upload size={32} className="mx-auto text-slate-400 mb-3" />
+                                <p className="text-sm text-slate-600 font-medium">
+                                    Trascina qui il file o clicca per selezionare
+                                </p>
+                                <p className="text-xs text-slate-400 mt-1">
+                                    Caricare il documento di esito (PDF, JPG, PNG)
+                                </p>
+                            </div>
+                        </label>
+                    ) : (
+                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center">
+                                    <FileText className="w-5 h-5 text-red-500" />
+                                </div>
                                 <div>
-                                    <p className="font-semibold text-orange-800">Verifica Rafforzata Richiesta</p>
-                                    <p className="text-sm text-orange-700 mt-1">
-                                        L'esito "Forzante" richiede documentazione aggiuntiva e approvazione del responsabile AML.
-                                    </p>
+                                    <p className="text-sm font-medium text-slate-900">{dbDocument.name}</p>
+                                    <p className="text-xs text-slate-500">Caricato il {dbDocument.date}</p>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
-                )}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setDbDocument(null)}
+                                    className="p-2 hover:bg-slate-100 rounded-lg text-red-500 transition-colors"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                                <button className="p-2 hover:bg-slate-100 rounded-lg text-primary-600 transition-colors">
+                                    <Eye size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

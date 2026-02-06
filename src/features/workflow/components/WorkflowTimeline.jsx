@@ -1,11 +1,11 @@
 /**
  * WorkflowTimeline - Sheet showing the workflow progression
+ * Clicking on any step transitions to that state
  */
 import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, ChevronRight } from 'lucide-react';
+import { CheckCircle, Circle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onTransition }) {
@@ -24,12 +24,18 @@ export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onT
         return 'future';
     };
 
+    const handleStepClick = (step) => {
+        // Transition to the clicked step
+        onTransition(step.fullName);
+        onOpenChange(false);
+    };
+
     return (
         <Sheet open={isOpen} onOpenChange={onOpenChange}>
             <SheetContent className="sm:max-w-lg overflow-y-auto">
                 <SheetHeader>
                     <SheetTitle>Timeline Progetto</SheetTitle>
-                    <SheetDescription>Progressione del workflow</SheetDescription>
+                    <SheetDescription>Clicca su uno stato per andare a quello stato</SheetDescription>
                 </SheetHeader>
 
                 <div className="py-6 space-y-6">
@@ -52,16 +58,17 @@ export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onT
                                     return (
                                         <div
                                             key={step.id}
+                                            onClick={() => handleStepClick(step)}
                                             className={cn(
-                                                "relative flex items-start gap-3 p-3 rounded-lg transition-all",
+                                                "relative flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer",
                                                 status === 'current' && "bg-blue-50 border border-blue-200",
-                                                status === 'completed' && "opacity-60",
-                                                status === 'future' && "opacity-50"
+                                                status === 'completed' && "hover:bg-green-50",
+                                                status === 'future' && "hover:bg-slate-50"
                                             )}
                                         >
                                             {/* Step indicator */}
                                             <div className={cn(
-                                                "absolute -left-6 mt-0.5 h-6 w-6 rounded-full border-2 flex items-center justify-center bg-white",
+                                                "absolute -left-6 mt-0.5 h-6 w-6 rounded-full border-2 flex items-center justify-center bg-white transition-all",
                                                 status === 'current' && "border-blue-500",
                                                 status === 'completed' && "border-green-500 bg-green-500",
                                                 status === 'future' && "border-slate-300"
@@ -79,7 +86,7 @@ export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onT
                                                 <p className={cn(
                                                     "text-sm font-medium",
                                                     status === 'current' && "text-blue-900",
-                                                    status === 'completed' && "text-slate-600 line-through",
+                                                    status === 'completed' && "text-slate-600",
                                                     status === 'future' && "text-slate-500"
                                                 )}>
                                                     {step.subState || step.fullName}
@@ -88,18 +95,6 @@ export function WorkflowTimeline({ isOpen, onOpenChange, steps, currentStep, onT
                                                     Owner: {step.owner}
                                                 </p>
                                             </div>
-
-                                            {/* Transition button for next possible states */}
-                                            {status === 'current' && step.nextPossible?.length > 0 && (
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    className="shrink-0"
-                                                    onClick={() => onTransition(step.nextPossible[0])}
-                                                >
-                                                    Avanza <ChevronRight className="ml-1 h-4 w-4" />
-                                                </Button>
-                                            )}
                                         </div>
                                     );
                                 })}

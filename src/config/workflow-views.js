@@ -11,6 +11,7 @@ const AMLVerificationView = lazy(() => import('@/features/projects/views/AMLVeri
 const CreditCheckView = lazy(() => import('@/features/projects/views/CreditCheckView'));
 const ApprovalView = lazy(() => import('@/features/projects/views/ApprovalView'));
 const ContractView = lazy(() => import('@/features/projects/views/ContractView'));
+const FascicoliView = lazy(() => import('@/features/projects/views/FascicoliView'));
 
 /**
  * View configuration for each workflow state
@@ -27,7 +28,7 @@ export const WORKFLOW_VIEW_CONFIG = {
     // ==================== BOZZA ====================
     "Bozza": {
         component: StandardView,
-        availableTabs: ['info', 'documenti', 'team'],
+        availableTabs: ['info', 'documenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'draft',
@@ -38,7 +39,7 @@ export const WORKFLOW_VIEW_CONFIG = {
     // ==================== APERTA ====================
     "Aperta – Verifica preliminare": {
         component: StandardView,
-        availableTabs: ['info', 'documenti', 'team'],
+        availableTabs: ['info', 'documenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'preliminary_check',
@@ -48,7 +49,7 @@ export const WORKFLOW_VIEW_CONFIG = {
 
     "Aperta - Validazione documenti": {
         component: DocumentsView,
-        availableTabs: ['documenti', 'info', 'team'],
+        availableTabs: ['documenti', 'fascicoli', 'info', 'team'],
         defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'document_validation',
@@ -59,7 +60,7 @@ export const WORKFLOW_VIEW_CONFIG = {
     // ==================== CARICATA ====================
     "Caricata - Lavorazione AML e Banche Dati": {
         component: AMLVerificationView,
-        availableTabs: ['aml', 'documenti', 'info'],
+        availableTabs: ['aml', 'documenti', 'fascicoli', 'info'],
         defaultTab: 'aml',
         showAssistant: true,
         assistantConfigKey: 'aml_check',
@@ -228,4 +229,5 @@ export const TAB_LABELS = {
     lavori: 'Stato Lavori',
     contratto: 'Contratto',
     storico: 'Storico',
+    fascicoli: 'Fascicoli',
 };

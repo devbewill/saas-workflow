@@ -1,8 +1,9 @@
 /**
  * ProjectDetailPage - Main page component for project details
  * Uses Configuration Object pattern to render state-specific views
+ * Each tab renders a different view component
  */
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PROJECTS, CONDOMINIUM_DATA, FINANCIAL_DATA, DOCUMENTS } from '@/data/mockData';
 import { getViewConfig, TAB_LABELS } from '@/config/workflow-views';
@@ -18,10 +19,33 @@ import { Card, CardContent } from '@/components/ui/card';
 // Feature Components
 import { OperatorAssistantSheet } from '@/features/operator-assist/components/OperatorAssistantSheet';
 import { WorkflowTimeline } from '@/features/workflow/components/WorkflowTimeline';
-import { BundlesSection } from '../components/BundlesSection';
 
 // Icons
 import { ArrowLeft, Hand, Clock } from 'lucide-react';
+
+// Lazy load all view components
+const StandardView = lazy(() => import('@/features/projects/views/StandardView'));
+const DocumentsView = lazy(() => import('@/features/projects/views/DocumentsView'));
+const AMLVerificationView = lazy(() => import('@/features/projects/views/AMLVerificationView'));
+const FascicoliView = lazy(() => import('@/features/projects/views/FascicoliView'));
+const CreditCheckView = lazy(() => import('@/features/projects/views/CreditCheckView'));
+const ApprovalView = lazy(() => import('@/features/projects/views/ApprovalView'));
+const ContractView = lazy(() => import('@/features/projects/views/ContractView'));
+
+// Tab to View Component mapping
+const TAB_VIEW_MAP = {
+    info: StandardView,
+    documenti: DocumentsView,
+    fascicoli: FascicoliView,
+    aml: AMLVerificationView,
+    crediti: CreditCheckView,
+    delibera: ApprovalView,
+    contratto: ContractView,
+    team: StandardView, // Team uses StandardView for now
+    finanziario: StandardView, // Financial uses StandardView for now
+    lavori: StandardView, // Works uses StandardView for now
+    storico: StandardView, // History uses StandardView for now
+};
 
 // Loading skeleton for lazy-loaded views
 function ViewSkeleton() {
@@ -62,11 +86,13 @@ export default function ProjectDetailPage() {
     const [isTimelineOpen, setIsTimelineOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(viewConfig.defaultTab);
 
-    // Get the view component from config
-    const ViewComponent = viewConfig.component;
-
     // All workflow steps for timeline
     const allSteps = workflowData.workflow.steps;
+
+    // Get view component for the active tab
+    const getViewForTab = (tabKey) => {
+        return TAB_VIEW_MAP[tabKey] || StandardView;
+    };
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
@@ -138,16 +164,18 @@ export default function ProjectDetailPage() {
                     ))}
                 </TabsList>
 
-                {/* Main View Content - Rendered based on workflow state */}
-                <TabsContent value={activeTab} className="mt-6">
-                    <Suspense fallback={<ViewSkeleton />}>
-                        <ViewComponent project={projectData} />
-                    </Suspense>
-                </TabsContent>
+                {/* Render TabsContent for each available tab */}
+                {viewConfig.availableTabs.map(tabKey => {
+                    const ViewComponent = getViewForTab(tabKey);
+                    return (
+                        <TabsContent key={tabKey} value={tabKey} className="mt-6">
+                            <Suspense fallback={<ViewSkeleton />}>
+                                <ViewComponent project={projectData} />
+                            </Suspense>
+                        </TabsContent>
+                    );
+                })}
             </Tabs>
-
-            {/* Bundles Section (Fascicoli) */}
-            <BundlesSection projectId={projectData.id} documents={DOCUMENTS} />
 
             {/* Operator Assistant Sheet */}
             {viewConfig.showAssistant && (
