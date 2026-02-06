@@ -11,19 +11,19 @@ import { useWorkflowEngine } from '@/hooks/use-workflow-engine';
 const STATE_CONFIGS = {
   "Aperta - Validazione documenti": {
     title: "Verifica Documentale",
-    description: "Analizza attentamente tutti i documenti caricati dal cliente. Verifica la corrispondenza dei dati tra il Codice Fiscale del condominio e il verbale di nomina dell'amministratore.",
+    description: "Analizza attentamente tutti i documenti caricati e procedi con la validazione.",
     requirements: [
       { id: 'privacy', label: 'Validità documenti privacy', checked: true },
       { id: 'verbali', label: 'Coerenza date verbali', checked: false }
     ],
     nextSteps: [
       { id: 1, text: 'Segnala eventuali anomalie nelle note del documento specifico.' },
-      { id: 2, text: 'Invia la pratica in \'KO\' se i documenti obbligatori mancano dopo 3 solleciti.' }
+      { id: 2, text: 'Invia la pratica in \'KO\' se i documenti mostrano problemi rilevanti.' }
     ],
     warning: {
       type: 'info',
       title: 'PROMEMORIA',
-      message: 'Ricorda che la delibera assemblea deve contenere....'
+      message: 'Ricorda che il documento x deve contenere necessariamente....'
     },
     proceedLabel: 'Ho verificato i documenti'
   },
@@ -64,89 +64,95 @@ const STATE_CONFIGS = {
 };
 
 export function AtomicAssistantSheet({ isOpen, onOpenChange, currentStepName }) {
-    const config = STATE_CONFIGS[currentStepName] || STATE_CONFIGS["Bozza"];
+  const config = STATE_CONFIGS[currentStepName] || STATE_CONFIGS["Bozza"];
 
-    // Check if configuration exists before accessing properties
-    const requirements = config?.requirements || [];
-    const allRequirementsMet = requirements.every(req => req.checked);
+  // Check if configuration exists before accessing properties
+  const requirements = config?.requirements || [];
+  const allRequirementsMet = requirements.every(req => req.checked);
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Operator Assistant</SheetTitle>
+          <SheetTitle>Supporto operatore</SheetTitle>
           <SheetDescription>Supporto guidato per la lavorazione.</SheetDescription>
         </SheetHeader>
 
         <div className="space-y-6 py-6">
 
-            {/* Phase Info */}
-            <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs uppercase tracking-wider">Fase Corrente</Badge>
-                </div>
-                <div className="rounded-lg border bg-card p-4 shadow-sm">
-                    <h3 className="font-semibold text-lg">{config.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{config.description}</p>
-                </div>
+          {/* Phase Info */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs uppercase tracking-wider">Fase Corrente</Badge>
             </div>
-
-            {/* Warning if exists */}
-            {config.warning && (
-                <div className={cn("p-4 rounded-lg flex gap-3 text-sm",
-                    config.warning.type === 'warning' ? "bg-amber-50 text-amber-800 border border-amber-200" : "bg-blue-50 text-blue-800 border border-blue-200"
-                )}>
-                    {config.warning.type === 'warning' ? <AlertTriangle className="h-5 w-5 shrink-0" /> : <Info className="h-5 w-5 shrink-0" />}
-                    <div>
-                        <p className="font-bold">{config.warning.title}</p>
-                        <p>{config.warning.message}</p>
-                    </div>
-                </div>
-            )}
-
-            {/* Checklist */}
-            <div className="space-y-3">
-                <h4 className="text-sm font-medium uppercase text-muted-foreground">Checklist Operativa</h4>
-                <div className="rounded-lg border p-4 space-y-3">
-                    {requirements.map(req => (
-                        <div key={req.id} className="flex items-center gap-3">
-                            {req.checked ? (
-                                <CheckCircle className="h-5 w-5 text-primary shrink-0" />
-                            ) : (
-                                <Circle className="h-5 w-5 text-muted-foreground shrink-0" />
-                            )}
-                            <span className={cn("text-sm", req.checked ? "font-medium" : "text-muted-foreground")}>
-                                {req.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+            <div className="rounded-lg border bg-card p-4 shadow-sm">
+              <h3 className="font-semibold text-lg">{config.title}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{config.description}</p>
             </div>
-
-             {/* Next Steps */}
-             <div className="space-y-3">
-                <h4 className="text-sm font-medium uppercase text-muted-foreground">Prossimi Passaggi</h4>
-                <div className="space-y-3 pl-2">
-                    {config.nextSteps?.map(step => (
-                        <div key={step.id} className="flex gap-3 text-sm text-muted-foreground">
-                            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium text-foreground">
-                                {step.id}
-                            </span>
-                            <p>{step.text}</p>
-                        </div>
-                    ))}
+          </div>
+          {/* Checklist */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium uppercase text-muted-foreground">Checklist Operativa</h4>
+            <div className="rounded-lg border p-4 space-y-3">
+              {requirements.map(req => (
+                <div key={req.id} className="flex items-center gap-3">
+                  {req.checked ? (
+                    <CheckCircle className="h-5 w-5 text-primary shrink-0" />
+                  ) : (
+                    <Circle className="h-5 w-5 text-muted-foreground shrink-0" />
+                  )}
+                  <span className={cn("text-sm", req.checked ? "font-medium" : "text-muted-foreground")}>
+                    {req.label}
+                  </span>
                 </div>
+              ))}
             </div>
+          </div>
+
+          {/* Warning if exists */}
+          {config.warning && (
+            <div className={cn("p-4 rounded-lg flex gap-3 text-sm",
+              config.warning.type === 'warning' ? "bg-amber-50 text-amber-800 border border-amber-200" : "bg-blue-50 text-blue-800 border border-blue-200"
+            )}>
+              {config.warning.type === 'warning' ? <AlertTriangle className="h-5 w-5 shrink-0" /> : <Info className="h-5 w-5 shrink-0" />}
+              <div>
+                <p className="font-bold">{config.warning.title}</p>
+                <p>{config.warning.message}</p>
+              </div>
+            </div>
+          )}
+
+
+          {/* Next Steps */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium uppercase text-muted-foreground">Prossimi Passaggi</h4>
+            <div className="space-y-3 pl-2">
+              {config.nextSteps?.map(step => (
+                <div key={step.id} className="flex gap-3 text-sm text-muted-foreground">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium text-foreground">
+                    {step.id}
+                  </span>
+                  <p>{step.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
         </div>
 
-        <SheetFooter className="flex-col gap-2 sm:flex-col">
-            <Button className="w-full" disabled={!allRequirementsMet}>
-                <CheckCircle className="mr-2 h-4 w-4" /> {config.proceedLabel}
-            </Button>
-            <Button variant="destructive" variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700">
-                Segnala Problema / KO
-            </Button>
+        <SheetFooter className="flex-col gap-2 sm:flex-col sm:space-x-0">
+          <Button disabled={!allRequirementsMet}>
+            <CheckCircle className="mr-2 h-4 w-4" /> {config.proceedLabel}
+          </Button>
+          <Button variant="destructive">
+            Manda in KO
+          </Button>
+
+
+
+          <Button variant="link">
+            Segnala un problema
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
