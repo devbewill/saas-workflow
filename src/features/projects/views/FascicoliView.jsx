@@ -122,64 +122,86 @@ export default function FascicoliView({ project }) {
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {bundles.map((bundle) => (
-                        <Card
-                            key={bundle.id}
-                            className={cn(
-                                "transition-all hover:shadow-md cursor-pointer",
-                                bundle.isSignatureEnabled && "border-violet-200 bg-violet-50/30"
-                            )}
-                            onClick={() => handleEditFascicolo(bundle)}
-                        >
-                            <CardContent className="p-4">
-                                <div className="flex items-start justify-between mb-3">
-                                    <div>
-                                        <h4 className="font-medium text-sm">{bundle.name}</h4>
-                                        <p className="text-xs text-muted-foreground mt-0.5">
-                                            {bundle.docCount} documenti • Aggiornato {bundle.updatedAt}
-                                        </p>
-                                    </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleEditFascicolo(bundle); }}>
-                                                <Edit className="h-4 w-4 mr-2" /> Modifica
-                                            </DropdownMenuItem>
-                                            {bundle.isSignatureEnabled && (
-                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}>
-                                                    <FileSignature className="h-4 w-4 mr-2" /> Invia in Firma
+                    {bundles.map((bundle) => {
+                        // Get document names for this bundle
+                        const bundleDocs = DOCUMENTS.filter(doc => bundle.documentIds.includes(doc.id));
+
+                        return (
+                            <Card
+                                key={bundle.id}
+                                className={cn(
+                                    "transition-all hover:shadow-md cursor-pointer",
+                                    bundle.isSignatureEnabled && "border-violet-200 bg-violet-50/30"
+                                )}
+                                onClick={() => handleEditFascicolo(bundle)}
+                            >
+                                <CardContent className="p-4">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div>
+                                            <h4 className="font-medium text-sm">{bundle.name}</h4>
+                                            <p className="text-xs text-muted-foreground mt-0.5">
+                                                {bundle.docCount} documenti • Aggiornato {bundle.updatedAt}
+                                            </p>
+                                        </div>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleEditFascicolo(bundle); }}>
+                                                    <Edit className="h-4 w-4 mr-2" /> Modifica
                                                 </DropdownMenuItem>
+                                                {bundle.isSignatureEnabled && (
+                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}>
+                                                        <FileSignature className="h-4 w-4 mr-2" /> Invia in Firma
+                                                    </DropdownMenuItem>
+                                                )}
+                                                <DropdownMenuItem
+                                                    className="text-red-600"
+                                                    onClick={(e) => { e.stopPropagation(); handleDeleteFascicolo(bundle.id); }}
+                                                >
+                                                    <Trash2 className="h-4 w-4 mr-2" /> Elimina
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+
+                                    {/* Document List */}
+                                    {bundleDocs.length > 0 && (
+                                        <div className="mb-3 space-y-1.5 border-t border-slate-100 pt-3">
+                                            {bundleDocs.slice(0, 3).map(doc => (
+                                                <div key={doc.id} className="flex items-center gap-2 text-xs text-slate-600">
+                                                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full shrink-0" />
+                                                    <span className="truncate">{doc.name}</span>
+                                                </div>
+                                            ))}
+                                            {bundleDocs.length > 3 && (
+                                                <p className="text-xs text-muted-foreground pl-3.5">
+                                                    +{bundleDocs.length - 3} altri documenti
+                                                </p>
                                             )}
-                                            <DropdownMenuItem
-                                                className="text-red-600"
-                                                onClick={(e) => { e.stopPropagation(); handleDeleteFascicolo(bundle.id); }}
-                                            >
-                                                <Trash2 className="h-4 w-4 mr-2" /> Elimina
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    {getStatusBadge(bundle)}
-
-                                    {bundle.isSignatureEnabled && (
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}
-                                        >
-                                            <Send className="h-3 w-3 mr-1" /> Invia
-                                        </Button>
+                                        </div>
                                     )}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
+
+                                    <div className="flex items-center justify-between">
+                                        {getStatusBadge(bundle)}
+
+                                        {bundle.isSignatureEnabled && (
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}
+                                            >
+                                                <Send className="h-3 w-3 mr-1" /> Invia
+                                            </Button>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
                 </div>
             )}
 

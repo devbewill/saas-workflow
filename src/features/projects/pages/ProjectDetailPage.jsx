@@ -86,6 +86,11 @@ export default function ProjectDetailPage() {
     const [isTimelineOpen, setIsTimelineOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(viewConfig.defaultTab);
 
+    // Sync activeTab with viewConfig when workflow state changes
+    React.useEffect(() => {
+        setActiveTab(viewConfig.defaultTab);
+    }, [viewConfig.defaultTab]);
+
     // All workflow steps for timeline
     const allSteps = workflowData.workflow.steps;
 
