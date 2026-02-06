@@ -102,6 +102,7 @@ export function DocumentsTable({ projectId }) {
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-slate-50">
+                            <TableHead className="w-[60px]">ID</TableHead>
                             <TableHead className="w-[400px]">Documento</TableHead>
                             <TableHead>Data</TableHead>
                             <TableHead>Stato</TableHead>
@@ -113,7 +114,7 @@ export function DocumentsTable({ projectId }) {
                             <React.Fragment key={category}>
                                 {/* Category Header Row */}
                                 <TableRow className="bg-slate-100/50">
-                                    <TableCell colSpan={4} className="py-2">
+                                    <TableCell colSpan={5} className="py-2">
                                         <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                                             {category}
                                         </span>
@@ -126,6 +127,9 @@ export function DocumentsTable({ projectId }) {
                                 {/* Document Rows */}
                                 {docs.map(doc => (
                                     <TableRow key={doc.id} className="hover:bg-blue-50/30">
+                                        <TableCell>
+                                            <span className="text-xs font-mono text-slate-500">{doc.id}</span>
+                                        </TableCell>
                                         <TableCell>
                                             <div className="flex items-start gap-3">
                                                 <div className={cn(
@@ -186,7 +190,7 @@ export function DocumentsTable({ projectId }) {
 
                         {filteredDocuments.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                                     Nessun documento trovato
                                 </TableCell>
                             </TableRow>
