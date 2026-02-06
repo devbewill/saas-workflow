@@ -16,10 +16,6 @@ const STATE_CONFIGS = {
       { id: 'privacy', label: 'Validità documenti privacy', checked: true },
       { id: 'verbali', label: 'Coerenza date verbali', checked: false }
     ],
-    nextSteps: [
-      { id: 1, text: 'Segnala eventuali anomalie nelle note del documento specifico.' },
-      { id: 2, text: 'Invia la pratica in \'KO\' se i documenti mostrano problemi rilevanti.' }
-    ],
     warning: {
       type: 'info',
       title: 'PROMEMORIA',
@@ -35,11 +31,6 @@ const STATE_CONFIGS = {
       { id: 'db', label: 'Esito banche dati caricato', checked: true },
       { id: 'aml', label: 'Esito AML selezionato', checked: true }
     ],
-    nextSteps: [
-      { id: 1, text: 'Carica il report HAWK nel sistema.' },
-      { id: 2, text: 'Verifica l\'esito del controllo banche dati.' },
-      { id: 3, text: 'Seleziona l\'esito AML appropriato.' }
-    ],
     warning: {
       type: 'warning',
       title: 'ATTENZIONE',
@@ -53,10 +44,6 @@ const STATE_CONFIGS = {
     requirements: [
       { id: 'dati', label: 'Dati anagrafici completi', checked: true },
       { id: 'importo', label: 'Importo finanziamento inserito', checked: true }
-    ],
-    nextSteps: [
-      { id: 1, text: 'Verifica i dati anagrafici del condominio.' },
-      { id: 2, text: 'Conferma l\'importo da finanziare.' }
     ],
     warning: null,
     proceedLabel: 'Apri la pratica'
@@ -122,21 +109,6 @@ export function AtomicAssistantSheet({ isOpen, onOpenChange, currentStepName }) 
             </div>
           )}
 
-
-          {/* Next Steps */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-medium uppercase text-muted-foreground">Prossimi Passaggi</h4>
-            <div className="space-y-3 pl-2">
-              {config.nextSteps?.map(step => (
-                <div key={step.id} className="flex gap-3 text-sm text-muted-foreground">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium text-foreground">
-                    {step.id}
-                  </span>
-                  <p>{step.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
 
         </div>
 

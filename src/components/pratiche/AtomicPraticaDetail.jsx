@@ -14,6 +14,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTr
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Domain Components
 // import { BundleWidget } from '@/components/domain/bundle-widget'; // Removed in favor of AtomicBundleCard
@@ -24,7 +30,7 @@ import { AtomicTeamTab } from './AtomicTeamTab';
 import { AMLVerificationView } from './AMLVerificationView';
 
 // Icons
-import { Clock, Info, ArrowLeft, Home, FileText, Plus, ShieldCheck, Hand, Headset, Edit, CloudUpload, FileSignature } from 'lucide-react';
+import { Clock, Info, ArrowLeft, Home, FileText, Plus, ShieldCheck, Hand, Headset, Edit, CloudUpload, FileSignature, CheckCircle2, XCircle, File, Eye, MoreHorizontal, FilePenLine } from 'lucide-react';
 
 // Mock Documents Data
 
@@ -139,12 +145,24 @@ export default function AtomicPraticaDetail() {
             {/* 1.1 Info Header Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-50 border rounded-lg">
                 <div className="space-y-1">
+                    <span className="text-xs text-muted-foreground uppercase font-bold">Nome Progetto</span>
+                    <p className="text-sm font-medium">{practiceData.name}</p>
+                </div>
+                <div className="space-y-1">
                     <span className="text-xs text-muted-foreground uppercase font-bold">Id Progetto</span>
                     <p className="text-sm font-medium">{practiceData.displayId}</p>
                 </div>
                 <div className="space-y-1">
                     <span className="text-xs text-muted-foreground uppercase font-bold">Importo Finanziabile</span>
                     <p className="text-sm font-medium">124.500,00 €</p>
+                </div>
+                <div className="space-y-1">
+                    <span className="text-xs text-muted-foreground uppercase font-bold">Pratica Broker</span>
+                    <p className="text-sm font-medium">123456</p>
+                </div>
+                <div className="space-y-1">
+                    <span className="text-xs text-muted-foreground uppercase font-bold">Pratica OCS</span>
+                    <p className="text-sm font-medium">345342</p>
                 </div>
                 <div className="space-y-1">
                     <span className="text-xs text-muted-foreground uppercase font-bold">Prodotto</span>
@@ -260,8 +278,8 @@ export default function AtomicPraticaDetail() {
                                             ) : (
                                                 filteredDocuments.map((doc) => {
                                                     let statusColor = "";
-                                                    if (doc.status === "Da caricare") statusColor = "bg-red-100 text-red-700 border-red-200";
-                                                    else if (doc.status === "Caricato") statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                                                    if (doc.status === "Da caricare") statusColor = "bg-gray-100 text-gray-700 border-gray-200";
+                                                    else if (doc.status === "Da validare") statusColor = "bg-blue-100 text-blue-700 border-blue-200";
                                                     else if (doc.status === "Validato") statusColor = "bg-green-100 text-green-700 border-green-200";
                                                     else statusColor = "bg-slate-100 text-slate-700 border-slate-200";
 
@@ -269,7 +287,37 @@ export default function AtomicPraticaDetail() {
                                                         <TableRow key={doc.id}>
                                                             <TableCell className="font-medium text-muted-foreground">{doc.id}</TableCell>
                                                             <TableCell><Badge variant="secondary" className="font-normal text-xs">{doc.category}</Badge></TableCell>
-                                                            <TableCell className="font-medium">{doc.name}</TableCell>
+                                                            <TableCell>
+                                                                <div className="flex items-start gap-3">
+                                                                    <div className={cn(
+                                                                        "mt-0.5 p-1.5 rounded-md border",
+                                                                        doc.status === "Da caricare"
+                                                                            ? "bg-gray-50 border-dashed border-gray-300 text-gray-400"
+                                                                            : "bg-blue-50 border-blue-100 text-blue-600"
+                                                                    )}>
+                                                                        {doc.status === "Da caricare" ? (
+                                                                            <CloudUpload className="w-4 h-4" />
+                                                                        ) : (
+                                                                            <Eye className="w-4 h-4" />
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex flex-col">
+                                                                        <span className={cn("font-medium", doc.status !== "Da caricare" && "text-foreground")}>
+                                                                            {doc.name}
+                                                                        </span>
+                                                                        {doc.status !== "Da caricare" && doc.file !== "--" && (
+                                                                            <span className="text-xs text-muted-foreground font-mono mt-0.5">
+                                                                                {doc.file}
+                                                                            </span>
+                                                                        )}
+                                                                        {doc.status === "Da caricare" && (
+                                                                            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold mt-0.5">
+                                                                                Da caricare
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </TableCell>
                                                             <TableCell>{doc.date}</TableCell>
                                                             <TableCell>
                                                                 <Badge variant="outline" className={cn("text-xs font-normal", statusColor)}>
@@ -277,23 +325,30 @@ export default function AtomicPraticaDetail() {
                                                                 </Badge>
                                                             </TableCell>
                                                             <TableCell className="text-right">
-                                                                <div className="flex justify-end gap-2">
-                                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                                                                        <Edit className="h-4 w-4" />
-                                                                    </Button>
-                                                                    {doc.status === "Da caricare" ? (
-                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50">
-                                                                            <CloudUpload className="h-4 w-4" />
-                                                                        </Button>
-                                                                    ) : doc.status === "Caricato" ? (
-                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                                                                            <FileText className="h-4 w-4" />
-                                                                        </Button>
-                                                                    ) : (
-                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50">
-                                                                            <ShieldCheck className="h-4 w-4" />
-                                                                        </Button>
+                                                                <div className="flex items-center justify-end gap-2">
+                                                                    {doc.isTemplate && (
+                                                                        <div className="p-1 rounded-md bg-indigo-50 text-indigo-600" title="Richiede compilazione">
+                                                                            <FilePenLine className="h-4 w-4" />
+                                                                        </div>
                                                                     )}
+                                                                    {doc.signature && (
+                                                                        <div className="p-1 rounded-md bg-amber-50 text-amber-600" title="Richiede firma digitale">
+                                                                            <FileSignature className="h-4 w-4" />
+                                                                        </div>
+                                                                    )}
+                                                                    <DropdownMenu>
+                                                                        <DropdownMenuTrigger asChild>
+                                                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                                <span className="sr-only">Menu azioni</span>
+                                                                                <MoreHorizontal className="h-4 w-4" />
+                                                                            </Button>
+                                                                        </DropdownMenuTrigger>
+                                                                        <DropdownMenuContent align="end">
+                                                                            <DropdownMenuItem>Sostituisci</DropdownMenuItem>
+                                                                            <DropdownMenuItem>Valida</DropdownMenuItem>
+                                                                            <DropdownMenuItem>Aggiungi nota</DropdownMenuItem>
+                                                                        </DropdownMenuContent>
+                                                                    </DropdownMenu>
                                                                 </div>
                                                             </TableCell>
                                                         </TableRow>

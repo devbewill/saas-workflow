@@ -7,8 +7,7 @@ import AtomicPraticaDetail from './components/pratiche/AtomicPraticaDetail';
 
 // Placeholders for now
 // const Dashboard = () => <div>Dashboard Content</div>;
-import { ViewManager } from './components/domain/view-manager';
-const Pratiches = () => <ViewManager />;
+import PratichesList from './components/pratiche/PratichesList';
 // const Detail = () => <div>Detail Content</div>;
 
 import { WorkflowProvider } from './context/WorkflowContext';
@@ -19,7 +18,7 @@ function App() {
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/pratiche" element={<Pratiches />} />
+          <Route path="/pratiche" element={<PratichesList />} />
           <Route path="/pratiche/:id" element={<AtomicPraticaDetail />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
