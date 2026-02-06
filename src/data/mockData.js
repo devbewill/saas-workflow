@@ -1,10 +1,5 @@
 import { Share2, FileText, Calendar, Globe, Home, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
-export const USER = {
-  name: "Marzia",
-  role: "Operator"
-};
-
 
 export const PRACTICES = [
   {
@@ -58,35 +53,6 @@ export const PRACTICES = [
   }
 ];
 
-export const WORKFLOW_STEPS = [
-  {
-    category: "Aperta",
-    steps: [
-      { id: "bozza", label: "Bozza", state: "completed" },
-      { id: "preliminare", label: "Verifica preliminare", state: "completed" },
-      { id: "documenti", label: "Validazione documenti", state: "current", subLabel: "Richiesta integrazione" },
-    ]
-  },
-  {
-    category: "Istruttoria",
-    steps: [
-      { id: "aml", label: "Verifica AML", state: "future" },
-      { id: "credit_check", label: "Credit Check", state: "future" },
-    ]
-  },
-  {
-    category: "Approvata",
-    steps: [
-      { id: "approved", label: "Approvata", state: "future" },
-    ]
-  },
-  {
-    category: "Perfezionata",
-    steps: [
-      { id: "done", label: "Erogata", state: "future" },
-    ]
-  },
-];
 
 export const STATS = [
   { label: "Pratiche Totali", value: "1,240", change: "+12%", trend: "up", icon: FileText, color: "indigo" },

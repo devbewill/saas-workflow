@@ -13,9 +13,9 @@ import {
 
 // Mock Data (temporaneo, poi sposta in context o props)
 const USER = {
-    name: 'Stefano Perelli',
-    email: 'stefano.perelli@example.com',
-    role: 'Amministratore'
+  name: 'Marzia Brambilla',
+  email: 'marzia@example.com',
+  role: 'Frontoffice'
 };
 
 export function AppHeader() {
@@ -42,7 +42,7 @@ export function AppHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full border border-primary/20 bg-primary/10 hover:bg-primary/20 p-0 font-normal focus:ring-0">
-               <span className="text-xs font-bold text-primary">{USER.name.charAt(0)}{USER.name.split(' ')[1]?.charAt(0)}</span>
+              <span className="text-xs font-bold text-primary">{USER.name.charAt(0)}{USER.name.split(' ')[1]?.charAt(0)}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
