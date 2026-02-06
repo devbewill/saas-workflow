@@ -103,7 +103,6 @@ export function DocumentsTable({ projectId }) {
                     <TableHeader>
                         <TableRow className="bg-slate-50">
                             <TableHead className="w-[400px]">Documento</TableHead>
-                            <TableHead>File</TableHead>
                             <TableHead>Data</TableHead>
                             <TableHead>Stato</TableHead>
                             <TableHead className="text-right">Azioni</TableHead>
@@ -114,7 +113,7 @@ export function DocumentsTable({ projectId }) {
                             <React.Fragment key={category}>
                                 {/* Category Header Row */}
                                 <TableRow className="bg-slate-100/50">
-                                    <TableCell colSpan={5} className="py-2">
+                                    <TableCell colSpan={4} className="py-2">
                                         <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                                             {category}
                                         </span>
@@ -148,11 +147,6 @@ export function DocumentsTable({ projectId }) {
                                                     )}
                                                 </div>
                                             </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span className="text-sm text-slate-500">
-                                                {doc.file === '--' ? '-' : doc.file}
-                                            </span>
                                         </TableCell>
                                         <TableCell>
                                             <span className="text-sm text-slate-500">{doc.date}</span>
@@ -192,7 +186,7 @@ export function DocumentsTable({ projectId }) {
 
                         {filteredDocuments.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                                     Nessun documento trovato
                                 </TableCell>
                             </TableRow>
