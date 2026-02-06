@@ -5,13 +5,6 @@ export const USER = {
   role: "Operator"
 };
 
-export const MENU_ITEMS = [
-  { icon: Home, label: "Dashboard", path: "/" },
-  { icon: Share2, label: "Reti", path: "/reti" },
-  { icon: FileText, label: "Pratiche", path: "/pratiche" },
-  { icon: Calendar, label: "Appuntamenti", path: "/appuntamenti" },
-  { icon: Globe, label: "Traduzioni", path: "/traduzioni" },
-];
 
 export const PRACTICES = [
   {

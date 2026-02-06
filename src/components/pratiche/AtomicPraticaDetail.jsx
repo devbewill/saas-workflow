@@ -143,7 +143,7 @@ export default function AtomicPraticaDetail() {
             </div>
 
             {/* 1.1 Info Header Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-50 border rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-card border rounded-lg">
                 <div className="space-y-1">
                     <span className="text-xs text-muted-foreground uppercase font-bold">Nome Progetto</span>
                     <p className="text-sm font-medium">{practiceData.name}</p>

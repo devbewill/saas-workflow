@@ -40,10 +40,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        projectStatus: {
+          DEFAULT: "hsl(var(--projectStatus))",
+          foreground: "hsl(var(--projectStatus-foreground))",
+        },
+
         // Custom Brand Colors extracted from Mockups
         // Custom Brand Colors extracted from Mockups
         brand: {
-          50:  'hsl(var(--brand-50))',
+          50: 'hsl(var(--brand-50))',
           100: 'hsl(var(--brand-100))',
           200: 'hsl(var(--brand-200))',
           300: 'hsl(var(--brand-300))',
@@ -56,7 +61,8 @@ export default {
         },
         cyan: {
           400: '#22d3ee', // Secondary accent
-        }
+        },
+
       },
       borderRadius: {
         lg: "var(--radius)",

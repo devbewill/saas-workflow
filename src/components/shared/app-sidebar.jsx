@@ -21,11 +21,11 @@ export function AppSidebar() {
             <ShieldCheck size={18} />
           </div>
           <div className="flex flex-col leading-none">
-             <span className="text-lg font-bold tracking-tight text-foreground">WHITELBL</span>
-             <div className="flex items-center gap-2">
-               <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Platform</span>
-               <span className="px-1.5 py-0.5 rounded-sm bg-violet-100 text-violet-700 text-[9px] font-bold border border-violet-200">v2.0 ATOMIC</span>
-             </div>
+            <span className="text-lg font-bold tracking-tight text-foreground">WHITELBL</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Platform</span>
+              <span className="px-1.5 py-0.5 rounded-sm bg-violet-100 text-violet-700 text-[9px] font-bold border border-violet-200">v2.0 ATOMIC</span>
+            </div>
           </div>
         </div>
       </div>
@@ -45,8 +45,8 @@ export function AppSidebar() {
               )
             }
           >
-             <item.icon size={18} />
-             {item.label}
+            <item.icon size={18} />
+            {item.label}
           </NavLink>
         ))}
       </nav>

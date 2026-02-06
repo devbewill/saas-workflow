@@ -32,6 +32,8 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --projectStatus: 27 96% 61%;
+    --projectStatus-foreground: 0 0% 3.9%;
   }
 
   .dark {
@@ -59,6 +61,8 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --projectStatus: 263.4 69.3% 42.2%;
+    --projectStatus-foreground: 0 0% 3.9%;
   }
 }
 
