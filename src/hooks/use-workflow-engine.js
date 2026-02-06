@@ -19,11 +19,12 @@ export function useWorkflowEngine(initialStatus = INITIAL_STEP) {
   // Actions
   const transitionTo = (nextStatusName) => {
     // Basic validation: Check if nextStatusName is in nextPossible list
-    if (currentStep.nextPossible?.includes(nextStatusName)) {
-      setCurrentStatusName(nextStatusName);
-    } else {
-      console.warn(`Invalid transition from ${currentStatusName} to ${nextStatusName}`);
-    }
+    // For DEMO purposes, we allow jumping to any state
+    // if (currentStep.nextPossible?.includes(nextStatusName)) {
+    setCurrentStatusName(nextStatusName);
+    // } else {
+    //   console.warn(`Invalid transition from ${currentStatusName} to ${nextStatusName}`);
+    // }
   };
 
   const getAvailableActions = () => {
@@ -31,17 +32,17 @@ export function useWorkflowEngine(initialStatus = INITIAL_STEP) {
   };
 
   const getStatusColor = (state) => {
-      switch (state) {
-        case "Bozza": return "secondary"; // grey
-        case "Aperta": return "default"; // violet (primary)
-        case "Caricata": return "default"; // cyan -> map to primary/info
-        case "Esame": return "destructive"; // orange -> map to warning/destructive
-        case "Approvata": return "outline"; // green -> map to success/outline
-        case "Perfezionata": return "secondary"; // dark -> map to secondary
-        case "In attesa": return "secondary"; // yellow -> map to warning
-        default: return "outline";
-      }
-    };
+    switch (state) {
+      case "Bozza": return "secondary"; // grey
+      case "Aperta": return "default"; // violet (primary)
+      case "Caricata": return "default"; // cyan -> map to primary/info
+      case "Esame": return "destructive"; // orange -> map to warning/destructive
+      case "Approvata": return "outline"; // green -> map to success/outline
+      case "Perfezionata": return "secondary"; // dark -> map to secondary
+      case "In attesa": return "secondary"; // yellow -> map to warning
+      default: return "outline";
+    }
+  };
 
   return {
     currentStatusName,

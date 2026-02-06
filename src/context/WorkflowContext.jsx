@@ -6,16 +6,6 @@ const WorkflowContext = createContext();
 
 export const FONTS = {
   inter: { name: 'Inter', class: 'font-["Inter"]', description: 'Clean & versatile' },
-  dmSans: { name: 'DM Sans', class: 'font-["DM_Sans"]', description: 'Geometric & minimal' },
-  manrope: { name: 'Manrope', class: 'font-["Manrope"]', description: 'Modern & friendly' },
-  outfit: { name: 'Outfit', class: 'font-["Outfit"]', description: 'Rounded & bold' },
-  plusJakarta: { name: 'Plus Jakarta', class: 'font-["Plus_Jakarta_Sans"]', description: 'Warm & elegant' },
-  spaceGrotesk: { name: 'Space Grotesk', class: 'font-["Space_Grotesk"]', description: 'Tech & futuristic' },
-  sora: { name: 'Sora', class: 'font-["Sora"]', description: 'Soft & refined' },
-  workSans: { name: 'Work Sans', class: 'font-["Work_Sans"]', description: 'Professional & clear' },
-  poppins: { name: 'Poppins', class: 'font-["Poppins"]', description: 'Friendly & rounded' },
-  montserrat: { name: 'Montserrat', class: 'font-["Montserrat"]', description: 'Bold & urban' },
-  ibmPlex: { name: 'IBM Plex Sans', class: 'font-["IBM_Plex_Sans"]', description: 'Tech & precise (Geist-like)' },
 };
 
 
@@ -65,19 +55,6 @@ export function WorkflowProvider({ children }) {
     setCurrentFont(fontId);
   };
 
-  const getStatusColor = (state) => {
-    switch (state) {
-      case "Bozza": return "bg-slate-200 text-slate-700";
-      case "Aperta": return "bg-violet-200 text-violet-700";
-      case "Caricata": return "bg-cyan-400 text-white";
-      case "Esame": return "bg-orange-400 text-white";
-      case "Approvata": return "bg-green-500 text-white";
-      case "Perfezionata": return "bg-slate-900 text-white";
-      case "In attesa": return "bg-yellow-400 text-slate-900";
-      default: return "bg-slate-100 text-slate-700";
-    }
-  };
-
   const value = {
     steps,
     currentStatusName,
@@ -88,8 +65,7 @@ export function WorkflowProvider({ children }) {
     setTheme,
     currentFont,
     setFont,
-    setStatus,
-    getStatusColor
+    setStatus
   };
 
   return (

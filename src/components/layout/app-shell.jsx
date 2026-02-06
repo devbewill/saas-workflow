@@ -10,7 +10,7 @@ export default function AppShell() {
       <div className="pl-64 flex flex-col min-h-screen">
         <AppHeader />
         <main className="flex-1 p-6">
-           <Outlet />
+          <Outlet />
         </main>
       </div>
     </div>

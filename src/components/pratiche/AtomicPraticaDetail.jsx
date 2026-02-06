@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PRACTICES, CONDOMINIUM_DATA, FINANCIAL_DATA } from '@/data/mockData';
+import { PRACTICES, CONDOMINIUM_DATA, FINANCIAL_DATA, DOCUMENTS } from '@/data/mockData';
 import { useWorkflowEngine } from '@/hooks/use-workflow-engine';
 import { cn } from '@/lib/utils';
 import workflowData from '@/data/workflow.json';
@@ -12,6 +12,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // Domain Components
 // import { BundleWidget } from '@/components/domain/bundle-widget'; // Removed in favor of AtomicBundleCard
@@ -19,21 +21,13 @@ import { AtomicBundleCard } from './AtomicBundleCard';
 import { AtomicFascicoloSheet } from './AtomicFascicoloSheet';
 import { AtomicAssistantSheet } from './AtomicAssistantSheet';
 import { AtomicTeamTab } from './AtomicTeamTab';
+import { AMLVerificationView } from './AMLVerificationView';
 
 // Icons
 import { Clock, Info, ArrowLeft, Home, FileText, Plus, ShieldCheck, Hand, Headset, Edit, CloudUpload, FileSignature } from 'lucide-react';
 
 // Mock Documents Data
-const DOCUMENTS = [
-    { id: 1, name: "Codice Fiscale Condominio", file: "--", date: "--", status: "Da caricare", statusColor: "bg-red-200 text-red-700", isSigned: false },
-    { id: 2, name: "Informativa Privacy Condominio", file: "InformativaPrivacyCondominio.pdf", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700", isSigned: true },
-    { id: 3, name: "Informativa SIC Condominio", file: "InformativaSICCondominio.pdf", date: "23/06/25", status: "In attesa", statusColor: "bg-yellow-200 text-yellow-700", isSigned: false },
-    { id: 4, name: "Verbale nomina", file: "Verbale_nomina.pdf", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700", isSigned: true },
-    { id: 5, name: "Tessera sanitaria", file: "Tessera:sanitaria.jpg", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700", isSigned: false },
-    { id: 6, name: "Presentazione Condominio", file: "PresentazioneCondominio.pdf", date: "23/05/25", status: "Caricato", statusColor: "bg-green-200 text-green-700", isSigned: false },
-    { id: 7, name: "Preventivo spese", file: "Preventivo:spese.pdf", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700", isSigned: false },
-    { id: 8, name: "Documento Identità Amministratore", file: "CI_Amm.pdf", date: "23/06/25", status: "Caricato", statusColor: "bg-green-200 text-green-700", isSigned: true },
-];
+
 
 const DataGroup = ({ title, data }) => (
     <div className="space-y-3">
@@ -54,6 +48,20 @@ export default function AtomicPraticaDetail() {
     const navigate = useNavigate();
     const practiceData = PRACTICES.find(p => p.id === id) || PRACTICES[0];
 
+    // Document Filtering State
+    const [docSearch, setDocSearch] = useState('');
+    const [docCategoryFilter, setDocCategoryFilter] = useState('all');
+    const [docStatusFilter, setDocStatusFilter] = useState('all');
+
+    const filteredDocuments = useMemo(() => {
+        return DOCUMENTS.filter(doc => {
+            const matchesSearch = doc.name.toLowerCase().includes(docSearch.toLowerCase());
+            const matchesCategory = docCategoryFilter === 'all' || doc.category === docCategoryFilter;
+            const matchesStatus = docStatusFilter === 'all' || doc.status === docStatusFilter;
+            return matchesSearch && matchesCategory && matchesStatus;
+        });
+    }, [docSearch, docCategoryFilter, docStatusFilter]);
+
     // Use the new Hook!
     const { currentStatusName, currentStep, getStatusColor, transitionTo } = useWorkflowEngine("Aperta - Validazione documenti");
 
@@ -65,8 +73,8 @@ export default function AtomicPraticaDetail() {
     const [isFascicoloSheetOpen, setIsFascicoloSheetOpen] = useState(false);
     const [editingFascicolo, setEditingFascicolo] = useState(null);
     const [bundles, setBundles] = useState([
-        { id: 1, name: 'Documenti Amministratore', documentIds: [4, 5, 8], isSignatureEnabled: true, updatedAt: '04/02/2026', docCount: 3 },
-        { id: 2, name: 'Privacy e GDPR', documentIds: [2, 3], isSignatureEnabled: false, updatedAt: '04/02/2026', docCount: 2 }
+        { id: 1, name: 'Documenti Amministratore', documentIds: [46, 47, 51], isSignatureEnabled: true, updatedAt: '04/02/2026', docCount: 3 },
+        { id: 2, name: 'Privacy e GDPR', documentIds: [12, 13], isSignatureEnabled: false, updatedAt: '04/02/2026', docCount: 2 }
     ]);
 
     const handleCreateFascicolo = () => {
@@ -173,164 +181,240 @@ export default function AtomicPraticaDetail() {
                 </div>
             </div>
 
-            {/* 2. Main Content Tabs */}
-            <Tabs defaultValue="documenti" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 lg:w-[400px]">
-                    <TabsTrigger value="documenti">Documenti</TabsTrigger>
-                    <TabsTrigger value="dati">Dati</TabsTrigger>
-                    <TabsTrigger value="fascicoli">Fascicoli</TabsTrigger>
-                    <TabsTrigger value="team">Team</TabsTrigger>
-                </TabsList>
-
-                <div className="mt-6">
-                    {/* Tab: Documenti */}
-                    <TabsContent value="documenti" className="space-y-4">
-                        <Card>
-
-                            <CardContent className="p-0">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="w-[80px]">Id</TableHead>
-                                            <TableHead>Documento</TableHead>
-                                            <TableHead>Caricato il</TableHead>
-                                            <TableHead>Stato</TableHead>
-                                            <TableHead className="text-right">Azioni</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {DOCUMENTS.map((doc) => (
-                                            <TableRow key={doc.id}>
-                                                <TableCell className="font-medium text-muted-foreground">{doc.id}</TableCell>
-                                                <TableCell className="font-medium">{doc.name}</TableCell>
-                                                <TableCell>{doc.date}</TableCell>
-                                                <TableCell>
-                                                    <Badge variant="outline" className={cn("text-xs font-normal border-0", doc.statusColor)}>
-                                                        {doc.status}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <div className="flex justify-end gap-2">
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-                                                        {doc.status === "Da caricare" ? (
-                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                                                                <CloudUpload className="h-4 w-4" />
-                                                            </Button>
-                                                        ) : (
-                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                                                                <FileSignature className="h-4 w-4" />
-                                                            </Button>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    {/* Tab: Dati Completi */}
-                    <TabsContent value="dati">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Card>
-                                <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                                    <div className="bg-primary/10 p-2 rounded-lg">
-                                        <Home className="w-6 h-6 text-primary" />
-                                    </div>
-                                    <CardTitle>Dati Condominio</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    {Object.entries(CONDOMINIUM_DATA).map(([key, data]) => (
-                                        <DataGroup key={key} title={key} data={data} />
-                                    ))}
-                                </CardContent>
-                            </Card>
-
-                            <Card>
-                                <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                                    <div className="bg-primary/10 p-2 rounded-lg">
-                                        <FileText className="w-6 h-6 text-primary" />
-                                    </div>
-                                    <CardTitle>Dati Finanziari</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    {Object.entries(FINANCIAL_DATA).map(([key, data]) => (
-                                        <DataGroup key={key} title={key} data={data} />
-                                    ))}
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </TabsContent>
-
-                    {/* Tab: Fascicoli (GRID VIEW) */}
-                    <TabsContent value="fascicoli">
-                        <div>
-                            <div className="flex items-center justify-between mb-6">
-                                <div>
-                                    <h3 className="text-lg font-medium">Gestione Fascicoli</h3>
-                                    <p className="text-sm text-muted-foreground">Gestisci i raggruppamenti di documenti per l'invio e la firma.</p>
-                                </div>
-                                <Button onClick={handleCreateFascicolo}>
-                                    <Plus className="mr-2 h-4 w-4" /> Nuovo Fascicolo
-                                </Button>
-                            </div>
-
-                            {bundles.length === 0 ? (
-                                <div className="text-center py-12 border-2 border-dashed rounded-xl bg-slate-50">
-                                    <div className="bg-white p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-sm">
-                                        <Plus className="h-8 w-8 text-muted-foreground" />
-                                    </div>
-                                    <h3 className="font-semibold text-lg text-slate-900">Nessun fascicolo presente</h3>
-                                    <p className="text-muted-foreground max-w-sm mx-auto mt-2">Crea il primo fascicolo per raggruppare i documenti da inviare al cliente.</p>
-                                    <Button variant="outline" className="mt-6" onClick={handleCreateFascicolo}>Crea Fascicolo</Button>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {bundles.map(bundle => (
-                                        <AtomicBundleCard
-                                            key={bundle.id}
-                                            bundle={bundle}
-                                            documents={DOCUMENTS} // Pass all docs, component filters them
-                                            onEdit={handleEditFascicolo}
-                                            onDelete={handleDeleteFascicolo}
-                                            onSign={handleSignFascicolo}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value="team">
-                        <AtomicTeamTab />
-                    </TabsContent>
+            {/* 2. Main Content - Dynamic Switch */}
+            {currentStatusName === "Caricata - Lavorazione AML e Banche Dati" ? (
+                <div className="mt-6 animate-in fade-in zoom-in-95 duration-300">
+                    <AMLVerificationView />
                 </div>
-            </Tabs>
+            ) : (
+                <Tabs defaultValue="documenti" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4 lg:w-[400px]">
+                        <TabsTrigger value="documenti">Documenti</TabsTrigger>
+                        <TabsTrigger value="dati">Dati</TabsTrigger>
+                        <TabsTrigger value="fascicoli">Fascicoli</TabsTrigger>
+                        <TabsTrigger value="team">Team</TabsTrigger>
+                    </TabsList>
+
+                    <div className="mt-6">
+                        {/* Tab: Documenti */}
+                        <TabsContent value="documenti" className="space-y-4">
+                            <Card>
+
+                                <CardContent className="p-0">
+                                    <div className="p-4 border-b space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex-1">
+                                                <Input
+                                                    placeholder="Cerca documento..."
+                                                    value={docSearch}
+                                                    onChange={(e) => setDocSearch(e.target.value)}
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                            <div className="w-[200px]">
+                                                <Select value={docCategoryFilter} onValueChange={setDocCategoryFilter}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Tutte le categorie" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="all">Tutte le categorie</SelectItem>
+                                                        {Array.from(new Set(DOCUMENTS.map(d => d.category))).map(cat => (
+                                                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div className="w-[200px]">
+                                                <Select value={docStatusFilter} onValueChange={setDocStatusFilter}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Tutti gli stati" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="all">Tutti gli stati</SelectItem>
+                                                        {Array.from(new Set(DOCUMENTS.map(d => d.status))).map(st => (
+                                                            <SelectItem key={st} value={st}>{st}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="w-[80px]">Id</TableHead>
+                                                <TableHead>Categoria</TableHead>
+                                                <TableHead>Documento</TableHead>
+                                                <TableHead>Caricato il</TableHead>
+                                                <TableHead>Stato</TableHead>
+                                                <TableHead className="text-right">Azioni</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {filteredDocuments.length === 0 ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                                                        Nessun documento trovato con i filtri selezionati.
+                                                    </TableCell>
+                                                </TableRow>
+                                            ) : (
+                                                filteredDocuments.map((doc) => {
+                                                    let statusColor = "";
+                                                    if (doc.status === "Da caricare") statusColor = "bg-red-100 text-red-700 border-red-200";
+                                                    else if (doc.status === "Caricato") statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                                                    else if (doc.status === "Validato") statusColor = "bg-green-100 text-green-700 border-green-200";
+                                                    else statusColor = "bg-slate-100 text-slate-700 border-slate-200";
+
+                                                    return (
+                                                        <TableRow key={doc.id}>
+                                                            <TableCell className="font-medium text-muted-foreground">{doc.id}</TableCell>
+                                                            <TableCell><Badge variant="secondary" className="font-normal text-xs">{doc.category}</Badge></TableCell>
+                                                            <TableCell className="font-medium">{doc.name}</TableCell>
+                                                            <TableCell>{doc.date}</TableCell>
+                                                            <TableCell>
+                                                                <Badge variant="outline" className={cn("text-xs font-normal", statusColor)}>
+                                                                    {doc.status}
+                                                                </Badge>
+                                                            </TableCell>
+                                                            <TableCell className="text-right">
+                                                                <div className="flex justify-end gap-2">
+                                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                                                                        <Edit className="h-4 w-4" />
+                                                                    </Button>
+                                                                    {doc.status === "Da caricare" ? (
+                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50">
+                                                                            <CloudUpload className="h-4 w-4" />
+                                                                        </Button>
+                                                                    ) : doc.status === "Caricato" ? (
+                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                                                            <FileText className="h-4 w-4" />
+                                                                        </Button>
+                                                                    ) : (
+                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50">
+                                                                            <ShieldCheck className="h-4 w-4" />
+                                                                        </Button>
+                                                                    )}
+                                                                </div>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                }))}
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+
+                        {/* Tab: Dati Completi */}
+                        <TabsContent value="dati">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Card>
+                                    <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+                                        <div className="bg-primary/10 p-2 rounded-lg">
+                                            <Home className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <CardTitle>Dati Condominio</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6">
+                                        {Object.entries(CONDOMINIUM_DATA).map(([key, data]) => (
+                                            <DataGroup key={key} title={key} data={data} />
+                                        ))}
+                                    </CardContent>
+                                </Card>
+
+                                <Card>
+                                    <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+                                        <div className="bg-primary/10 p-2 rounded-lg">
+                                            <FileText className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <CardTitle>Dati Finanziari</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6">
+                                        {Object.entries(FINANCIAL_DATA).map(([key, data]) => (
+                                            <DataGroup key={key} title={key} data={data} />
+                                        ))}
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </TabsContent>
+
+                        {/* Tab: Fascicoli (GRID VIEW) */}
+                        <TabsContent value="fascicoli">
+                            <div>
+                                <div className="flex items-center justify-between mb-6">
+                                    <div>
+                                        <h3 className="text-lg font-medium">Gestione Fascicoli</h3>
+                                        <p className="text-sm text-muted-foreground">Gestisci i raggruppamenti di documenti per l'invio e la firma.</p>
+                                    </div>
+                                    <Button onClick={handleCreateFascicolo}>
+                                        <Plus className="mr-2 h-4 w-4" /> Nuovo Fascicolo
+                                    </Button>
+                                </div>
+
+                                {bundles.length === 0 ? (
+                                    <div className="text-center py-12 border-2 border-dashed rounded-xl bg-slate-50">
+                                        <div className="bg-white p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                            <Plus className="h-8 w-8 text-muted-foreground" />
+                                        </div>
+                                        <h3 className="font-semibold text-lg text-slate-900">Nessun fascicolo presente</h3>
+                                        <p className="text-muted-foreground max-w-sm mx-auto mt-2">Crea il primo fascicolo per raggruppare i documenti da inviare al cliente.</p>
+                                        <Button variant="outline" className="mt-6" onClick={handleCreateFascicolo}>Crea Fascicolo</Button>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {bundles.map(bundle => (
+                                            <AtomicBundleCard
+                                                key={bundle.id}
+                                                bundle={bundle}
+                                                documents={DOCUMENTS} // Pass all docs, component filters them
+                                                onEdit={handleEditFascicolo}
+                                                onDelete={handleDeleteFascicolo}
+                                                onSign={handleSignFascicolo}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </TabsContent>
+
+                        <TabsContent value="team">
+                            <AtomicTeamTab />
+                        </TabsContent>
+                    </div>
+                </Tabs>
+            )}
 
             {/* Side Panels Implementation using Sheet */}
 
             {/* Timeline Sheet */}
             <Sheet open={isTimelineOpen} onOpenChange={setIsTimelineOpen}>
-                <SheetContent>
+                <SheetContent className="overflow-y-auto">
                     <SheetHeader>
                         <SheetTitle>Cronologia Pratica</SheetTitle>
                         <SheetDescription>Stato avanzamento lavori</SheetDescription>
                     </SheetHeader>
-                    <div className="my-6 space-y-4">
+                    <div className="my-6 space-y-0">
                         {allSteps.map((step) => {
                             const isCompleted = step.id < currentStep.id;
                             const isCurrent = step.id === currentStep.id;
                             const isFuture = step.id > currentStep.id;
 
                             return (
-                                <div key={step.id} className={cn("flex gap-4 relative", isFuture && "opacity-50 grayscale")}>
+                                <div
+                                    key={step.id}
+                                    className={cn(
+                                        "flex gap-4 relative p-2 rounded-lg transition-colors cursor-pointer hover:bg-slate-100",
+                                        isFuture && "opacity-50 grayscale hover:opacity-100 hover:grayscale-0"
+                                    )}
+                                    onClick={() => {
+                                        transitionTo(step.fullName);
+                                        // Optional: close timeline after selection if desired, but maybe user wants to see change
+                                        // setIsTimelineOpen(false);
+                                    }}
+                                >
                                     {/* Vertical Line */}
                                     {step.id !== allSteps[allSteps.length - 1].id && (
-                                        <div className="absolute left-[15px] top-8 bottom-[-16px] w-[2px] bg-muted z-0" />
+                                        <div className="absolute left-[23px] top-8 bottom-[-8px] w-[2px] bg-muted z-0" />
                                     )}
 
                                     {/* Indicator */}
@@ -344,7 +428,7 @@ export default function AtomicPraticaDetail() {
                                     </div>
 
                                     {/* Content */}
-                                    <div className="pb-6 pt-1">
+                                    <div className="pb-4 pt-1">
                                         <h4 className={cn("font-medium text-sm", isCurrent ? "text-primary font-bold" : "text-foreground")}>
                                             {step.fullName}
                                         </h4>
