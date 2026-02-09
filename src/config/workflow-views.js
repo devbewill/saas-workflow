@@ -60,7 +60,7 @@ export const WORKFLOW_VIEW_CONFIG = {
     // ==================== CARICATA ====================
     "Caricata - Lavorazione AML e Banche Dati": {
         component: AMLVerificationView,
-        availableTabs: ['aml', 'documenti', 'fascicoli', 'info'],
+        availableTabs: ['aml', 'documenti', 'fascicoli', 'info', 'team'],
         defaultTab: 'aml',
         showAssistant: true,
         assistantConfigKey: 'aml_check',
@@ -70,8 +70,8 @@ export const WORKFLOW_VIEW_CONFIG = {
 
     "Caricata - Valutazione istruttoria": {
         component: StandardView,
-        availableTabs: ['info', 'documenti', 'finanziario'],
-        defaultTab: 'finanziario',
+        availableTabs: ['documenti', 'fascicoli', 'info', 'team'],
+        defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'evaluation',
         showTimeline: true,
@@ -80,8 +80,8 @@ export const WORKFLOW_VIEW_CONFIG = {
 
     "Caricata - Valutazione rating condominio": {
         component: StandardView,
-        availableTabs: ['info', 'finanziario', 'documenti'],
-        defaultTab: 'info',
+        availableTabs: ['documenti', 'fascicoli', 'info', 'team'],
+        defaultTab: 'documenti',
         showAssistant: false,
         assistantConfigKey: null,
         showTimeline: true,
