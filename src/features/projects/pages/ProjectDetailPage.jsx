@@ -8,7 +8,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { PROJECTS, CONDOMINIUM_DATA, FINANCIAL_DATA, DOCUMENTS } from '@/data/mockData';
 import { getViewConfig, TAB_LABELS } from '@/config/workflow-views';
 import { useWorkflowEngine } from '@/hooks/use-workflow-engine';
-import workflowData from '@/data/workflow.json';
+import { useAppContext } from '@/context/AppContext';
 
 // UI Components
 import { Button } from '@/components/ui/button';
@@ -72,15 +72,23 @@ export default function ProjectDetailPage() {
         currentStatusName,
         currentStep,
         currentOwner,
+        allSteps,
         transitionTo,
         getAvailableActions,
         getStatusColor
     } = useWorkflowEngine("Aperta - Validazione documenti");
 
+    const { activeApp } = useAppContext();
+
     // Get view configuration based on current workflow state
     const viewConfig = useMemo(() => {
-        return getViewConfig(currentStatusName);
-    }, [currentStatusName]);
+        const config = getViewConfig(currentStatusName);
+        // Filter tabs based on active app features
+        return {
+            ...config,
+            availableTabs: config.availableTabs.filter(tab => activeApp.features.tabs.includes(tab))
+        };
+    }, [currentStatusName, activeApp]);
 
     // UI State
     const [isAssistantOpen, setIsAssistantOpen] = useState(false);
@@ -89,11 +97,11 @@ export default function ProjectDetailPage() {
 
     // Sync activeTab with viewConfig when workflow state changes
     React.useEffect(() => {
-        setActiveTab(viewConfig.defaultTab);
-    }, [viewConfig.defaultTab]);
-
-    // All workflow steps for timeline
-    const allSteps = workflowData.workflow.steps;
+        // If current activeTab is not in availableTabs anymore, switch to default
+        if (!viewConfig.availableTabs.includes(activeTab)) {
+            setActiveTab(viewConfig.defaultTab);
+        }
+    }, [viewConfig.availableTabs, viewConfig.defaultTab]);
 
     // Get view component for the active tab
     const getViewForTab = (tabKey) => {
@@ -162,7 +170,11 @@ export default function ProjectDetailPage() {
                         </div>
                         <div className="space-y-1">
                             <span className="text-xs text-muted-foreground uppercase font-bold">Prodotto</span>
-                            <p className="text-sm font-medium">Cefin - Finanziamento Esposto 5,8%</p>
+                            <p className="text-sm font-medium">
+                                {activeApp.id === 'HD_CEF' && 'Cefin - Finanziamento Esposto 5,8%'}
+                                {activeApp.id === 'HD_RISTR' && 'RISTR - Finanziamento Ristrutturazioni 4,5%'}
+                                {activeApp.id === 'HD_BRK' && 'Broker Plus - Gestione Terzi 6,2%'}
+                            </p>
                         </div>
                         <div className="space-y-1">
                             <span className="text-xs text-muted-foreground uppercase font-bold">Rating</span>

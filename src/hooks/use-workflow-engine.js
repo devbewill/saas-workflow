@@ -1,17 +1,31 @@
 import { useState, useMemo } from 'react';
-import workflowData from '@/data/workflow.json';
+import workflowCef from '@/data/workflow-hd-cef.json';
+import workflowRistr from '@/data/workflow-hd-ristr.json';
+import workflowBrk from '@/data/workflow-hd-brk.json';
+import { useAppContext } from '@/context/AppContext';
 
 // Initialize with the starting step
 const INITIAL_STEP = "Bozza";
 
 export function useWorkflowEngine(initialStatus = INITIAL_STEP) {
+  const { activeApp } = useAppContext();
+
+  // Pick the correct workflow data based on active app
+  const workflowData = useMemo(() => {
+    switch (activeApp.id) {
+      case 'HD_RISTR': return workflowRistr;
+      case 'HD_BRK': return workflowBrk;
+      default: return workflowCef;
+    }
+  }, [activeApp]);
+
   // Current status name (e.g., "Aperta - Verifica preliminare")
   const [currentStatusName, setCurrentStatusName] = useState(initialStatus);
 
   // Get the full step object from JSON
   const currentStep = useMemo(() => {
     return workflowData.workflow.steps.find(s => s.fullName === currentStatusName) || workflowData.workflow.steps[0];
-  }, [currentStatusName]);
+  }, [currentStatusName, workflowData]);
 
   // Derived state: User Role for this step
   const currentOwner = currentStep.owner;
@@ -22,10 +36,15 @@ export function useWorkflowEngine(initialStatus = INITIAL_STEP) {
     // For DEMO purposes, we allow jumping to any state
     // if (currentStep.nextPossible?.includes(nextStatusName)) {
     setCurrentStatusName(nextStatusName);
-    // } else {
-    //   console.warn(`Invalid transition from ${currentStatusName} to ${nextStatusName}`);
-    // }
   };
+
+  // Reset status if it doesn't exist in the current workflow (e.g. after app switch)
+  useMemo(() => {
+    const exists = workflowData.workflow.steps.some(s => s.fullName === currentStatusName);
+    if (!exists) {
+      setCurrentStatusName(workflowData.workflow.steps[0].fullName);
+    }
+  }, [workflowData, currentStatusName]);
 
   const getAvailableActions = () => {
     return currentStep.nextPossible || [];
@@ -48,6 +67,7 @@ export function useWorkflowEngine(initialStatus = INITIAL_STEP) {
     currentStatusName,
     currentStep,
     currentOwner,
+    allSteps: workflowData.workflow.steps,
     transitionTo,
     getAvailableActions,
     getStatusColor
