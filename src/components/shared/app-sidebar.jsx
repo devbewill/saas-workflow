@@ -24,7 +24,7 @@ export function AppSidebar() {
             <span className="text-lg font-bold tracking-tight text-foreground">WHITELBL</span>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Platform</span>
-              <span className="px-1.5 py-0.5 rounded-sm bg-violet-100 text-violet-700 text-[9px] font-bold border border-violet-200">v2.0 ATOMIC</span>
+              <span className="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary text-[9px] font-bold border border-primary/20">v0.1 </span>
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@ export function AppSidebar() {
               cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-primary/10 text-primary"
+                  ? "bg-[#f44336]/10 text-[#f44336]"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )
             }

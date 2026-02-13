@@ -23,13 +23,17 @@ import {
     FileSignature,
     FilePenLine,
     CheckCircle2,
-    XCircle
+    XCircle,
+    MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { DocumentNotesSheet } from './DocumentNotesSheet';
 
 export function DocumentsTable({ projectId }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('all');
+    const [selectedDocForNotes, setSelectedDocForNotes] = useState(null);
+    const [isNotesOpen, setIsNotesOpen] = useState(false);
 
     // Get unique categories
     const categories = useMemo(() => {
@@ -67,6 +71,11 @@ export function DocumentsTable({ projectId }) {
             default:
                 return <Badge variant="outline">{status}</Badge>;
         }
+    };
+
+    const handleOpenNotes = (doc) => {
+        setSelectedDocForNotes(doc);
+        setIsNotesOpen(true);
     };
 
     return (
@@ -135,8 +144,19 @@ export function DocumentsTable({ projectId }) {
                                                 <Eye className="w-4 h-4" />
                                             )}
                                         </div>
-                                        <div className="min-w-0">
-                                            <p className="text-sm font-medium text-slate-900 truncate">{doc.name}</p>
+                                        <div className="min-w-0 flex-1">
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm font-medium text-slate-900 truncate">{doc.name}</p>
+                                                {doc.notesCount > 0 && (
+                                                    <div
+                                                        onClick={() => handleOpenNotes(doc)}
+                                                        className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-bold shrink-0 cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    >
+                                                        <MessageSquare className="w-3 h-3" />
+                                                        {doc.notesCount}
+                                                    </div>
+                                                )}
+                                            </div>
                                             {doc.file !== '--' && (
                                                 <p className="text-xs text-slate-500 mt-0.5">{doc.file}</p>
                                             )}
@@ -169,7 +189,9 @@ export function DocumentsTable({ projectId }) {
                                                 <DropdownMenuItem>Carica</DropdownMenuItem>
                                                 <DropdownMenuItem>Valida</DropdownMenuItem>
                                                 <DropdownMenuItem>Sostituisci</DropdownMenuItem>
-                                                <DropdownMenuItem>Aggiungi nota</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleOpenNotes(doc)}>
+                                                    Aggiungi nota
+                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
@@ -202,6 +224,12 @@ export function DocumentsTable({ projectId }) {
                     </span>
                 </div>
             </div>
+
+            <DocumentNotesSheet
+                document={selectedDocForNotes}
+                isOpen={isNotesOpen}
+                onOpenChange={setIsNotesOpen}
+            />
         </div>
     );
 }

@@ -91,7 +91,7 @@ export default function FascicoliView({ project }) {
 
     const getStatusBadge = (bundle) => {
         if (bundle.isSignatureEnabled) {
-            return <Badge className="bg-violet-100 text-violet-800 border-violet-200">Firma abilitata</Badge>;
+            return <Badge className="bg-primary/10 text-primary border-primary/20">Firma abilitata</Badge>;
         }
         return <Badge variant="outline" className="text-slate-600">In preparazione</Badge>;
     };
@@ -101,7 +101,7 @@ export default function FascicoliView({ project }) {
             {/* Header with Create Button */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <FileStack className="h-5 w-5 text-violet-600" />
+                    <FileStack className="h-5 w-5 text-primary" />
                     <h3 className="text-lg font-semibold">Fascicoli per Firma</h3>
                 </div>
                 <Button onClick={handleCreateFascicolo}>
@@ -131,7 +131,7 @@ export default function FascicoliView({ project }) {
                                 key={bundle.id}
                                 className={cn(
                                     "transition-all hover:shadow-md cursor-pointer",
-                                    bundle.isSignatureEnabled && "border-violet-200 bg-violet-50/30"
+                                    bundle.isSignatureEnabled && "border-primary/20 bg-primary/5"
                                 )}
                                 onClick={() => handleEditFascicolo(bundle)}
                             >
@@ -170,7 +170,7 @@ export default function FascicoliView({ project }) {
 
                                     {/* Document List */}
                                     {bundleDocs.length > 0 && (
-                                        <div className="mb-3 space-y-1.5 border-t border-slate-100 pt-3">
+                                        <div className="mb-3 space-y-1.5 border-t border-border pt-3">
                                             {bundleDocs.slice(0, 3).map(doc => (
                                                 <div key={doc.id} className="flex items-center gap-2 text-xs text-slate-600">
                                                     <span className="w-1.5 h-1.5 bg-slate-400 rounded-full shrink-0" />
@@ -203,7 +203,8 @@ export default function FascicoliView({ project }) {
                         );
                     })}
                 </div>
-            )}
+            )
+            }
 
             {/* Edit/Create Sheet */}
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -286,6 +287,6 @@ export default function FascicoliView({ project }) {
                     </SheetFooter>
                 </SheetContent>
             </Sheet>
-        </div>
+        </div >
     );
 }

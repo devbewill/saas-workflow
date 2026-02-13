@@ -157,8 +157,8 @@ export const FINANCIAL_DATA = {
 };
 
 export const DOCUMENTS = [
-  { id: 1, category: "BROKER", name: "Ricevuta consegna foglio informativo e informative obbligatorie di BROKER", file: "ricevuta_consegna.pdf", date: "12/01/2024", status: "Validato", isSigned: false, signature: true, isTemplate: false },
-  { id: 2, category: "BROKER", name: "Questionario adeguata verifica Broker", file: "questionario_av.pdf", date: "12/01/2024", status: "Da validare", isSigned: false, signature: true, isTemplate: false },
+  { id: 1, category: "BROKER", name: "Ricevuta consegna foglio informativo e informative obbligatorie di BROKER", file: "ricevuta_consegna.pdf", date: "12/01/2024", status: "Validato", isSigned: false, signature: true, isTemplate: false, notesCount: 2 },
+  { id: 2, category: "BROKER", name: "Questionario adeguata verifica Broker", file: "questionario_av.pdf", date: "12/01/2024", status: "Da validare", isSigned: false, signature: true, isTemplate: false, notesCount: 1 },
   { id: 3, category: "BROKER", name: "Foglio informativo Broker", file: "--", date: "15/01/2024", status: "Da caricare", isSigned: false, signature: false, isTemplate: true },
   { id: 4, category: "BROKER", name: "Informativa privacy Broker", file: "--", date: "15/01/2024", status: "Da caricare", isSigned: false, signature: false, isTemplate: true },
   { id: 5, category: "BROKER", name: "Lettera incarico Collaboratore", file: "--", date: "18/01/2024", status: "Da caricare", isSigned: false, signature: false, isTemplate: true },

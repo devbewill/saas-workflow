@@ -29,7 +29,6 @@ export function FilterPanel({ isOpen, onClose }) {
              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
                 <div>
                    <h2 className="font-semibold text-xl text-slate-900 flex items-center gap-2">
-                       <Filter size={20} className="text-violet-600" />
                        Filtri Avanzati
                    </h2>
                    <p className="text-sm text-slate-500">Affina la tua ricerca</p>
