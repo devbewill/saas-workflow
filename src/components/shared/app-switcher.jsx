@@ -4,11 +4,8 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    DropdownMenuSeparator,
-    DropdownMenuLabel
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { ChevronDown, Check } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { APPS } from '@/config/apps-config';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
@@ -19,53 +16,42 @@ export function AppSwitcher() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-lg p-2 transition-all hover:bg-muted text-left w-full outline-none group">
-                    <div className={cn(
-                        "flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-all group-hover:scale-105",
-                        activeApp.id === 'HD_CEF' ? "bg-primary text-primary-foreground" : "bg-emerald-600 text-white"
-                    )}>
-                        <activeApp.icon size={20} />
+                <button className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition-all hover:bg-slate-50 focus:outline-none group">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground shadow-lg shadow-accent/20">
+                        <activeApp.icon size={20} strokeWidth={2.5} />
                     </div>
-                    <div className="flex flex-col leading-none flex-1 overflow-hidden">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold tracking-tight text-foreground truncate">
-                                {activeApp.name}
-                            </span>
-                            <ChevronDown size={14} className="text-muted-foreground ml-1" />
-                        </div>
-                        <span className="text-[10px] text-muted-foreground mt-1 truncate">
-                            {activeApp.label}
-                        </span>
+                    <div className="flex flex-col items-start leading-tight">
+                        <span className="text-sm font-bold tracking-tight text-primary group-hover:text-accent transition-colors">{activeApp.name}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{activeApp.version}</span>
                     </div>
+                    <ChevronDown className="ml-2 h-4 w-4 text-muted-foreground group-hover:text-accent transition-all group-data-[state=open]:rotate-180" />
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-[240px] p-2">
-                <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground px-2 py-1.5">
-                    Seleziona Applicazione
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+            <DropdownMenuContent align="start" className="w-64 mt-2 overflow-hidden rounded-xl border-border bg-white p-1 shadow-2xl">
+                <div className="px-3 py-2 mb-1 border-b border-border/50">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Seleziona app</p>
+                </div>
                 {Object.values(APPS).map((app) => (
                     <DropdownMenuItem
                         key={app.id}
                         onClick={() => setActiveApp(app)}
                         className={cn(
-                            "flex items-center gap-3 p-2 cursor-pointer mb-1 rounded-md",
-                            activeApp.id === app.id && "bg-accent text-accent-foreground"
+                            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 cursor-pointer",
+                            activeApp.id === app.id
+                                ? "bg-accent/5 text-accent font-bold"
+                                : "text-slate-600 hover:bg-slate-50 hover:text-primary"
                         )}
                     >
                         <div className={cn(
-                            "flex h-8 w-8 items-center justify-center rounded-md",
-                            app.id === 'HD_CEF' ? "bg-primary/10 text-primary" : "bg-emerald-600/10 text-emerald-600"
+                            "flex h-8 w-8 items-center justify-center rounded-md transition-colors",
+                            activeApp.id === app.id ? "bg-accent text-accent-foreground" : "bg-slate-100"
                         )}>
                             <app.icon size={16} />
                         </div>
-                        <div className="flex flex-col flex-1">
-                            <span className="text-sm font-semibold">{app.name}</span>
+                        <div className="flex flex-col">
+                            <span className="font-bold text-primary">{app.name}</span>
                             <span className="text-[10px] text-muted-foreground">{app.label}</span>
                         </div>
-                        {activeApp.id === app.id && (
-                            <Check size={14} className="text-primary" />
-                        )}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>

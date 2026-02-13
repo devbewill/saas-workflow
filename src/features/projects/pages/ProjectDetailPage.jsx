@@ -17,11 +17,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 
 // Feature Components
-import { OperatorAssistantSheet } from '@/features/operator-assist/components/OperatorAssistantSheet';
-import { WorkflowTimeline } from '@/features/workflow/components/WorkflowTimeline';
+import { OperatorAssistantSheet } from '@/components/sheets/OperatorAssistantSheet';
+import { WorkflowTimelineSheet } from '@/components/sheets/WorkflowTimelineSheet';
 
 // Icons
-import { ArrowLeft, Hand, Clock } from 'lucide-react';
+import { ArrowLeft, Hand, Clock, Loader2 } from 'lucide-react';
 
 // Lazy load all view components
 const StandardView = lazy(() => import('@/features/projects/views/StandardView'));
@@ -109,108 +109,136 @@ export default function ProjectDetailPage() {
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="space-y-8 p-2 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header Section */}
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8 -ml-2">
-                            <ArrowLeft size={16} />
-                        </Button>
-                        <h1 className="text-2xl font-bold tracking-tight">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="space-y-3">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="group flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors mb-2"
+                    >
+                        <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-1" />
+                        INDIETRO AI PROGETTI
+                    </button>
+                    <div className="flex flex-wrap items-center gap-4">
+                        <h1 className="text-4xl font-extrabold tracking-tight text-primary">
                             Progetto {projectData.displayId}
                         </h1>
                         <Badge
-                            variant={getStatusColor(currentStep.state)}
-                            className="cursor-pointer hover:opacity-80 transition-opacity select-none"
+                            variant="secondary"
+                            className="px-3 py-1 text-xs font-bold bg-white border border-border shadow-sm hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full flex items-center gap-2"
                             onClick={() => setIsTimelineOpen(true)}
                         >
-                            {currentStatusName}
+                            <span className="h-2 w-2 rounded-full bg-accent animate-pulse"></span>
+                            {currentStatusName.toUpperCase()}
                         </Badge>
                     </div>
+                    <p className="text-muted-foreground font-medium max-w-2xl">
+                        {projectData.name} — Gestione integrata e monitoraggio workflow per {activeApp.label}.
+                    </p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-3">
                     {viewConfig.showAssistant && (
-                        <Button onClick={() => setIsAssistantOpen(true)}>
-                            <Hand className="w-4 h-4 mr-2" /> Supporto
+                        <Button
+                            onClick={() => setIsAssistantOpen(true)}
+                            className="rounded-xl px-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95"
+                        >
+                            <Hand className="w-4 h-4 mr-2" /> Supporto Operativo
                         </Button>
                     )}
                     {viewConfig.showTimeline && (
-                        <Button variant="outline" onClick={() => setIsTimelineOpen(true)}>
-                            <Clock className="w-4 h-4 mr-2" /> Timeline
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsTimelineOpen(true)}
+                            className="rounded-xl px-6 border-primary/20 text-primary hover:bg-primary/5 hover:border-primary/40 transition-all shadow-sm active:scale-95"
+                        >
+                            <Clock className="w-4 h-4 mr-2" /> Visualizza Timeline
                         </Button>
                     )}
                 </div>
             </div>
 
-            {/* Project Info Summary */}
-            <Card>
-                <CardContent className="p-4">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Nome Progetto</span>
-                            <p className="text-sm font-medium">{projectData.name}</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Id Progetto</span>
-                            <p className="text-sm font-medium">{projectData.displayId}</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Importo Finanziabile</span>
-                            <p className="text-sm font-medium">124.500,00 €</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Pratica Broker</span>
-                            <p className="text-sm font-medium">{projectData.brokerId || '123456'}</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Pratica OCS</span>
-                            <p className="text-sm font-medium">{projectData.ocsId || '345342'}</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Prodotto</span>
-                            <p className="text-sm font-medium">
-                                {activeApp.id === 'HD_CEF' && 'Cefin - Finanziamento Esposto 5,8%'}
-                                {activeApp.id === 'HD_RISTR' && 'RISTR - Finanziamento Ristrutturazioni 4,5%'}
-                                {activeApp.id === 'HD_BRK' && 'Broker Plus - Gestione Terzi 6,2%'}
-                            </p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Rating</span>
-                            <div><Badge variant="outline" className="bg-green-100 text-green-700 border-green-200">Positiva</Badge></div>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Data Creazione</span>
-                            <p className="text-sm font-medium">{projectData.created || '12/01/2026'}</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Ultima Modifica</span>
-                            <p className="text-sm font-medium">{projectData.updated || '04/02/2026'}</p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Amministratore</span>
-                            <div className="flex items-center gap-2">
-                                <div className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">AI</div>
-                                <p className="text-sm font-medium">Andrea Ippolito</p>
+            {/* Project Info Summary - Refined Card */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
+                <div className="lg:col-span-3">
+                    <Card className="h-full overflow-hidden border-none shadow-xl shadow-black/[0.03] bg-white ring-1 ring-border/50">
+                        <CardContent className="p-0 h-full">
+                            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y divide-border/40 h-full">
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-bold tracking-widest">Cliente / Condominio</span>
+                                    <p className="text-sm font-bold text-primary truncate">{projectData.name}</p>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-bold tracking-widest">Importo finanziamento</span>
+                                    <p className="text-sm font-bold text-accent">€ 124.500,00</p>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-extrabold tracking-widest">ID Pratica OCS</span>
+                                    <p className="text-sm font-bold text-primary font-mono tracking-tighter">{projectData.ocsId || '345342'}</p>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-extrabold tracking-widest">Stato Delibera</span>
+                                    <div><Badge className="bg-blue-50 text-blue-700 border-blue-200/50 shadow-none font-bold text-[10px] rounded-sm px-2">RATING OK</Badge></div>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-extrabold tracking-widest">Prodotto Attivo</span>
+                                    <p className="text-[11px] font-semibold text-primary/80">
+                                        {activeApp.id === 'HD_CEF' && 'Cefin - Finanziamento Esposto'}
+                                        {activeApp.id === 'HD_RISTR' && 'RISTR - Finanziamento Ristrutturazioni'}
+                                        {activeApp.id === 'HD_BRK' && 'Broker Plus - Gestione Terzi'}
+                                    </p>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-extrabold tracking-widest">Ultimo Check AML</span>
+                                    <p className="text-sm font-bold text-primary">04/02/2026</p>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-extrabold tracking-widest">Assegnatario</span>
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-sm font-bold text-primary">{projectData.owner || 'Marzia Brambilla'}</p>
+                                    </div>
+                                </div>
+                                <div className="p-6 space-y-1.5 hover:bg-slate-50/50 transition-colors border-b-0">
+                                    <span className="text-[10px] text-muted-foreground/80 uppercase font-extrabold tracking-widest">Documenti Validati</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden">
+                                            <div className="h-full bg-accent w-3/4 rounded-full"></div>
+                                        </div>
+                                        <span className="text-[10px] font-bold text-accent italic">75%</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs text-muted-foreground uppercase font-bold">Gestito da</span>
-                            <div className="flex items-center gap-2">
-                                <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold">MR</div>
-                                <p className="text-sm font-medium">{projectData.owner || 'Marco Rossi'}</p>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="hidden lg:block lg:col-span-1 h-full">
+                    <Card className="h-full border-none shadow-xl shadow-black/[0.05] bg-accent text-accent-foreground overflow-hidden relative group cursor-pointer flex flex-col">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+                        <CardContent className="p-6 flex flex-col justify-between h-full relative z-10">
+                            <Hand className="w-6 h-6 mb-4 opacity-80" />
+                            <div>
+                                <h3 className="text-base font-extrabold tracking-tight leading-tight mb-2">Hai bisogno di supporto?</h3>
+                                <p className="text-[11px] font-medium text-accent-foreground/80 mb-4 tracking-tight leading-relaxed">Il nostro sistema IA è pronto a guidarti nei prossimi step.</p>
+                                <Button size="sm" variant="secondary" className="w-full font-bold shadow-sm h-9 text-[10px] tracking-widest uppercase rounded-xl" onClick={() => setIsAssistantOpen(true)}>
+                                    CHIEDI ALLA PIATTAFORMA
+                                </Button>
                             </div>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
 
             {/* Tabs Section - Dynamic based on viewConfig */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList>
+                <TabsList className="bg-slate-100/50 p-1 rounded-xl h-auto flex-wrap">
                     {viewConfig.availableTabs.map(tabKey => (
-                        <TabsTrigger key={tabKey} value={tabKey}>
+                        <TabsTrigger
+                            key={tabKey}
+                            value={tabKey}
+                            className="rounded-lg px-6 py-2.5 text-xs font-bold tracking-widest transition-all data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
+                        >
                             {TAB_LABELS[tabKey] || tabKey}
                         </TabsTrigger>
                     ))}
@@ -239,7 +267,7 @@ export default function ProjectDetailPage() {
             )}
 
             {/* Workflow Timeline Sheet */}
-            <WorkflowTimeline
+            <WorkflowTimelineSheet
                 isOpen={isTimelineOpen}
                 onOpenChange={setIsTimelineOpen}
                 steps={allSteps}

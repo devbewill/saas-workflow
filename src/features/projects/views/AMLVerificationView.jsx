@@ -3,9 +3,94 @@
  * Two-column side-by-side layout for Verifica AML and Controllo Banche Dati
  */
 import React, { useState } from 'react';
-import { AlertTriangle, CheckCircle, Upload, Eye, Trash2, FileText } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Upload, Eye, Trash2, FileText, Send, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { NoteManager } from '@/components/shared/NoteManager';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+
+function NoteManager({ notes = [], onAddNote, title = "NOTE DI PROCESSO" }) {
+    const [newNote, setNewNote] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!newNote.trim()) return;
+
+        onAddNote(newNote);
+        setNewNote('');
+    };
+
+    return (
+        <div className="flex flex-col h-full space-y-6">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <MessageSquare size={14} className="text-accent" />
+                    <h4 className="text-[10px] font-bold tracking-widest text-primary">{title}</h4>
+                </div>
+                <Badge variant="secondary" className="bg-slate-100 text-slate-500 font-bold text-[9px] px-2 py-0 border-none">
+                    {notes.length} messaggi
+                </Badge>
+            </div>
+
+            {/* Input Area - Refined */}
+            <form onSubmit={handleSubmit} className="relative group">
+                <textarea
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder="Scrivi una nota per il team..."
+                    rows={3}
+                    className="w-full px-4 py-3 pr-14 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium transition-all placeholder:text-muted-foreground/50 focus:bg-white focus:ring-2 focus:ring-accent/10 focus:border-accent outline-none resize-none"
+                />
+                <button
+                    type="submit"
+                    disabled={!newNote.trim()}
+                    className={cn(
+                        "absolute right-3 bottom-3 p-2.5 rounded-xl transition-all shadow-sm active:scale-95",
+                        newNote.trim()
+                            ? "bg-accent text-accent-foreground hover:bg-accent/90"
+                            : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                    )}
+                >
+                    <Send size={16} />
+                </button>
+            </form>
+
+            {/* Notes List - Elegant Timeline Style */}
+            <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                {notes.length === 0 ? (
+                    <div className="text-center py-10 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/30">
+                        <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-2" />
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Nessuna nota presente</p>
+                    </div>
+                ) : (
+                    notes.map((note) => (
+                        <div key={note.id} className="flex gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                            <Avatar className="h-9 w-9 flex-shrink-0 border-2 border-white shadow-sm">
+                                <AvatarImage src={note.user.avatar} />
+                                <AvatarFallback className="bg-primary text-white text-[10px] font-bold">
+                                    {note.user.initials}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-bold text-primary tracking-tight">{note.user.name}</span>
+                                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">
+                                        {note.date} • {note.time}
+                                    </span>
+                                </div>
+                                <div className="bg-white rounded-2xl rounded-tl-none p-4 border border-border/50 shadow-sm shadow-black/[0.02]">
+                                    <p className="text-sm text-slate-600 font-medium leading-relaxed whitespace-pre-wrap tracking-tight">
+                                        {note.content}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+}
 
 export default function AMLVerificationView({ project }) {
     const [amlOutcome, setAmlOutcome] = useState('Rosso - Alto');
@@ -157,7 +242,7 @@ export default function AMLVerificationView({ project }) {
                         )}>
                             {riskConfig.icon}
                         </div>
-                        <span className={cn("text-xs font-bold uppercase tracking-wider", riskConfig.textColor)}>
+                        <span className={cn("text-xs font-bold tracking-wider", riskConfig.textColor)}>
                             {riskConfig.label}
                         </span>
                     </div>
@@ -166,7 +251,7 @@ export default function AMLVerificationView({ project }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Outcome Selector */}
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase">Esito controllo</label>
+                        <label className="text-xs font-bold text-slate-500">Esito controllo</label>
                         <select
                             value={amlOutcome}
                             onChange={(e) => setAmlOutcome(e.target.value)}
@@ -199,7 +284,7 @@ export default function AMLVerificationView({ project }) {
 
                 {/* Document Upload/Display */}
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Documento HAWK</label>
+                    <label className="text-xs font-bold text-slate-500">Documento Hawk</label>
 
                     {!hawkDocument ? (
                         <label className="block cursor-pointer">
@@ -227,12 +312,12 @@ export default function AMLVerificationView({ project }) {
                                 </div>
                             </div>
                             <div className="flex items-center gap-1">
-                                <button className="p-1.5 hover:bg-white hover:text-primary-600 rounded-md text-slate-400 transition-all">
+                                <button className="p-1.5 hover:bg-white hover:text-primary-600 rounded-lg text-slate-400 transition-all">
                                     <Eye size={14} />
                                 </button>
                                 <button
                                     onClick={() => setHawkDocument(null)}
-                                    className="p-1.5 hover:bg-white hover:text-red-600 rounded-md text-slate-400 transition-all"
+                                    className="p-1.5 hover:bg-white hover:text-red-600 rounded-lg text-slate-400 transition-all"
                                 >
                                     <Trash2 size={14} />
                                 </button>
@@ -267,7 +352,7 @@ export default function AMLVerificationView({ project }) {
                         )}>
                             {dbConfig.icon}
                         </div>
-                        <span className={cn("text-xs font-bold uppercase tracking-wider", dbConfig.textColor)}>
+                        <span className={cn("text-xs font-bold tracking-wider", dbConfig.textColor)}>
                             {dbConfig.label}
                         </span>
                     </div>
@@ -275,7 +360,7 @@ export default function AMLVerificationView({ project }) {
 
                 {/* Outcome Selector */}
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Esito controllo</label>
+                    <label className="text-xs font-bold text-slate-500">Esito controllo</label>
                     <select
                         value={dbOutcome}
                         onChange={(e) => setDbOutcome(e.target.value)}
@@ -289,7 +374,7 @@ export default function AMLVerificationView({ project }) {
 
                 {/* Document Upload/Display */}
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Documento esito Banche dati</label>
+                    <label className="text-xs font-bold text-slate-500">Documento esito banche dati</label>
 
                     {!dbDocument ? (
                         <label className="block cursor-pointer">
@@ -309,7 +394,7 @@ export default function AMLVerificationView({ project }) {
                         <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between group hover:border-primary-200 transition-colors">
                             <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 bg-white shadow-sm border border-slate-100 rounded-lg flex items-center justify-center">
-                                    <FileText className="w-4 h-4 text-emerald-500" />
+                                    <FileText className="w-4 h-4 text-blue-500" />
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs font-bold text-slate-900 truncate max-w-[150px]">{dbDocument.name}</p>
@@ -317,12 +402,12 @@ export default function AMLVerificationView({ project }) {
                                 </div>
                             </div>
                             <div className="flex items-center gap-1">
-                                <button className="p-1.5 hover:bg-white hover:text-primary-600 rounded-md text-slate-400 transition-all">
+                                <button className="p-1.5 hover:bg-white hover:text-primary-600 rounded-lg text-slate-400 transition-all">
                                     <Eye size={14} />
                                 </button>
                                 <button
                                     onClick={() => setDbDocument(null)}
-                                    className="p-1.5 hover:bg-white hover:text-red-600 rounded-md text-slate-400 transition-all"
+                                    className="p-1.5 hover:bg-white hover:text-red-600 rounded-lg text-slate-400 transition-all"
                                 >
                                     <Trash2 size={14} />
                                 </button>

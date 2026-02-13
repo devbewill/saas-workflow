@@ -65,7 +65,7 @@ export default function TeamView({ project }) {
     return (
         <div className="grid gap-6">
             <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-bold tracking-tight">Gestione Team</h3>
+                <h3 className="text-lg font-bold tracking-tight text-primary">Gestione team</h3>
                 <p className="text-muted-foreground">
                     Assegna i ruoli necessari per la gestione del progetto. Il supervisore è obbligatorio.
                 </p>
@@ -79,21 +79,21 @@ export default function TeamView({ project }) {
 
                     return (
                         <Card key={role.id} className={cn(
-                            "transition-all",
-                            assignedUser ? "border-green-200 bg-green-50/50 shadow-sm" : "border-dashed border-muted"
+                            "transition-all rounded-2xl",
+                            assignedUser ? "border-primary/20 bg-primary/5 shadow-sm" : "border-dashed border-muted"
                         )}>
                             <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
                                 <div className="space-y-1">
-                                    <CardTitle className="text-base font-semibold flex items-center gap-2">
+                                    <CardTitle className="text-sm font-bold flex items-center gap-2 tracking-tight text-primary">
                                         {role.label}
-                                        {role.mandatory && <Badge variant="secondary" className="text-[10px] h-5">Richiesto</Badge>}
-                                        {assignedUser && <Badge variant="outline" className="text-[10px] h-5 bg-white text-green-700 border-green-200">Assegnato</Badge>}
+                                        {role.mandatory && <Badge variant="secondary" className="text-[9px] h-5 font-bold uppercase bg-slate-100 text-slate-500">Richiesto</Badge>}
+                                        {assignedUser && <Badge variant="outline" className="text-[9px] h-5 bg-white text-accent border-accent/20 font-bold uppercase">Assegnato</Badge>}
                                     </CardTitle>
                                     <CardDescription className="text-xs">
                                         {role.description}
                                     </CardDescription>
                                 </div>
-                                <div className={cn("p-2 rounded-full", assignedUser ? "bg-white text-green-600 shadow-sm" : "bg-muted/20 text-muted-foreground")}>
+                                <div className={cn("p-2 rounded-xl", assignedUser ? "bg-white text-accent shadow-sm" : "bg-muted/20 text-muted-foreground")}>
                                     <Icon size={16} />
                                 </div>
                             </CardHeader>
@@ -113,7 +113,7 @@ export default function TeamView({ project }) {
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="text-muted-foreground hover:text-primary hover:bg-white"
+                                            className="text-muted-foreground hover:text-primary hover:bg-white rounded-lg px-3"
                                             onClick={() => {
                                                 if (window.confirm(`Vuoi sostituire l'utente assegnato al ruolo ${role.label}?`)) {
                                                     setAssignments(p => ({ ...p, [role.id]: null }));
@@ -147,7 +147,7 @@ export default function TeamView({ project }) {
                                                         <span className="bg-background px-2 text-muted-foreground">Oppure</span>
                                                     </div>
                                                 </div>
-                                                <Button variant="outline" size="sm" className="w-full bg-white" onClick={() => setSelectedRoleForInvite(role.id)}>
+                                                <Button variant="outline" size="sm" className="w-full bg-white rounded-xl border-border hover:bg-slate-50 text-[10px] font-bold tracking-widest" onClick={() => setSelectedRoleForInvite(role.id)}>
                                                     <Mail className="mr-2 h-3 w-3" /> Invita tramite Email
                                                 </Button>
                                             </div>
@@ -159,7 +159,7 @@ export default function TeamView({ project }) {
                                                     value={inviteEmail}
                                                     onChange={(e) => setInviteEmail(e.target.value)}
                                                 />
-                                                <Button size="sm" onClick={() => handleInvite(role.id)}>Invia</Button>
+                                                <Button size="sm" className="rounded-xl bg-primary text-white" onClick={() => handleInvite(role.id)}>Invia</Button>
                                                 <Button variant="ghost" size="sm" onClick={() => setSelectedRoleForInvite(null)}>X</Button>
                                             </div>
                                         )}

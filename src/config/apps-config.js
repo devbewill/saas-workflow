@@ -19,7 +19,7 @@ export const APPS = {
         name: 'HD RISTR',
         label: 'Ristrutturazioni',
         icon: Home,
-        color: 'emerald-600',
+        color: 'primary',
         version: 'v0.1',
         features: {
             aml: false,

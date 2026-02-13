@@ -1,7 +1,7 @@
 {
   "workflow": {
-    "name": "Flusso Pratica Standard (aggiornato)",
-    "description": "Processo dalla bozza alla liquidazione",
+    "name": "HD BRK Workflow",
+    "description": "Flusso specifico per Broker Esterni",
     "version": "1.0",
     "steps": [
       {
@@ -10,146 +10,125 @@
         "state": "Bozza",
         "subState": null,
         "owner": "Supervisor",
-        "nextPossible": ["Aperta – verifica preliminare"],
+        "nextPossible": ["Validazione Doc Preliminari"],
         "isStart": true,
         "isFinal": false
       },
       {
         "id": 2,
-        "fullName": "Aperta – Verifica preliminare",
+        "fullName": "Validazione Doc Preliminari",
         "state": "Aperta",
-        "subState": "Verifica preliminare",
-        "owner": "Front office",
-        "nextPossible": ["Aperta - Validazione documenti"],
+        "subState": "Validazione Doc Preliminari",       "owner": "Front office",
+        "nextPossible": ["Attesa Antiriciclaggio"],
         "isFinal": false
       },
       {
         "id": 3,
-        "fullName": "Aperta - Validazione documenti",
+        "fullName": "Attesa Antiriciclaggio",
         "state": "Aperta",
-        "subState": "Validazione documenti",
+        "subState": "Attesa Antiriciclaggio",
         "owner": "Back office",
-        "nextPossible": ["Caricata - Lavorazione AML e Banche Dati"],
+        "nextPossible": ["Antiriciclaggio Completato"],
         "isFinal": false
       },
       {
         "id": 4,
-        "fullName": "Caricata - Lavorazione AML e Banche Dati",
-        "state": "Caricata",
-        "subState": "Lavorazione AML e Banche Dati",
+        "fullName": "Antiriciclaggio Completato",
+        "state": "Aperta",
+        "subState": "Antiriciclaggio Completato",
         "owner": "Back office",
-        "nextPossible": ["Caricata - Valutazione istruttoria"],
+        "nextPossible": ["In attesa valutazione"],
         "isFinal": false
       },
       {
         "id": 5,
-        "fullName": "Caricata - Valutazione istruttoria",
+        "fullName": "In attesa valutazione",
         "state": "Caricata",
-        "subState": "Valutazione istruttoria",
+        "subState": "In attesa valutazione",
         "owner": "Middle office",
-        "nextPossible": ["Caricata - Valutazione rating condominio", "Caricata - Valutazione crediti"],
+        "nextPossible": ["Rating completato"],
         "isFinal": false
       },
       {
         "id": 6,
-        "fullName": "Caricata - Valutazione rating condominio",
+        "fullName": "Rating completato",
         "state": "Caricata",
-        "subState": "Valutazione rating condominio",
-        "owner": "Back office",
-        "nextPossible": ["Caricata - Valutazione crediti"],
-        "isFinal": false,
-        "note": "stato probabilmente automatico / senza assegnatario fisso"
+        "subState": "Rating completato",
+        "owner": "Ufficio crediti",
+        "nextPossible": ["Presentazione in Banca"],
+        "isFinal": false
       },
       {
         "id": 7,
-        "fullName": "Caricata - Valutazione crediti",
-        "state": "Caricata",
-        "subState": "Valutazione crediti",
+        "fullName": "Presentazione in Banca",
+        "state": "Esame",
+        "subState": "Presentazione in Banca",
         "owner": "Ufficio crediti",
-        "nextPossible": ["Esame - Valutazione organo deliberante"],
+        "nextPossible": ["Documenti Banca caricati"],
         "isFinal": false
       },
       {
         "id": 8,
-        "fullName": "Esame - Valutazione organo deliberante",
+        "fullName": "Documenti Banca caricati",
         "state": "Esame",
-        "subState": "Valutazione organo deliberante",
-        "owner": "Organo deliberante",
-        "nextPossible": ["Approvata - Delibera OK"],
+        "subState": "Documenti Banca caricati",
+        "owner": "Back office",
+        "nextPossible": ["Documenti in Banca validati"],
         "isFinal": false
       },
       {
         "id": 9,
-        "fullName": "Approvata - Delibera OK",
-        "state": "Approvata",
-        "subState": "Delibera OK",
-        "owner": "Middle office",
-        "nextPossible": ["In attesa - Esecuzione lavori in corso"],
+        "fullName": "Documenti in Banca validati",
+        "state": "Esame",
+        "subState": "Documenti in Banca validati",
+        "owner": "Back office",
+        "nextPossible": ["Presentata in Banca"],
         "isFinal": false
       },
       {
         "id": 10,
-        "fullName": "In attesa - Esecuzione lavori in corso",
-        "state": "In attesa",
-        "subState": "Esecuzione lavori in corso",
-        "owner": "Front office",
-        "nextPossible": ["Approvata – Valutazione post fine lavori"],
+        "fullName": "Presentata in Banca",
+        "state": "Esame",
+        "subState": "Presentata in Banca",
+        "owner": "Ufficio crediti",
+        "nextPossible": ["Finanziamento Approvato"],
         "isFinal": false
       },
       {
         "id": 11,
-        "fullName": "Approvata – Valutazione post fine lavori",
+        "fullName": "Finanziamento Approvato",
         "state": "Approvata",
-        "subState": "Valutazione post fine lavori",
+        "subState": "DeFinanziamento Approvatolibera",
         "owner": "Middle office",
-        "nextPossible": ["Approvata – Pronta per stampa contratto"],
+        "nextPossible": ["Documenti Finali Broker caricati"],
         "isFinal": false
       },
       {
         "id": 12,
-        "fullName": "Approvata – Pronta per stampa contratto",
+        "fullName": "Documenti Finali Broker caricati",
         "state": "Approvata",
-        "subState": "Pronta per stampa contratto",
-        "owner": "Middle office",
-        "nextPossible": ["Approvata – Inviato contratto in firma"],
+        "subState": "Documenti Finali Broker caricati",
+        "owner": "Back office",
+        "nextPossible": ["Documenti Finali Inviati a Banca"],
         "isFinal": false
       },
       {
         "id": 13,
-        "fullName": "Approvata – Inviato contratto in firma",
+        "fullName": "Documenti Finali Inviati a Banca",
         "state": "Approvata",
-        "subState": "Inviato contratto in firma",
-        "owner": "Amministratore",
-        "nextPossible": ["Approvata – Contratto firmato"],
+        "subState": "Documenti Finali Inviati a Banca",
+        "owner": "Middle office",
+        "nextPossible": ["Finanziamento Erogato"],
         "isFinal": false
       },
       {
         "id": 14,
-        "fullName": "Approvata – Contratto firmato",
-        "state": "Approvata",
-        "subState": "Contratto firmato",
-        "owner": "Middle office",
-        "nextPossible": ["Perfezionata – Da liquidare"],
-        "isFinal": false
-      },
-      {
-        "id": 15,
-        "fullName": "Perfezionata – Da liquidare",
+        "fullName": "Finanziamento Erogato",
         "state": "Perfezionata",
-        "subState": "Da liquidare",
-        "owner": "Back office",
-        "nextPossible": ["Perfezionata – Liquidata"],
-        "isFinal": false
-      },
-      {
-        "id": 16,
-        "fullName": "Perfezionata – Liquidata",
-        "state": "Perfezionata",
-        "subState": "Liquidata",
+        "subState": "Finanziamento Erogato",
         "owner": "Back office",
         "isFinal": true,
-        "isSuccess": true,
-        "note": ""
+        "isSuccess": true
       }
     ]
   }

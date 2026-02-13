@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { PROJECTS, STATS } from '@/data/mockData';
 import { Search, Filter, Edit, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { FilterPanel } from '@/components/filters/FilterPanel';
+import { FilterSheet } from '@/components/sheets/FilterSheet';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/Table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -59,7 +59,7 @@ export default function ProjectsList() {
                         </div>
                     </div>
 
-                    <FilterPanel isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+                    <FilterSheet isOpen={isFilterOpen} onOpenChange={setIsFilterOpen} />
 
                     <div className="p-0">
                         <Table>

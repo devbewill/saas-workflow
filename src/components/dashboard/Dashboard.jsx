@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PROJECTS, STATS, RECENT_ACTIONS } from '@/data/mockData';
-import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type, FileText } from 'lucide-react';
+import { Search, Filter, Calendar as CalendarIcon, Edit, Clock, Bell, Zap, Type, FileText, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { FilterPanel } from '../filters/FilterPanel';
+import { FilterSheet } from '../sheets/FilterSheet';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../ui/Table';
 
 export default function Dashboard() {
@@ -56,13 +56,13 @@ export default function Dashboard() {
                 <div className="p-5 last:pb-0 hover:bg-slate-50/50 transition-colors">
                   <p className="text-sm font-medium text-slate-900 leading-snug">Esito Negativo - Roma 123</p>
                   <div className="flex items-center gap-2 mt-3">
-                    <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase">AML</span>
+                    <span className="px-2.5 py-1 rounded text-[10px] font-bold">AML</span>
                     <Zap size={10} className="opacity-20" />
-                    <span className={cn("px-2.5 py-1 rounded text-[10px] font-black bg-red-50 text-red-500 uppercase tracking-wider")}>Ko tecnico</span>
+                    <span className={cn("px-2.5 py-1 rounded text-[10px] font-bold bg-red-50 text-red-500 tracking-wider")}>Ko tecnico</span>
                   </div>
                 </div>
               </div>
-              <button className="w-full mt-10 py-4 text-[10px] font-black uppercase tracking-[0.3em] border transition-all border-slate-100 text-slate-400 hover:bg-slate-50 hover:text-slate-900 rounded-lg">
+              <button className="w-full mt-10 py-4 text-[10px] font-bold uppercase tracking-[0.3em] border transition-all border-slate-100 text-slate-400 hover:bg-slate-50 hover:text-slate-900 rounded-xl">
                 Segna tutte come lette
               </button>
             </section>
@@ -80,7 +80,7 @@ export default function Dashboard() {
                   <div key={action.id} className="p-4 border border-slate-100 rounded-lg hover:border-blue-100 hover:bg-slate-50 transition-all">
                     <div className="flex justify-between items-start mb-1">
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{action.time}</span>
-                      <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-semibold">{action.target}</span>
+                      <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold">{action.target}</span>
                     </div>
                     <p className="text-sm font-medium text-slate-900 leading-snug">{action.text}</p>
                   </div>
@@ -90,6 +90,26 @@ export default function Dashboard() {
                 Vedi Storico Completo
               </button>
             </section>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 transition-all hover:border-blue-200 hover:shadow-md group">
+            <div className="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+              <Zap size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Pratiche da lavorare</p>
+              <h4 className="text-2xl font-bold text-slate-900">12 pratiche</h4>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 transition-all hover:border-emerald-200 hover:shadow-md group">
+            <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+              <CheckCircle size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Completate oggi</p>
+              <h4 className="text-2xl font-bold text-slate-900">48 pratiche</h4>
+            </div>
           </div>
         </div>
 
@@ -107,14 +127,14 @@ export default function Dashboard() {
               </div>
               <button
                 onClick={() => setIsFilterOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
               >
                 <Filter size={14} /> Filtri
               </button>
             </div>
           </div>
 
-          <FilterPanel isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+          <FilterSheet isOpen={isFilterOpen} onOpenChange={setIsFilterOpen} />
 
           <div className="p-0">
             <Table>

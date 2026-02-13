@@ -17,36 +17,43 @@ export function AppSidebar() {
   const { activeApp } = useAppContext();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card">
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-sidebar-bg text-sidebar-foreground">
       {/* Sidebar Header */}
-      <div className="flex h-16 items-center border-b border-border px-4">
+      <div className="flex h-16 items-center px-6 border-b border-border/40 mb-2">
         <AppSwitcher />
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-1.5 p-4">
+        <div className="px-2 py-2 text-[10px] font-bold tracking-widest text-sidebar-muted/60">
+          Menu principale
+        </div>
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold transition-all duration-300",
                 isActive
-                  ? "bg-[#f44336]/10 text-[#f44336]"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-red-50 text-red-600 shadow-sm"
+                  : "text-sidebar-muted hover:bg-slate-50 hover:text-sidebar-foreground"
               )
             }
           >
-            <item.icon size={18} />
-            {item.label}
+            {({ isActive }) => (
+              <>
+                <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                {item.label}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-border p-4">
-        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+      <div className="border-t border-border/40 p-4">
+        <button className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-sidebar-muted transition-all hover:bg-slate-50 hover:text-sidebar-foreground">
           <LogOut size={18} />
           Disconnetti
         </button>

@@ -6,8 +6,7 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '@/components/ui/sheet';
-import { Plus, FileStack, Send, MoreHorizontal, Edit, Trash2, Save, FileSignature } from 'lucide-react';
+import { Plus, FileStack, Send, MoreHorizontal, Edit, Trash2, FileSignature } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { DOCUMENTS } from '@/data/mockData';
+import { FascicoliSheet } from '@/components/sheets/FascicoliSheet';
 
 // Initial bundles data
 const INITIAL_BUNDLES = [
@@ -80,15 +80,6 @@ export default function FascicoliView({ project }) {
         alert(`Avvio procedura firma per il fascicolo: ${bundle.name}`);
     };
 
-    const handleToggleDoc = (docId) => {
-        setFormData(prev => ({
-            ...prev,
-            documentIds: prev.documentIds.includes(docId)
-                ? prev.documentIds.filter(id => id !== docId)
-                : [...prev.documentIds, docId]
-        }));
-    };
-
     const getStatusBadge = (bundle) => {
         if (bundle.isSignatureEnabled) {
             return <Badge className="bg-primary/10 text-primary border-primary/20">Firma abilitata</Badge>;
@@ -104,7 +95,7 @@ export default function FascicoliView({ project }) {
                     <FileStack className="h-5 w-5 text-primary" />
                     <h3 className="text-lg font-semibold">Fascicoli per Firma</h3>
                 </div>
-                <Button onClick={handleCreateFascicolo}>
+                <Button onClick={handleCreateFascicolo} className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20">
                     <Plus className="h-4 w-4 mr-2" /> Nuovo Fascicolo
                 </Button>
             </div>
@@ -130,7 +121,7 @@ export default function FascicoliView({ project }) {
                             <Card
                                 key={bundle.id}
                                 className={cn(
-                                    "transition-all hover:shadow-md cursor-pointer",
+                                    "transition-all hover:shadow-md cursor-pointer rounded-2xl",
                                     bundle.isSignatureEnabled && "border-primary/20 bg-primary/5"
                                 )}
                                 onClick={() => handleEditFascicolo(bundle)}
@@ -138,7 +129,7 @@ export default function FascicoliView({ project }) {
                                 <CardContent className="p-4">
                                     <div className="flex items-start justify-between mb-3">
                                         <div>
-                                            <h4 className="font-medium text-sm">{bundle.name}</h4>
+                                            <h4 className="font-bold text-sm text-primary tracking-tight">{bundle.name}</h4>
                                             <p className="text-xs text-muted-foreground mt-0.5">
                                                 {bundle.docCount} documenti • Aggiornato {bundle.updatedAt}
                                             </p>
@@ -192,6 +183,7 @@ export default function FascicoliView({ project }) {
                                             <Button
                                                 size="sm"
                                                 variant="outline"
+                                                className="rounded-lg border-primary/20 text-primary hover:bg-primary/10 transition-all font-bold"
                                                 onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}
                                             >
                                                 <Send className="h-3 w-3 mr-1" /> Invia
@@ -207,86 +199,15 @@ export default function FascicoliView({ project }) {
             }
 
             {/* Edit/Create Sheet */}
-            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetContent className="sm:max-w-md">
-                    <SheetHeader>
-                        <SheetTitle>{editingFascicolo ? 'Modifica Fascicolo' : 'Nuovo Fascicolo'}</SheetTitle>
-                        <SheetDescription>
-                            {editingFascicolo ? 'Aggiorna i dettagli del raggruppamento.' : 'Crea un nuovo raggruppamento di documenti per azioni massive.'}
-                        </SheetDescription>
-                    </SheetHeader>
-
-                    <div className="space-y-6 py-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium leading-none">
-                                Nome Fascicolo
-                            </label>
-                            <input
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                placeholder="Es. Documenti Amministratore"
-                                value={formData.name}
-                                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                            />
-                        </div>
-
-                        <div className="space-y-4">
-                            <label className="text-sm font-medium leading-none">Seleziona Documenti</label>
-                            <div className="border rounded-md h-[400px] overflow-y-auto p-4 space-y-2">
-                                {DOCUMENTS.map(doc => (
-                                    <div key={doc.id} className="flex items-start space-x-3 p-2 hover:bg-muted/50 rounded-md transition-colors">
-                                        <input
-                                            type="checkbox"
-                                            className="mt-1 h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                            checked={formData.documentIds.includes(doc.id)}
-                                            onChange={() => handleToggleDoc(doc.id)}
-                                        />
-                                        <div className="grid gap-1.5 leading-none">
-                                            <label className="text-sm font-medium leading-none">
-                                                {doc.name}
-                                            </label>
-                                            <p className="text-xs text-muted-foreground">
-                                                Stato: {doc.status}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                id="sig-check"
-                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                checked={formData.isSignatureEnabled}
-                                onChange={(e) => setFormData(prev => ({ ...prev, isSignatureEnabled: e.target.checked }))}
-                            />
-                            <div className="grid gap-1.5 leading-none">
-                                <label htmlFor="sig-check" className="text-sm font-medium leading-none">
-                                    Abilita Firma Digitale
-                                </label>
-                                <p className="text-xs text-muted-foreground">
-                                    Richiedi firma massiva per i documenti in questo fascicolo.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <SheetFooter className="flex-col sm:justify-between sm:flex-row gap-2">
-                        {editingFascicolo && (
-                            <Button variant="destructive" onClick={() => { handleDeleteFascicolo(editingFascicolo.id); setIsSheetOpen(false); }}>
-                                <Trash2 className="mr-2 h-4 w-4" /> Elimina
-                            </Button>
-                        )}
-                        <div className="flex gap-2">
-                            <Button variant="outline" onClick={() => setIsSheetOpen(false)}>Annulla</Button>
-                            <Button onClick={handleSaveFascicolo}>
-                                <Save className="mr-2 h-4 w-4" /> Salva Fascicolo
-                            </Button>
-                        </div>
-                    </SheetFooter>
-                </SheetContent>
-            </Sheet>
-        </div >
+            <FascicoliSheet
+                isOpen={isSheetOpen}
+                onOpenChange={setIsSheetOpen}
+                editingFascicolo={editingFascicolo}
+                formData={formData}
+                setFormData={setFormData}
+                handleSaveFascicolo={handleSaveFascicolo}
+                handleDeleteFascicolo={handleDeleteFascicolo}
+            />
+        </div>
     );
 }

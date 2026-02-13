@@ -44,6 +44,11 @@ export default {
           DEFAULT: "hsl(var(--projectStatus))",
           foreground: "hsl(var(--projectStatus-foreground))",
         },
+        sidebar: {
+          bg: "hsl(var(--sidebar-bg))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          muted: "hsl(var(--sidebar-muted))",
+        },
 
         // Custom Brand Colors extracted from Mockups
         // Custom Brand Colors extracted from Mockups
@@ -65,7 +70,7 @@ export default {
 
       },
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

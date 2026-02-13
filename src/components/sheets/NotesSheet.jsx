@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
@@ -7,7 +7,6 @@ import { Tooltip } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-    MessageSquare,
     User,
     Calendar,
     Clock,
@@ -19,7 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export function DocumentNotesSheet({ document, isOpen, onOpenChange }) {
+export function NotesSheet({ document, isOpen, onOpenChange }) {
     const [noteText, setNoteText] = useState('');
     const [isPublic, setIsPublic] = useState(false);
 
@@ -67,16 +66,18 @@ export function DocumentNotesSheet({ document, isOpen, onOpenChange }) {
 
     return (
         <Sheet open={isOpen} onOpenChange={onOpenChange}>
-            <SheetContent className="flex flex-col h-full w-full sm:max-w-md p-0">
+            <SheetContent className="flex flex-col h-full p-0 sm:max-w-md bg-white/95 backdrop-blur-xl border-l border-border/50 shadow-2xl">
                 <div className="flex-1 overflow-hidden flex flex-col">
-                    <div className="p-6 border-b">
+                    <div className="p-8 border-b border-border/40">
                         <SheetHeader>
-                            <SheetTitle className="flex items-center gap-2">
-                                <MessageSquare className="h-5 w-5 text-primary" />
-                                Note Documento
-                            </SheetTitle>
-                            <SheetDescription>
-                                Aggiungi un nota al documento: <br /> <span className="font-semibold text-foreground">{document.name}</span>
+                            <div className="flex items-center gap-2 mb-2">
+                                <div className="h-6 w-1 bg-accent rounded-full"></div>
+                                <span className="text-[10px] font-bold tracking-widest text-accent uppercase">Documentazione</span>
+                            </div>
+                            <SheetTitle className="text-2xl font-bold tracking-tight text-primary">Note documento</SheetTitle>
+                            <SheetDescription className="font-medium text-slate-500">
+                                Visualizza e aggiungi annotazioni per: <br />
+                                <span className="text-primary font-bold">{document.name}</span>
                             </SheetDescription>
                         </SheetHeader>
                     </div>
@@ -86,38 +87,38 @@ export function DocumentNotesSheet({ document, isOpen, onOpenChange }) {
                             {/* Previous Notes List */}
                             <div className="space-y-4">
                                 {notes.map((note) => (
-                                    <div key={note.id} className="rounded-lg border bg-card p-4 shadow-sm space-y-3">
+                                    <div key={note.id} className="rounded-2xl border border-border/40 bg-white p-4 shadow-sm space-y-3">
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center gap-2">
-                                                <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                                                    <User className="h-4 w-4 text-muted-foreground" />
+                                                <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
+                                                    <User className="h-4 w-4 text-slate-400" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium leading-none">{note.author}</p>
-                                                    <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
+                                                    <p className="text-sm font-bold text-primary">{note.author}</p>
+                                                    <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1 font-bold uppercase tracking-tighter">
                                                         <Calendar className="h-3 w-3" /> {note.date}
-                                                        <span className="mx-1">•</span>
+                                                        <span className="mx-1 opacity-20">•</span>
                                                         <Clock className="h-3 w-3" /> {note.time}
                                                     </p>
                                                 </div>
                                             </div>
-                                            <Badge variant="outline" className="text-[10px] h-5 bg-slate-50">
-                                                <History className="h-3 w-3 mr-1" /> {note.version}
+                                            <Badge variant="outline" className="text-[9px] font-bold h-5 bg-slate-50 border-slate-200 text-slate-500 uppercase">
+                                                <History className="h-2.5 w-2.5 mr-1" /> {note.version}
                                             </Badge>
                                         </div>
 
-                                        <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">
+                                        <p className="text-sm text-slate-600 font-medium whitespace-pre-wrap leading-relaxed">
                                             {note.text}
                                         </p>
 
                                         <div className="flex items-center pt-1 border-t border-slate-50 mt-2">
                                             {note.isPublic ? (
-                                                <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-[10px] gap-1 px-1.5 border-blue-100">
-                                                    <Globe className="h-3 w-3" /> Pubblica
+                                                <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-[9px] font-bold gap-1 px-1.5 border-blue-100 uppercase">
+                                                    <Globe className="h-2.5 w-2.5" /> Pubblica
                                                 </Badge>
                                             ) : (
-                                                <Badge variant="outline" className="text-slate-500 text-[10px] gap-1 px-1.5 border-slate-200">
-                                                    <Lock className="h-3 w-3" /> Privata
+                                                <Badge variant="outline" className="text-slate-400 text-[9px] font-bold gap-1 px-1.5 border-slate-100 uppercase">
+                                                    <Lock className="h-2.5 w-2.5" /> Privata
                                                 </Badge>
                                             )}
                                         </div>
@@ -129,28 +130,28 @@ export function DocumentNotesSheet({ document, isOpen, onOpenChange }) {
                 </div>
 
                 {/* Fixed Footer with Input Form */}
-                <div className="p-6 border-t bg-slate-50/50 space-y-4">
+                <div className="p-6 border-t border-border/40 bg-slate-50/50 space-y-4">
                     <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pl-0.5">
-                            Nuova Nota
+                        <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-0.5">
+                            Nuova nota
                         </label>
                         <Textarea
                             placeholder="Scrivi qui la tua nota..."
                             value={noteText}
                             onChange={(e) => setNoteText(e.target.value)}
-                            className="bg-background resize-none h-24 text-sm"
+                            className="bg-white border-border/60 rounded-xl resize-none h-24 text-sm focus:ring-accent/10 focus:border-accent"
                         />
                     </div>
 
-                    <div className="flex items-center justify-between bg-background p-3 rounded-lg border shadow-sm">
+                    <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-border/40 shadow-sm">
                         <div className="flex items-center gap-3">
                             <Switch
                                 checked={isPublic}
                                 onCheckedChange={setIsPublic}
                             />
                             <div className="flex flex-col">
-                                <span className="text-xs font-medium">Nota pubblica</span>
-                                <span className="text-[10px] text-muted-foreground">Visibile a tutte le applicazioni HD che vedono questo documento</span>
+                                <span className="text-xs font-bold text-primary">Nota pubblica</span>
+                                <span className="text-[10px] text-muted-foreground font-medium">Visibile a tutte le applicazioni</span>
                             </div>
                         </div>
 
@@ -164,7 +165,7 @@ export function DocumentNotesSheet({ document, isOpen, onOpenChange }) {
                         )}
                     </div>
 
-                    <Button className="w-full" onClick={handleAddNote} disabled={!noteText.trim()}>
+                    <Button className="w-full h-11 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground font-bold shadow-lg shadow-accent/20 transition-all" onClick={handleAddNote} disabled={!noteText.trim()}>
                         <Send className="h-4 w-4 mr-2" /> Aggiungi Nota
                     </Button>
                 </div>
