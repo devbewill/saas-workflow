@@ -97,14 +97,14 @@ export function OperatorAssistantSheet({ isOpen, onOpenChange, configKey }) {
                 </div>
 
                 <SheetFooter className="p-8 border-t border-border/40 bg-slate-50/50 flex flex-col gap-3 sm:flex-col sm:space-x-0">
-                    <Button disabled={!allRequirementsMet} className="w-full h-12 rounded-xl font-bold tracking-tight bg-accent hover:bg-accent/90 shadow-lg shadow-accent/20 transition-all active:scale-95">
+                    <Button disabled={!allRequirementsMet} className="w-full">
                         <CheckCircle className="mr-2 h-4 w-4" /> {config.proceedLabel}
                     </Button>
                     <div className="flex gap-3">
-                        <Button variant="outline" className="flex-1 h-11 rounded-xl font-bold border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors text-xs">
+                        <Button variant="destructiveOutline" className="flex-1">
                             Manda in KO
                         </Button>
-                        <Button variant="link" className="flex-1 h-11 rounded-xl font-bold text-slate-500 transition-colors text-xs">
+                        <Button variant="link" className="flex-1">
                             Segnala errore
                         </Button>
                     </div>

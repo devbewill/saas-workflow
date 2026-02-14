@@ -98,17 +98,17 @@ export function FascicoliSheet({
                     </div>
                 </div>
 
-                <SheetFooter className="p-8 border-t border-border/40 bg-slate-50/50 flex flex-col sm:flex-row gap-3">
-                    {editingFascicolo && (
-                        <Button variant="destructive" className="sm:mr-auto rounded-xl font-bold" onClick={() => { handleDeleteFascicolo(editingFascicolo.id); onOpenChange(false); }}>
-                            <Trash2 className="mr-2 h-4 w-4" /> Elimina
-                        </Button>
-                    )}
-                    <div className="flex gap-2 w-full sm:w-auto">
-                        <Button variant="outline" className="flex-1 sm:flex-none rounded-xl border-border hover:bg-white font-bold" onClick={() => onOpenChange(false)}>Annulla</Button>
-                        <Button className="flex-1 sm:flex-none rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 font-bold" onClick={handleSaveFascicolo}>
+                <SheetFooter className="p-8 border-t border-border/40 bg-slate-50/50">
+                    <div className="flex flex-col gap-3 w-full">
+                        <Button className="w-full" onClick={handleSaveFascicolo}>
                             <Save className="mr-2 h-4 w-4" /> Salva Fascicolo
                         </Button>
+                        <Button variant="outline" className="w-full" onClick={() => onOpenChange(false)}>Annulla</Button>
+                        {editingFascicolo && (
+                            <Button variant="destructive" className="w-full" onClick={() => { handleDeleteFascicolo(editingFascicolo.id); onOpenChange(false); }}>
+                                <Trash2 className="mr-2 h-4 w-4" /> Elimina
+                            </Button>
+                        )}
                     </div>
                 </SheetFooter>
             </SheetContent>

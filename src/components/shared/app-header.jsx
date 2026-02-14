@@ -13,8 +13,8 @@ import {
 
 // Mock Data (temporaneo, poi sposta in context o props)
 const USER = {
-  name: 'Marzia Brambilla',
-  email: 'marzia@example.com',
+  name: 'Stefasno Perelli',
+  email: 'stefano@example.com',
   role: 'Frontoffice'
 };
 

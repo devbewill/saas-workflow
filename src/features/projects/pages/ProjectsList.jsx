@@ -17,7 +17,7 @@ export default function ProjectsList() {
 
     return (
         <div className="transition-all duration-700">
-            <div className="space-y-6 max-w-[1400px] mx-auto p-6">
+            <div className="space-y-6 max-w-[1400px] mx-auto p-2">
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -61,7 +61,7 @@ export default function ProjectsList() {
 
                     <FilterSheet isOpen={isFilterOpen} onOpenChange={setIsFilterOpen} />
 
-                    <div className="p-0">
+                    <div className="px-4    ">
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-slate-50/80 hover:bg-slate-50/80 border-b border-slate-200">

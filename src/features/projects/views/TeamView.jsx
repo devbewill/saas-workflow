@@ -63,113 +63,120 @@ export default function TeamView({ project }) {
     };
 
     return (
-        <div className="grid gap-6">
-            <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-bold tracking-tight text-primary">Gestione team</h3>
-                <p className="text-muted-foreground">
-                    Assegna i ruoli necessari per la gestione del progetto. Il supervisore è obbligatorio.
-                </p>
-            </div>
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <Card className="border-none shadow-xl shadow-black/[0.02] overflow-hidden">
+                <CardHeader className="bg-slate-50/50 border-b border-border/40 p-6">
+                    <CardTitle className="text-sm font-bold tracking-widest text-primary uppercase">Gestione team</CardTitle>
+                </CardHeader>
+                <CardContent className="px-6 py-4">
+                    <div className="grid gap-6">
+                        <p className="text-muted-foreground">
+                            Assegna i ruoli necessari per la gestione del progetto. Il supervisore è obbligatorio.
+                        </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {REQUIRED_ROLES.map((role) => {
-                    const assignedUser = assignments[role.id];
-                    const isInviteOpen = selectedRoleForInvite === role.id;
-                    const Icon = role.icon;
 
-                    return (
-                        <Card key={role.id} className={cn(
-                            "transition-all rounded-2xl",
-                            assignedUser ? "border-primary/20 bg-primary/5 shadow-sm" : "border-dashed border-muted"
-                        )}>
-                            <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
-                                <div className="space-y-1">
-                                    <CardTitle className="text-sm font-bold flex items-center gap-2 tracking-tight text-primary">
-                                        {role.label}
-                                        {role.mandatory && <Badge variant="secondary" className="text-[9px] h-5 font-bold uppercase bg-slate-100 text-slate-500">Richiesto</Badge>}
-                                        {assignedUser && <Badge variant="outline" className="text-[9px] h-5 bg-white text-accent border-accent/20 font-bold uppercase">Assegnato</Badge>}
-                                    </CardTitle>
-                                    <CardDescription className="text-xs">
-                                        {role.description}
-                                    </CardDescription>
-                                </div>
-                                <div className={cn("p-2 rounded-xl", assignedUser ? "bg-white text-accent shadow-sm" : "bg-muted/20 text-muted-foreground")}>
-                                    <Icon size={16} />
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                {assignedUser ? (
-                                    <div className="flex items-center gap-4">
-                                        <Avatar className="border-2 border-white shadow-sm">
-                                            <AvatarImage src={`https://avatar.vercel.sh/${assignedUser.email}`} />
-                                            <AvatarFallback>{assignedUser.avatar}</AvatarFallback>
-                                        </Avatar>
-                                        <div className="flex-1 space-y-1">
-                                            <p className="text-sm font-medium leading-none">{assignedUser.name}</p>
-                                            <div className="flex items-center text-xs text-muted-foreground gap-2">
-                                                <Mail size={12} /> {assignedUser.email}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {REQUIRED_ROLES.map((role) => {
+                                const assignedUser = assignments[role.id];
+                                const isInviteOpen = selectedRoleForInvite === role.id;
+                                const Icon = role.icon;
+
+                                return (
+                                    <Card key={role.id} className={cn(
+                                        "transition-all rounded-lg",
+                                        assignedUser ? "border-primary/20 bg-primary/5 shadow-sm" : "border-dashed border-muted"
+                                    )}>
+                                        <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
+                                            <div className="space-y-1">
+                                                <CardTitle className="text-sm font-bold flex items-center gap-2 tracking-tight text-primary">
+                                                    {role.label}
+                                                    {role.mandatory && <Badge variant="secondary" className="text-[9px] h-5 font-bold uppercase bg-slate-100 text-slate-500">Richiesto</Badge>}
+                                                    {assignedUser && <Badge variant="outline" className="text-[9px] h-5 bg-white text-accent border-accent/20 font-bold uppercase">Assegnato</Badge>}
+                                                </CardTitle>
+                                                <CardDescription className="text-xs">
+                                                    {role.description}
+                                                </CardDescription>
                                             </div>
-                                        </div>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-muted-foreground hover:text-primary hover:bg-white rounded-lg px-3"
-                                            onClick={() => {
-                                                if (window.confirm(`Vuoi sostituire l'utente assegnato al ruolo ${role.label}?`)) {
-                                                    setAssignments(p => ({ ...p, [role.id]: null }));
-                                                }
-                                            }}
-                                        >
-                                            Sostituisci
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        {!isInviteOpen ? (
-                                            <div className="flex flex-col gap-2">
-                                                <Select onValueChange={(val) => handleAssign(role.id, MOCK_USERS.find(u => u.id.toString() === val))}>
-                                                    <SelectTrigger className="h-9 bg-white">
-                                                        <SelectValue placeholder="Seleziona da anagrafica..." />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {MOCK_USERS.map(user => (
-                                                            <SelectItem key={user.id} value={user.id.toString()}>
-                                                                {user.name} ({user.email})
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                                <div className="relative">
-                                                    <div className="absolute inset-0 flex items-center">
-                                                        <span className="w-full border-t" />
+                                            <div className={cn("p-2 rounded-xl", assignedUser ? "bg-white text-accent shadow-sm" : "bg-muted/20 text-muted-foreground")}>
+                                                <Icon size={16} />
+                                            </div>
+                                        </CardHeader>
+                                        <CardContent>
+                                            {assignedUser ? (
+                                                <div className="flex items-center gap-4">
+                                                    <Avatar className="border-2 border-white shadow-sm">
+                                                        <AvatarImage src={`https://avatar.vercel.sh/${assignedUser.email}`} />
+                                                        <AvatarFallback>{assignedUser.avatar}</AvatarFallback>
+                                                    </Avatar>
+                                                    <div className="flex-1 space-y-1">
+                                                        <p className="text-sm font-medium leading-none">{assignedUser.name}</p>
+                                                        <div className="flex items-center text-xs text-muted-foreground gap-2">
+                                                            <Mail size={12} /> {assignedUser.email}
+                                                        </div>
                                                     </div>
-                                                    <div className="relative flex justify-center text-xs uppercase">
-                                                        <span className="bg-background px-2 text-muted-foreground">Oppure</span>
-                                                    </div>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="text-muted-foreground hover:text-primary hover:bg-white rounded-lg px-3"
+                                                        onClick={() => {
+                                                            if (window.confirm(`Vuoi sostituire l'utente assegnato al ruolo ${role.label}?`)) {
+                                                                setAssignments(p => ({ ...p, [role.id]: null }));
+                                                            }
+                                                        }}
+                                                    >
+                                                        Sostituisci
+                                                    </Button>
                                                 </div>
-                                                <Button variant="outline" size="sm" className="w-full bg-white rounded-xl border-border hover:bg-slate-50 text-[10px] font-bold tracking-widest" onClick={() => setSelectedRoleForInvite(role.id)}>
-                                                    <Mail className="mr-2 h-3 w-3" /> Invita tramite Email
-                                                </Button>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center gap-2">
-                                                <Input
-                                                    placeholder="email@esempio.com"
-                                                    className="h-9 text-sm bg-white"
-                                                    value={inviteEmail}
-                                                    onChange={(e) => setInviteEmail(e.target.value)}
-                                                />
-                                                <Button size="sm" className="rounded-xl bg-primary text-white" onClick={() => handleInvite(role.id)}>Invia</Button>
-                                                <Button variant="ghost" size="sm" onClick={() => setSelectedRoleForInvite(null)}>X</Button>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-                    );
-                })}
-            </div>
-        </div>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    {!isInviteOpen ? (
+                                                        <div className="flex flex-col gap-2">
+                                                            <Select onValueChange={(val) => handleAssign(role.id, MOCK_USERS.find(u => u.id.toString() === val))}>
+                                                                <SelectTrigger className="h-9 bg-white">
+                                                                    <SelectValue placeholder="Seleziona da anagrafica..." />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {MOCK_USERS.map(user => (
+                                                                        <SelectItem key={user.id} value={user.id.toString()}>
+                                                                            {user.name} ({user.email})
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <div className="relative">
+                                                                <div className="absolute inset-0 flex items-center">
+                                                                    <span className="w-full border-t" />
+                                                                </div>
+                                                                <div className="relative flex justify-center text-xs uppercase">
+                                                                    <span className="bg-background px-2 text-muted-foreground">Oppure</span>
+                                                                </div>
+                                                            </div>
+                                                            <Button variant="outline" onClick={() => setSelectedRoleForInvite(role.id)}>
+                                                                <Mail className="mr-2 h-3 w-3" /> Invita tramite Email
+                                                            </Button>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center gap-2">
+                                                            <Input
+                                                                placeholder="email@esempio.com"
+                                                                className="h-9 text-sm bg-white"
+                                                                value={inviteEmail}
+                                                                onChange={(e) => setInviteEmail(e.target.value)}
+                                                            />
+                                                            <Button size="sm" className="rounded-lg bg-primary text-white" onClick={() => handleInvite(role.id)}>Invia</Button>
+                                                            <Button variant="ghost" size="sm" onClick={() => setSelectedRoleForInvite(null)}>X</Button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div >
     );
 }

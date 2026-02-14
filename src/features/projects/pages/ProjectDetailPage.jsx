@@ -21,7 +21,7 @@ import { OperatorAssistantSheet } from '@/components/sheets/OperatorAssistantShe
 import { WorkflowTimelineSheet } from '@/components/sheets/WorkflowTimelineSheet';
 
 // Icons
-import { ArrowLeft, Hand, Clock, Loader2 } from 'lucide-react';
+import { ArrowLeft, Hand, ArrowBigRight, Clock, Loader2 } from 'lucide-react';
 
 // Lazy load all view components
 const StandardView = lazy(() => import('@/features/projects/views/StandardView'));
@@ -142,20 +142,11 @@ export default function ProjectDetailPage() {
                     {viewConfig.showAssistant && (
                         <Button
                             onClick={() => setIsAssistantOpen(true)}
-                            className="rounded-xl px-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95"
                         >
-                            <Hand className="w-4 h-4 mr-2" /> Supporto Operativo
+                            <ArrowBigRight className="w-4 h-4 mr-2" /> Prosegui allo step successivo
                         </Button>
                     )}
-                    {viewConfig.showTimeline && (
-                        <Button
-                            variant="outline"
-                            onClick={() => setIsTimelineOpen(true)}
-                            className="rounded-xl px-6 border-primary/20 text-primary hover:bg-primary/5 hover:border-primary/40 transition-all shadow-sm active:scale-95"
-                        >
-                            <Clock className="w-4 h-4 mr-2" /> Visualizza Timeline
-                        </Button>
-                    )}
+
                 </div>
             </div>
 

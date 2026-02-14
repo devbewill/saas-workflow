@@ -165,7 +165,7 @@ export function NotesSheet({ document, isOpen, onOpenChange }) {
                         )}
                     </div>
 
-                    <Button className="w-full h-11 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground font-bold shadow-lg shadow-accent/20 transition-all" onClick={handleAddNote} disabled={!noteText.trim()}>
+                    <Button className="w-full" onClick={handleAddNote} disabled={!noteText.trim()}>
                         <Send className="h-4 w-4 mr-2" /> Aggiungi Nota
                     </Button>
                 </div>

@@ -90,20 +90,20 @@ export function DocumentsTable({ projectId }) {
                         placeholder="Cerca documento o ID..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="h-11 pl-12 pr-4 rounded-full border-border/50 bg-slate-50/50 transition-all focus:bg-white focus:ring-2 focus:ring-accent/10 focus:border-accent"
+                        className="h-11 pl-12 pr-4"
                     />
                 </div>
                 <div className="flex flex-wrap gap-2 w-full lg:w-auto">
                     {categories.slice(0, 5).map(cat => (
                         <Button
                             key={cat}
-                            variant={categoryFilter === cat ? 'default' : 'outline'}
+                            variant={categoryFilter === cat ? 'accent' : 'outline'}
                             onClick={() => setCategoryFilter(cat)}
                             className={cn(
-                                "h-9 rounded-xl px-5 text-[10px] font-extrabold uppercase tracking-widest transition-all",
+                                "",
                                 categoryFilter === cat
-                                    ? "bg-primary text-white shadow-md shadow-primary/20"
-                                    : "border-border/60 hover:bg-slate-50"
+                                    ? "text-xs font-extrabold"
+                                    : "text-xs"
                             )}
                         >
                             {cat === 'all' ? 'TUTTI' : cat.toUpperCase()}
@@ -112,8 +112,7 @@ export function DocumentsTable({ projectId }) {
                 </div>
             </div>
 
-            {/* Documents Table - Premium Design */}
-            <div className="border border-border/40 rounded-2xl overflow-hidden shadow-xl shadow-black/[0.02] bg-white">
+            <div className="border border-border/40 rounded-lg overflow-hidden shadow-xl shadow-black/[0.02] bg-white">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-slate-50/50 hover:bg-slate-50/50 border-b border-border/40">
@@ -156,7 +155,7 @@ export function DocumentsTable({ projectId }) {
                                                     "text-sm tracking-tight truncate transition-colors",
                                                     doc.status === "Da caricare"
                                                         ? "font-medium text-slate-400 italic"
-                                                        : "font-extrabold text-primary group-hover:text-accent"
+                                                        : "font-bold text-primary group-hover:text-accent"
                                                 )}>
                                                     {doc.name}
                                                 </p>
@@ -215,14 +214,14 @@ export function DocumentsTable({ projectId }) {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" className="w-48 p-1 rounded-xl shadow-xl">
-                                                <DropdownMenuItem className="rounded-lg font-bold text-xs uppercase tracking-tight py-2.5">
+                                                <DropdownMenuItem className="rounded-lg font text-xs tracking-tight py-2.5">
                                                     Carica File
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem className="rounded-lg font-bold text-xs uppercase tracking-tight py-2.5 text-accent focus:bg-accent/10 focus:text-accent">
+                                                <DropdownMenuItem className="rounded-lg font text-xs tracking-tight py-2.5 text-accent focus:bg-accent/10 focus:text-accent">
                                                     Valida Ora
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator className="bg-slate-50" />
-                                                <DropdownMenuItem onClick={() => handleOpenNotes(doc)} className="rounded-lg font-bold text-xs uppercase tracking-tight py-2.5">
+                                                <DropdownMenuItem onClick={() => handleOpenNotes(doc)} className="rounded-lg font text-xs tracking-tight py-2.5">
                                                     Aggiungi Nota
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>

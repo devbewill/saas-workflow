@@ -88,117 +88,125 @@ export default function FascicoliView({ project }) {
     };
 
     return (
-        <div className="space-y-6">
-            {/* Header with Create Button */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <FileStack className="h-5 w-5 text-primary" />
-                    <h3 className="text-lg font-semibold">Fascicoli per Firma</h3>
-                </div>
-                <Button onClick={handleCreateFascicolo} className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20">
-                    <Plus className="h-4 w-4 mr-2" /> Nuovo Fascicolo
-                </Button>
-            </div>
 
-            {/* Bundles Grid */}
-            {bundles.length === 0 ? (
-                <Card>
-                    <CardContent className="py-12">
-                        <div className="text-center text-muted-foreground">
-                            <FileStack className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                            <p className="font-medium">Nessun fascicolo creato</p>
-                            <p className="text-sm mt-1">Crea un fascicolo per raggruppare documenti da inviare in firma</p>
-                        </div>
-                    </CardContent>
-                </Card>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {bundles.map((bundle) => {
-                        // Get document names for this bundle
-                        const bundleDocs = DOCUMENTS.filter(doc => bundle.documentIds.includes(doc.id));
-
-                        return (
-                            <Card
-                                key={bundle.id}
-                                className={cn(
-                                    "transition-all hover:shadow-md cursor-pointer rounded-2xl",
-                                    bundle.isSignatureEnabled && "border-primary/20 bg-primary/5"
-                                )}
-                                onClick={() => handleEditFascicolo(bundle)}
-                            >
-                                <CardContent className="p-4">
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div>
-                                            <h4 className="font-bold text-sm text-primary tracking-tight">{bundle.name}</h4>
-                                            <p className="text-xs text-muted-foreground mt-0.5">
-                                                {bundle.docCount} documenti • Aggiornato {bundle.updatedAt}
-                                            </p>
-                                        </div>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleEditFascicolo(bundle); }}>
-                                                    <Edit className="h-4 w-4 mr-2" /> Modifica
-                                                </DropdownMenuItem>
-                                                {bundle.isSignatureEnabled && (
-                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}>
-                                                        <FileSignature className="h-4 w-4 mr-2" /> Invia in Firma
-                                                    </DropdownMenuItem>
-                                                )}
-                                                <DropdownMenuItem
-                                                    className="text-red-600"
-                                                    onClick={(e) => { e.stopPropagation(); handleDeleteFascicolo(bundle.id); }}
-                                                >
-                                                    <Trash2 className="h-4 w-4 mr-2" /> Elimina
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-
-                                    {/* Document List */}
-                                    {bundleDocs.length > 0 && (
-                                        <div className="mb-3 space-y-1.5 border-t border-border pt-3">
-                                            {bundleDocs.slice(0, 3).map(doc => (
-                                                <div key={doc.id} className="flex items-center gap-2 text-xs text-slate-600">
-                                                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full shrink-0" />
-                                                    <span className="truncate">{doc.name}</span>
-                                                </div>
-                                            ))}
-                                            {bundleDocs.length > 3 && (
-                                                <p className="text-xs text-muted-foreground pl-3.5">
-                                                    +{bundleDocs.length - 3} altri documenti
-                                                </p>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    <div className="flex items-center justify-between">
-                                        {getStatusBadge(bundle)}
-
-                                        {bundle.isSignatureEnabled && (
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                className="rounded-lg border-primary/20 text-primary hover:bg-primary/10 transition-all font-bold"
-                                                onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}
-                                            >
-                                                <Send className="h-3 w-3 mr-1" /> Invia
-                                            </Button>
-                                        )}
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <Card className="border-none shadow-xl shadow-black/[0.02] overflow-hidden">
+                <CardHeader className="flex flex-row justify-between items-center bg-slate-50/50 border-b border-border/40 px-6 py-4">
+                    <CardTitle className="text-sm font-bold tracking-widest text-primary uppercase">Fascicoli</CardTitle>
+                    <Button
+                        onClick={() => setIsSheetOpen(true)}
+                    >
+                        <Plus className="h-3 w-3 mr-1" /> Nuovo fascicolo
+                    </Button>
+                </CardHeader>
+                {/* Header with Create Button */}
+                <div className=" p-6">
+                    <div className="">
+                        {/* Bundles Grid */}
+                        {bundles.length === 0 ? (
+                            <Card>
+                                <CardContent className="py-12">
+                                    <div className="text-center text-muted-foreground">
+                                        <FileStack className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                                        <p className="font-medium">Nessun fascicolo creato</p>
+                                        <p className="text-sm mt-1">Crea un fascicolo per raggruppare documenti da inviare in firma</p>
                                     </div>
                                 </CardContent>
                             </Card>
-                        );
-                    })}
-                </div>
-            )
-            }
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-            {/* Edit/Create Sheet */}
+                                {bundles.map((bundle) => {
+                                    // Get document names for this bundle
+                                    const bundleDocs = DOCUMENTS.filter(doc => bundle.documentIds.includes(doc.id));
+
+                                    return (
+                                        <Card
+                                            key={bundle.id}
+                                            className={cn(
+                                                "transition-all hover:shadow-md cursor-pointer rounded-2xl",
+                                                bundle.isSignatureEnabled && "border-primary/20 bg-primary/5"
+                                            )}
+                                            onClick={() => handleEditFascicolo(bundle)}
+                                        >
+                                            <CardContent className="p-4">
+                                                <div className="flex items-start justify-between mb-3">
+                                                    <div>
+                                                        <h4 className="font-bold text-sm text-primary tracking-tight">{bundle.name}</h4>
+                                                        <p className="text-xs text-muted-foreground mt-0.5">
+                                                            {bundle.docCount} documenti • Aggiornato {bundle.updatedAt}
+                                                        </p>
+                                                    </div>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleEditFascicolo(bundle); }}>
+                                                                <Edit className="h-4 w-4 mr-2" /> Modifica
+                                                            </DropdownMenuItem>
+                                                            {bundle.isSignatureEnabled && (
+                                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}>
+                                                                    <FileSignature className="h-4 w-4 mr-2" /> Invia in Firma
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            <DropdownMenuItem
+                                                                className="text-red-600"
+                                                                onClick={(e) => { e.stopPropagation(); handleDeleteFascicolo(bundle.id); }}
+                                                            >
+                                                                <Trash2 className="h-4 w-4 mr-2" /> Elimina
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+
+                                                {/* Document List */}
+                                                {bundleDocs.length > 0 && (
+                                                    <div className="mb-3 space-y-1.5 border-t border-border pt-3">
+                                                        {bundleDocs.slice(0, 3).map(doc => (
+                                                            <div key={doc.id} className="flex items-center gap-2 text-xs text-slate-600">
+                                                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full shrink-0" />
+                                                                <span className="truncate">{doc.name}</span>
+                                                            </div>
+                                                        ))}
+                                                        {bundleDocs.length > 3 && (
+                                                            <p className="text-xs text-muted-foreground pl-3.5">
+                                                                +{bundleDocs.length - 3} altri documenti
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                <div className="flex items-center justify-between">
+                                                    {getStatusBadge(bundle)}
+
+                                                    {bundle.isSignatureEnabled && (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            className="rounded-lg border-primary/20 text-primary hover:bg-primary/10 transition-all font-bold"
+                                                            onClick={(e) => { e.stopPropagation(); handleSignFascicolo(bundle); }}
+                                                        >
+                                                            <Send className="h-3 w-3 mr-1" /> Invia
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    );
+                                })}
+
+                            </div>
+                        )
+                        }
+                    </div>
+                </div>
+            </Card>
+
+
+
             <FascicoliSheet
                 isOpen={isSheetOpen}
                 onOpenChange={setIsSheetOpen}
@@ -208,6 +216,6 @@ export default function FascicoliView({ project }) {
                 handleSaveFascicolo={handleSaveFascicolo}
                 handleDeleteFascicolo={handleDeleteFascicolo}
             />
-        </div>
+        </div >
     );
 }

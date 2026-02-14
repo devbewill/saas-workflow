@@ -5,7 +5,7 @@ import { AppHeader } from './app-header';
 
 export default function AppShell() {
     return (
-        <div className="min-h-screen bg-muted/40 antialiased">
+        <div className="min-h-screen bg-muted/10 antialiased">
             <AppSidebar />
             <div className="pl-64 flex flex-col min-h-screen">
                 <AppHeader />

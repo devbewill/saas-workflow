@@ -63,13 +63,15 @@ export function FilterSheet({ isOpen, onOpenChange }) {
                     </div>
                 </div>
 
-                <SheetFooter className="p-8 border-t border-border/40 bg-slate-50/50 flex gap-4">
-                    <Button variant="outline" className="flex-1 h-11 rounded-xl font-bold border-border hover:bg-white text-slate-500 transition-colors" onClick={() => onOpenChange(false)}>
-                        Deseleziona tutto
-                    </Button>
-                    <Button className="flex-1 h-11 rounded-xl font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all" onClick={() => onOpenChange(false)}>
-                        Applica 3 Filtri
-                    </Button>
+                <SheetFooter className="p-8 border-t border-border/40 bg-slate-50/50">
+                    <div className="flex flex-col gap-3 w-full">
+                        <Button variant="outline" className="w-full" onClick={() => onOpenChange(false)}>
+                            Deseleziona tutto
+                        </Button>
+                        <Button className="w-full" onClick={() => onOpenChange(false)}>
+                            Applica 3 Filtri
+                        </Button>
+                    </div>
                 </SheetFooter>
             </SheetContent>
         </Sheet>
