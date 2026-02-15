@@ -24,7 +24,7 @@ export const APPS = {
         features: {
             aml: false,
             banche_dati: false,
-            tabs: ['info', 'documenti', 'fascicoli', 'delibera', 'contratto', 'team']
+            tabs: ['info', 'documenti', 'pagamenti', 'fascicoli', 'delibera', 'contratto', 'team']
         }
     },
     HD_BRK: {

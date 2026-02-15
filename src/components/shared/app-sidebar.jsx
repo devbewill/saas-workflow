@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, Users, BarChart3, Settings, LogOut, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, BarChart3, Settings, LogOut, ShieldCheck, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AppSwitcher } from './app-switcher';
 import { useAppContext } from '@/context/AppContext';
@@ -16,6 +16,13 @@ const NAV_ITEMS = [
 export function AppSidebar() {
   const { activeApp } = useAppContext();
 
+  const filteredNavItems = [...NAV_ITEMS];
+
+  if (activeApp?.id === 'HD_RISTR') {
+    // Insert Pagamenti after Progetti (index 1)
+    filteredNavItems.splice(2, 0, { icon: Wallet, label: 'Pagamenti', path: '/payments' });
+  }
+
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-sidebar-bg text-sidebar-foreground">
       {/* Sidebar Header */}
@@ -28,7 +35,7 @@ export function AppSidebar() {
         <div className="px-2 py-2 text-[10px] font-bold tracking-widest text-sidebar-muted/60">
           Menu principale
         </div>
-        {NAV_ITEMS.map((item) => (
+        {filteredNavItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}

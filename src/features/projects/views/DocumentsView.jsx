@@ -3,7 +3,7 @@
  * Shows the documents table with filtering and actions
  */
 import React from 'react';
-import { DocumentsTable } from '@/features/documents/components/DocumentsTable';
+import { DocumentsTable } from '@/components/DocumentsTable';
 
 export default function DocumentsView({ project }) {
     return (

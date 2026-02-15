@@ -6,6 +6,7 @@ import Dashboard from './components/dashboard/Dashboard';
 // Feature-based imports
 import ProjectsList from './features/projects/pages/ProjectsList';
 import ProjectDetailPage from './features/projects/pages/ProjectDetailPage';
+import PaymentsOverview from './features/payments/pages/PaymentsOverview';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/projects" element={<ProjectsList />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
+        <Route path="/payments" element={<PaymentsOverview />} />
         {/* Legacy routes redirect */}
         <Route path="/pratiche" element={<Navigate to="/projects" replace />} />
         <Route path="/pratiche/:id" element={<Navigate to="/projects/:id" replace />} />

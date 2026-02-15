@@ -26,12 +26,13 @@ import { ArrowLeft, Hand, ArrowBigRight, Clock, Loader2 } from 'lucide-react';
 // Lazy load all view components
 const StandardView = lazy(() => import('@/features/projects/views/StandardView'));
 const DocumentsView = lazy(() => import('@/features/projects/views/DocumentsView'));
-const AMLVerificationView = lazy(() => import('@/features/projects/views/AMLVerificationView'));
-const FascicoliView = lazy(() => import('@/features/projects/views/FascicoliView'));
-const TeamView = lazy(() => import('@/features/projects/views/TeamView'));
+const AMLVerificationView = lazy(() => import('@/components/AMLVerificationView'));
+const FascicoliView = lazy(() => import('@/components/FascicoliView'));
+const TeamView = lazy(() => import('@/components/TeamView'));
 const CreditCheckView = lazy(() => import('@/features/projects/views/CreditCheckView'));
 const ApprovalView = lazy(() => import('@/features/projects/views/ApprovalView'));
 const ContractView = lazy(() => import('@/features/projects/views/ContractView'));
+const PaymentsView = lazy(() => import('@/features/projects/views/PaymentsView'));
 
 // Tab to View Component mapping
 const TAB_VIEW_MAP = {
@@ -46,6 +47,7 @@ const TAB_VIEW_MAP = {
     finanziario: StandardView, // Financial uses StandardView for now
     lavori: StandardView, // Works uses StandardView for now
     storico: StandardView, // History uses StandardView for now
+    pagamenti: PaymentsView,
 };
 
 // Loading skeleton for lazy-loaded views

@@ -7,11 +7,11 @@ import { lazy } from 'react';
 // Lazy load view components for better performance
 const StandardView = lazy(() => import('@/features/projects/views/StandardView'));
 const DocumentsView = lazy(() => import('@/features/projects/views/DocumentsView'));
-const AMLVerificationView = lazy(() => import('@/features/projects/views/AMLVerificationView'));
+const AMLVerificationView = lazy(() => import('@/components/AMLVerificationView'));
 const CreditCheckView = lazy(() => import('@/features/projects/views/CreditCheckView'));
 const ApprovalView = lazy(() => import('@/features/projects/views/ApprovalView'));
 const ContractView = lazy(() => import('@/features/projects/views/ContractView'));
-const FascicoliView = lazy(() => import('@/features/projects/views/FascicoliView'));
+const FascicoliView = lazy(() => import('@/components/FascicoliView'));
 
 /**
  * View configuration for each workflow state
@@ -28,7 +28,7 @@ export const WORKFLOW_VIEW_CONFIG = {
     // ==================== BOZZA ====================
     "Bozza": {
         component: StandardView,
-        availableTabs: ['info', 'documenti', 'fascicoli', 'team'],
+        availableTabs: ['info', 'documenti', 'pagamenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'draft',
@@ -39,7 +39,7 @@ export const WORKFLOW_VIEW_CONFIG = {
     // ==================== APERTA ====================
     "Aperta – Verifica preliminare": {
         component: StandardView,
-        availableTabs: ['info', 'documenti', 'fascicoli', 'team'],
+        availableTabs: ['info', 'documenti', 'pagamenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'preliminary_check',
@@ -49,7 +49,7 @@ export const WORKFLOW_VIEW_CONFIG = {
 
     "Aperta - Validazione documenti": {
         component: DocumentsView,
-        availableTabs: ['documenti', 'fascicoli', 'info', 'team'],
+        availableTabs: ['documenti', 'fascicoli', 'pagamenti', 'info', 'team'],
         defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'document_validation',
@@ -281,7 +281,7 @@ export const WORKFLOW_VIEW_CONFIG = {
  */
 export const DEFAULT_VIEW_CONFIG = {
     component: StandardView,
-    availableTabs: ['info', 'documenti', 'team'],
+    availableTabs: ['info', 'documenti', 'pagamenti', 'team'],
     defaultTab: 'info',
     showAssistant: false,
     assistantConfigKey: null,
@@ -313,4 +313,5 @@ export const TAB_LABELS = {
     contratto: 'Contratto',
     storico: 'Storico',
     fascicoli: 'Fascicoli',
+    pagamenti: 'Pagamenti',
 };

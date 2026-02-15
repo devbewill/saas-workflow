@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { ProjectInfoGrid } from '../components/ProjectInfoGrid';
+import { ProjectInfoGrid } from '@/components/ProjectInfoGrid';
 
 export default function StandardView({ project }) {
     return (
