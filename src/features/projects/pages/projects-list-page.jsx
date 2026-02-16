@@ -6,6 +6,10 @@ import { SearchInput } from '@/components/composed/search-input';
 import { StatusBadge } from '@/components/composed/status-badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PROJECTS, STATS } from '@/data/projects';
 import { Plus, Filter, Download } from 'lucide-react';
@@ -13,6 +17,7 @@ import { Plus, Filter, Download } from 'lucide-react';
 export default function ProjectsListPage() {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     const filteredProjects = PROJECTS.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -48,10 +53,84 @@ export default function ProjectsListPage() {
                     className="max-w-sm"
                 />
                 <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="gap-2">
-                        <Filter size={14} />
-                        Filtri
-                    </Button>
+                    {/* Filter Sheet */}
+                    <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                        <SheetTrigger asChild>
+                            <Button variant="outline" size="sm" className="gap-2">
+                                <Filter size={14} />
+                                Filtri
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader>
+                                <SheetTitle>Filtri avanzati</SheetTitle>
+                                <SheetDescription>Affina la tua ricerca sulle pratiche.</SheetDescription>
+                            </SheetHeader>
+
+                            <div className="space-y-5 mt-6">
+                                <div className="space-y-2">
+                                    <Label>Codice fiscale condominio</Label>
+                                    <Input placeholder="PRLSFN85C01G388H" />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Nome amministratore</Label>
+                                    <Input placeholder="Mario Rossi" />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Pratica creata da</Label>
+                                    <Select>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Tutti" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="tutti">Tutti</SelectItem>
+                                            <SelectItem value="broker">Broker</SelectItem>
+                                            <SelectItem value="admin">Admin</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>In carico a</Label>
+                                    <Select>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Tutti" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="tutti">Tutti</SelectItem>
+                                            <SelectItem value="stefano">Stefano Perelli</SelectItem>
+                                            <SelectItem value="mario">Mario Rossi</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label>Importo da</Label>
+                                        <Input placeholder="€" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Importo a</Label>
+                                        <Input placeholder="€" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <SheetFooter className="mt-8">
+                                <div className="flex flex-col gap-3 w-full">
+                                    <Button variant="outline" className="w-full" onClick={() => setIsFilterOpen(false)}>
+                                        Deseleziona tutto
+                                    </Button>
+                                    <Button className="w-full" onClick={() => setIsFilterOpen(false)}>
+                                        Applica Filtri
+                                    </Button>
+                                </div>
+                            </SheetFooter>
+                        </SheetContent>
+                    </Sheet>
+
                     <Button variant="outline" size="sm" className="gap-2">
                         <Download size={14} />
                         Esporta
