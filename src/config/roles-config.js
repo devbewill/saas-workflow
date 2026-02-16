@@ -10,6 +10,7 @@ export const ROLES = {
     IMPRESA: 'impresa',
     PROFESSIONISTA: 'professionista',
     CONDOMINO: 'condomino',
+    TECH: 'tech',
 };
 
 export const ROLE_POLICIES = {
@@ -46,6 +47,13 @@ export const ROLE_POLICIES = {
         payments: {
             view: 'PERSONAL_VIEW',
             features: ['view_status'],
+        },
+    },
+    [ROLES.TECH]: {
+        label: 'Tech Support (Developer)',
+        payments: {
+            view: 'SYSTEM_HEALTH',
+            features: ['debug_logs', 'system_wide_access', 'log_viewer'],
         },
     },
 };

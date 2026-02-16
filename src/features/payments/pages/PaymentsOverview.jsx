@@ -7,6 +7,7 @@ import { ROLE_POLICIES } from '@/config/roles-config';
 // Role-specific components
 import { AdminPaymentsView } from '@/components/specific/AdminPaymentsView';
 import { GestorePaymentsTable } from '@/components/specific/GestorePaymentsTable';
+import { TechPaymentsMonitor } from '@/components/specific/TechPaymentsMonitor';
 
 export default function PaymentsOverview() {
     const { user } = useAppContext();
@@ -23,6 +24,8 @@ export default function PaymentsOverview() {
                 return <AdminPaymentsView projects={displayedProjects} />;
             case 'GLOBAL_MONITORING':
                 return <GestorePaymentsTable projects={displayedProjects} />;
+            case 'SYSTEM_HEALTH':
+                return <TechPaymentsMonitor />;
             default:
                 return (
                     <div className="flex flex-col items-center justify-center p-20 border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/50">
@@ -38,12 +41,14 @@ export default function PaymentsOverview() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight text-primary">
-                        {policy?.view === 'WALLET_DASHBOARD' ? 'Gestione Wallet' : 'Monitoraggio Wallet'}
+                        {policy?.view === 'WALLET_DASHBOARD' ? 'Gestione Wallet' :
+                            policy?.view === 'SYSTEM_HEALTH' ? 'Tech Monitor' : 'Monitoraggio Wallet'}
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">
                         {policy?.view === 'WALLET_DASHBOARD'
-                            ? 'Profilo proprietario wallet: controlla i tuoi fondi e le fatture'
-                            : 'Stato attivazione wallet per i progetti in carico'}
+                            ? 'Profilo proprietario wallet: controlla i tuoi fondi e le fatture' :
+                            policy?.view === 'SYSTEM_HEALTH' ? 'System Health & Node Persistence Monitor'
+                                : 'Stato attivazione wallet per i progetti in carico'}
                     </p>
                 </div>
 
