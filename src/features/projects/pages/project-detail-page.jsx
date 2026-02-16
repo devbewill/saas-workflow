@@ -66,7 +66,13 @@ export default function ProjectDetailPage() {
         <>
             <PageHeader
                 title={project.name}
-                subtitle={`Pratica #${project.displayId} · ${activeApp.name}`}
+                subtitle={
+                    <span className="flex items-center gap-2 flex-wrap">
+                        Pratica #{project.displayId} · {activeApp.name}
+                        <StatusBadge status={currentStatusName} />
+                        <span className="text-xs text-muted-foreground">· In carico a: {currentOwner}</span>
+                    </span>
+                }
                 backLabel="Torna ai progetti"
                 actions={
                     <div className="flex gap-2">
