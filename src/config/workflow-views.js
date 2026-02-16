@@ -1,306 +1,201 @@
 /**
- * Workflow View Configuration
- * Maps workflow states to their corresponding view components and UI configuration
+ * workflow-views.js
+ * Maps workflow states to their view configuration.
+ * Determines which tabs, views, and assistant configs are available for each state.
  */
-import { lazy } from 'react';
 
-// Lazy load view components for better performance
-const StandardView = lazy(() => import('@/features/projects/views/StandardView'));
-const DocumentsView = lazy(() => import('@/features/projects/views/DocumentsView'));
-const AMLVerificationView = lazy(() => import('@/components/AMLVerificationView'));
-const CreditCheckView = lazy(() => import('@/features/projects/views/CreditCheckView'));
-const ApprovalView = lazy(() => import('@/features/projects/views/ApprovalView'));
-const ContractView = lazy(() => import('@/features/projects/views/ContractView'));
-const FascicoliView = lazy(() => import('@/components/FascicoliView'));
-
-/**
- * View configuration for each workflow state
- *
- * @property {React.LazyExoticComponent} component - The main view component to render
- * @property {string[]} availableTabs - Which tabs to show in the project detail
- * @property {string} defaultTab - The default active tab
- * @property {boolean} showAssistant - Whether to show the operator assistant panel
- * @property {string|null} assistantConfigKey - Key to load specific assistant configuration
- * @property {boolean} showTimeline - Whether to show the workflow timeline
- * @property {string} primaryAction - Label for the main CTA button
- */
 export const WORKFLOW_VIEW_CONFIG = {
-    // ==================== BOZZA ====================
-    "Bozza": {
-        component: StandardView,
+    'Bozza': {
         availableTabs: ['info', 'documenti', 'pagamenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'draft',
-        showTimeline: true,
         primaryAction: 'Apri Progetto',
     },
-
-    // ==================== APERTA ====================
-    "Aperta – Verifica preliminare": {
-        component: StandardView,
+    'Aperta – Verifica preliminare': {
         availableTabs: ['info', 'documenti', 'pagamenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'preliminary_check',
-        showTimeline: true,
         primaryAction: 'Conferma Verifica',
     },
-
-    "Aperta - Validazione documenti": {
-        component: DocumentsView,
+    'Aperta - Validazione documenti': {
         availableTabs: ['documenti', 'fascicoli', 'pagamenti', 'info', 'team'],
         defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'document_validation',
-        showTimeline: true,
         primaryAction: 'Completa Validazione',
     },
-
-    // ==================== CARICATA ====================
-    "Caricata - Lavorazione AML e Banche Dati": {
-        component: AMLVerificationView,
+    'Caricata - Lavorazione AML e Banche Dati': {
         availableTabs: ['aml', 'documenti', 'fascicoli', 'info', 'team'],
         defaultTab: 'aml',
         showAssistant: true,
         assistantConfigKey: 'aml_check',
-        showTimeline: true,
         primaryAction: 'Conferma Esito AML',
     },
-
-    "Caricata - Valutazione istruttoria": {
-        component: StandardView,
+    'Caricata - Valutazione istruttoria': {
         availableTabs: ['documenti', 'fascicoli', 'info', 'team'],
         defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'evaluation',
-        showTimeline: true,
         primaryAction: 'Invia a Valutazione',
     },
-
-    "Caricata - Valutazione rating condominio": {
-        component: StandardView,
+    'Caricata - Valutazione rating condominio': {
         availableTabs: ['documenti', 'fascicoli', 'info', 'team'],
         defaultTab: 'documenti',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
-        primaryAction: null, // Automatic step
+        primaryAction: null,
     },
-
-    "Caricata - Valutazione crediti": {
-        component: CreditCheckView,
+    'Caricata - Valutazione crediti': {
         availableTabs: ['crediti', 'finanziario', 'documenti'],
         defaultTab: 'crediti',
         showAssistant: true,
         assistantConfigKey: 'credit_check',
-        showTimeline: true,
         primaryAction: 'Approva Credito',
     },
-
-    // ==================== ESAME ====================
-    "Esame - Valutazione organo deliberante": {
-        component: ApprovalView,
+    'Esame - Valutazione organo deliberante': {
         availableTabs: ['delibera', 'finanziario', 'documenti'],
         defaultTab: 'delibera',
         showAssistant: true,
         assistantConfigKey: 'deliberation',
-        showTimeline: true,
         primaryAction: 'Delibera Approvazione',
     },
-
-    // ==================== APPROVATA ====================
-    "Approvata - Delibera OK": {
-        component: StandardView,
+    'Approvata - Delibera OK': {
         availableTabs: ['info', 'documenti', 'finanziario'],
         defaultTab: 'info',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
         primaryAction: 'Avvia Lavori',
     },
-
-    "In attesa - Esecuzione lavori in corso": {
-        component: StandardView,
+    'In attesa - Esecuzione lavori in corso': {
         availableTabs: ['lavori', 'documenti', 'info'],
         defaultTab: 'lavori',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
         primaryAction: 'Segnala Fine Lavori',
     },
-
-    "Approvata – Valutazione post fine lavori": {
-        component: StandardView,
+    'Approvata – Valutazione post fine lavori': {
         availableTabs: ['lavori', 'documenti', 'finanziario'],
         defaultTab: 'lavori',
         showAssistant: true,
         assistantConfigKey: 'post_works',
-        showTimeline: true,
         primaryAction: 'Conferma Valutazione',
     },
-
-    "Approvata – Pronta per stampa contratto": {
-        component: ContractView,
+    'Approvata – Pronta per stampa contratto': {
         availableTabs: ['contratto', 'documenti', 'info'],
         defaultTab: 'contratto',
         showAssistant: true,
         assistantConfigKey: 'contract_print',
-        showTimeline: true,
         primaryAction: 'Stampa Contratto',
     },
-
-    "Approvata – Inviato contratto in firma": {
-        component: ContractView,
+    'Approvata – Inviato contratto in firma': {
         availableTabs: ['contratto', 'documenti'],
         defaultTab: 'contratto',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
-        primaryAction: null, // Waiting for external signature
+        primaryAction: null,
     },
-
-    "Approvata – Contratto firmato": {
-        component: ContractView,
+    'Approvata – Contratto firmato': {
         availableTabs: ['contratto', 'documenti', 'finanziario'],
         defaultTab: 'contratto',
         showAssistant: true,
         assistantConfigKey: 'contract_signed',
-        showTimeline: true,
         primaryAction: 'Procedi a Perfezionamento',
     },
-
-    // ==================== PERFEZIONATA ====================
-    "Perfezionata – Da liquidare": {
-        component: StandardView,
+    'Perfezionata – Da liquidare': {
         availableTabs: ['finanziario', 'documenti', 'info'],
         defaultTab: 'finanziario',
         showAssistant: true,
         assistantConfigKey: 'liquidation',
-        showTimeline: true,
         primaryAction: 'Liquida',
     },
-
-    "Perfezionata – Liquidata": {
-        component: StandardView,
+    'Perfezionata – Liquidata': {
         availableTabs: ['finanziario', 'documenti', 'info', 'storico'],
         defaultTab: 'finanziario',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
-        primaryAction: null, // Final state
+        primaryAction: null,
         isFinal: true,
     },
-
-    // ==================== HD BRK SPECIFIC ====================
-    "Validazione Doc Preliminari": {
-        component: DocumentsView,
+    // HD BRK specific states
+    'Validazione Doc Preliminari': {
         availableTabs: ['documenti', 'info', 'fascicoli', 'team'],
         defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'document_validation',
-        showTimeline: true,
         primaryAction: 'Conferma Documenti',
     },
-    "Attesa Antiriciclaggio": {
-        component: AMLVerificationView,
+    'Attesa Antiriciclaggio': {
         availableTabs: ['aml', 'documenti', 'info', 'team'],
         defaultTab: 'aml',
         showAssistant: true,
         assistantConfigKey: 'aml_check',
-        showTimeline: true,
         primaryAction: 'Verifica AML',
     },
-    "Antiriciclaggio Completato": {
-        component: AMLVerificationView,
+    'Antiriciclaggio Completato': {
         availableTabs: ['aml', 'documenti', 'info', 'team'],
         defaultTab: 'aml',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
         primaryAction: 'Procedi a Valutazione',
     },
-    "In attesa valutazione": {
-        component: StandardView,
+    'In attesa valutazione': {
         availableTabs: ['info', 'documenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'evaluation',
-        showTimeline: true,
         primaryAction: 'Completa Rating',
     },
-    "Rating completato": {
-        component: StandardView,
+    'Rating completato': {
         availableTabs: ['info', 'documenti', 'fascicoli', 'team'],
         defaultTab: 'info',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
         primaryAction: 'Presenta in Banca',
     },
-    "Presentazione in Banca": {
-        component: StandardView,
+    'Presentazione in Banca': {
         availableTabs: ['info', 'documenti', 'team'],
         defaultTab: 'info',
         showAssistant: true,
         assistantConfigKey: 'delegation',
-        showTimeline: true,
         primaryAction: 'Carica Esito Banca',
     },
-    "Presentata in Banca": {
-        component: StandardView,
+    'Presentata in Banca': {
         availableTabs: ['info', 'documenti', 'team'],
         defaultTab: 'info',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
         primaryAction: 'Attendi Delibera',
     },
-    "Finanziamento Approvato": {
-        component: ApprovalView,
+    'Finanziamento Approvato': {
         availableTabs: ['delibera', 'documenti', 'info'],
         defaultTab: 'delibera',
         showAssistant: true,
         assistantConfigKey: null,
-        showTimeline: true,
         primaryAction: 'Procedi a Erogazione',
     },
-    "Finanziamento Erogato": {
-        component: StandardView,
+    'Finanziamento Erogato': {
         availableTabs: ['info', 'documenti', 'finanziario', 'storico'],
         defaultTab: 'finanziario',
         showAssistant: false,
         assistantConfigKey: null,
-        showTimeline: true,
         isFinal: true,
     },
 };
 
-/**
- * Default configuration for unknown/unmapped states
- */
-export const DEFAULT_VIEW_CONFIG = {
-    component: StandardView,
+const DEFAULT_VIEW_CONFIG = {
     availableTabs: ['info', 'documenti', 'pagamenti', 'team'],
     defaultTab: 'info',
     showAssistant: false,
     assistantConfigKey: null,
-    showTimeline: true,
     primaryAction: null,
 };
 
-/**
- * Get view configuration for a given workflow state
- * @param {string} statusName - The full workflow status name
- * @returns {object} View configuration object
- */
 export function getViewConfig(statusName) {
     return WORKFLOW_VIEW_CONFIG[statusName] || DEFAULT_VIEW_CONFIG;
 }
 
-/**
- * Tab label translations (Italian)
- */
 export const TAB_LABELS = {
     info: 'Dati Progetto',
     documenti: 'Documenti',
