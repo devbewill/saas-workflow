@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PROJECTS, STATS } from '@/data/projects';
-import { Plus, Filter, Download } from 'lucide-react';
+import { Filter, Download } from 'lucide-react';
 
 export default function ProjectsListPage() {
     const navigate = useNavigate();
@@ -29,12 +29,6 @@ export default function ProjectsListPage() {
             <PageHeader
                 title="Progetti"
                 subtitle={`${PROJECTS.length} progetti totali`}
-                actions={
-                    <Button className="gap-2">
-                        <Plus size={16} />
-                        Nuovo Progetto
-                    </Button>
-                }
             />
 
             {/* Stats */}
