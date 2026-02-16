@@ -3,14 +3,17 @@ import { useAppContext } from '@/context/app-context';
 import { ROLE_POLICIES } from '@/config/roles';
 
 // Lazy-load role-specific views
+// Lazy-load role-specific views
 const GestoreView = lazy(() => import('../views/gestore-view'));
 const AdminWalletView = lazy(() => import('../views/admin-wallet-view'));
 const TechMonitorView = lazy(() => import('../views/tech-monitor-view'));
+const CondominoGlobalView = lazy(() => import('../views/condomino-global-view'));
 
 const VIEW_MAP = {
     GLOBAL_MONITORING: GestoreView,
     WALLET_DASHBOARD: AdminWalletView,
     SYSTEM_HEALTH: TechMonitorView,
+    PERSONAL_VIEW: CondominoGlobalView,
 };
 
 export default function PaymentsPage() {

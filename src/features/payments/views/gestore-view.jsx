@@ -13,10 +13,13 @@ import { Download, Wallet, ArrowUpDown, Clock, CheckCircle2, AlertCircle, Landma
 import { formatCurrency } from '@/lib/formatters';
 import { PAYMENT_PROJECTS, WALLET_STATUS } from '@/data/payments';
 import { cn } from '@/lib/utils';
+import { ProjectPaymentDetailSheet } from '../components/project-payment-detail-sheet';
 
 export default function GestoreView() {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [sheetOpen, setSheetOpen] = useState(false);
 
     const filtered = PAYMENT_PROJECTS.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase())
@@ -112,7 +115,10 @@ export default function GestoreView() {
                             <TableRow
                                 key={project.id}
                                 className="group hover:bg-slate-50/50 transition-colors cursor-pointer h-16"
-                                onClick={() => navigate(`/projects/${project.id}?tab=pagamenti`)}
+                                onClick={() => {
+                                    setSelectedProject(project);
+                                    setSheetOpen(true);
+                                }}
                             >
                                 <TableCell>
                                     <div className="flex flex-col">
@@ -168,6 +174,12 @@ export default function GestoreView() {
                     </TableBody>
                 </Table>
             </Card>
+
+            <ProjectPaymentDetailSheet
+                project={selectedProject}
+                open={sheetOpen}
+                onOpenChange={setSheetOpen}
+            />
         </>
     );
 }

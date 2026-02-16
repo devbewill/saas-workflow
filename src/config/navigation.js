@@ -23,10 +23,10 @@ export function getNavItems(appId) {
             return [
                 COMMON_NAV[0], // Dashboard
                 COMMON_NAV[1], // Progetti
-                { icon: Wallet, label: 'Pagamenti', path: '/payments' },
+                COMMON_NAV[2], // Pagamenti
                 { icon: Building2, label: 'Imprese', path: '/imprese' },
                 { icon: Network, label: 'Rete commerciale', path: '/rete-commerciale' },
-                COMMON_NAV[2], // Impostazioni
+                COMMON_NAV[3], // Impostazioni
             ];
         default:
             return [...COMMON_NAV];

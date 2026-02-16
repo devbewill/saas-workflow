@@ -6,12 +6,37 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Wallet, TrendingUp, HandCoins, UserCircle2, Building2, Briefcase, CheckCircle2, Clock, AlertCircle, Lock } from 'lucide-react';
+import { Wallet, TrendingUp, HandCoins, UserCircle2, Building2, Briefcase, CheckCircle2, Clock, AlertCircle, Lock, FileSignature } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatters';
 import { PAYMENT_PROJECTS, WALLET_STATUS } from '@/data/payments';
 import { cn } from '@/lib/utils';
 import { useAppContext } from '@/context/app-context';
 import { ROLES } from '@/config/roles';
+import WalletDashboardView from '../../payments/views/wallet-dashboard-view'; // Updated import path
+
+const COMMON_ROLES = [
+    {
+        id: 'amministratore',
+        label: 'Amministrazione',
+        sub: 'Gestione e Coordinamento',
+        icon: Building2,
+        color: 'bg-indigo-50 text-indigo-600'
+    },
+    {
+        id: 'impresa',
+        label: 'Impresa',
+        sub: 'Esecuzione Lavori',
+        icon: Briefcase,
+        color: 'bg-amber-50 text-amber-600'
+    },
+    {
+        id: 'professionista',
+        label: 'Professionista',
+        sub: 'Direzione Lavori',
+        icon: FileSignature,
+        color: 'bg-violet-50 text-violet-600'
+    }
+];
 
 export default function PaymentsView() {
     const { id } = useParams();
@@ -21,22 +46,38 @@ export default function PaymentsView() {
         PAYMENT_PROJECTS.find(p => p.id === id) || PAYMENT_PROJECTS[0],
         [id]);
 
-    // Role-based visibility logic
-    const isSuperUser = [ROLES.GESTORE, ROLES.TECH, ROLES.AMMINISTRATORE].includes(user?.role);
-
-    // Determine visible sections
-    const visibleCommonRoles = useMemo(() => {
-        if (isSuperUser) return ['amministratore', 'impresa', 'professionista'];
-        // Self-view for other roles
-        if (user?.role === ROLES.IMPRESA) return ['impresa'];
-        if (user?.role === ROLES.PROFESSIONISTA) return ['professionista'];
-        return [];
-    }, [user, isSuperUser]);
-
-    const showPrivateParties = isSuperUser || user?.role === ROLES.CONDOMINO;
-
-    // For Condo: simulate looking at "My Unit" (e.g., index 0)
-    const visibleCondoIndex = user?.role === ROLES.CONDOMINO ? 0 : null; // null means all if showPrivateParties is true
+    // Role-based filtering logic
+    const { visibleCommonRoles, showPrivateParties, visibleCondoIndex } = useMemo(() => {
+        switch (user?.role) { // Added optional chaining for user
+            case ROLES.CONDOMINO:
+                return {
+                    visibleCommonRoles: [],
+                    showPrivateParties: true,
+                    visibleCondoIndex: 0 // Simulate user is Condomino 1
+                };
+            case ROLES.IMPRESA:
+                return {
+                    visibleCommonRoles: ['impresa'],
+                    showPrivateParties: false,
+                    visibleCondoIndex: null
+                };
+            case ROLES.PROFESSIONISTA:
+                return {
+                    visibleCommonRoles: ['professionista'],
+                    showPrivateParties: false,
+                    visibleCondoIndex: null
+                };
+            case ROLES.AMMINISTRATORE:
+            case ROLES.GESTORE:
+            case ROLES.TECH:
+            default:
+                return {
+                    visibleCommonRoles: ['amministratore', 'impresa', 'professionista'],
+                    showPrivateParties: true,
+                    visibleCondoIndex: null
+                };
+        }
+    }, [user?.role]); // Added optional chaining for user
 
     const getStatusBadge = (status) => {
         switch (status) {
@@ -63,12 +104,55 @@ export default function PaymentsView() {
             .reduce((sum, inv) => sum + inv.amount, 0);
     };
 
-    // Common roles configuration
-    const COMMONG_ROLES = [
-        { id: 'amministratore', label: 'Amministratore', icon: UserCircle2, sub: 'Gestore di condominio', color: 'bg-blue-50 text-blue-600' },
-        { id: 'impresa', label: 'Impresa', icon: Building2, sub: 'Esecutore lavori', color: 'bg-indigo-50 text-indigo-600' },
-        { id: 'professionista', label: 'Professionista', icon: Briefcase, sub: 'Progettista / Tecnico', color: 'bg-purple-50 text-purple-600' }
-    ];
+    // Helper for mock transactions (as they are not in the data source)
+    const getTransactionsForRole = (roleId) => {
+        // This is mock data, in a real app it would come from paymentData or an API
+        return [
+            { id: 'tr1', type: 'topup', amount: 500, date: '12/02/2026' },
+            { id: 'tr2', type: 'payment', amount: 150, date: '10/02/2026' },
+            { id: 'tr3', type: 'payment', amount: 85, date: '05/02/2026' },
+        ].slice(0, Math.floor(Math.random() * 3) + 1); // Random number of transactions
+    };
+
+    // --- RENDER SPECIALIZED VIEWS FOR CONDOMINO & ADMIN ---
+    if (user?.role === ROLES.CONDOMINO) {
+        const condoId = `condomino_${visibleCondoIndex}`;
+        const walletStatus = paymentData.wallets.condomino[visibleCondoIndex] || WALLET_STATUS.ACTIVE; // Assuming condoWallets is an array
+        // For Condomino, we simulate a personal balance. In a real app, this would be specific to the user's unit.
+        const personalBalance = 1250.00;
+
+        return (
+            <WalletDashboardView
+                balance={personalBalance}
+                lastUpdate={paymentData.lastUpdate} // Assuming paymentData has a lastUpdate field
+                invoices={getInvoicesForRole(condoId)}
+                transactions={getTransactionsForRole(condoId)}
+                roleLabel={`Condomino ${visibleCondoIndex + 1}`}
+                walletStatus={walletStatus}
+            />
+        );
+    }
+
+    if (user?.role === ROLES.AMMINISTRATORE) {
+        // Amministratore sees the "Global" or "Common" wallet view
+        // We'll show the 'amministratore' specific wallet data for now.
+        const adminWalletStatus = paymentData.wallets['amministratore'] || WALLET_STATUS.ACTIVE;
+        const adminBalance = paymentData.balance || 0; // Assuming paymentData has a global balance or admin balance
+
+        return (
+            <WalletDashboardView
+                balance={adminBalance}
+                lastUpdate={paymentData.lastUpdate}
+                invoices={getInvoicesForRole('amministratore')}
+                transactions={getTransactionsForRole('amministratore')}
+                roleLabel="Amministrazione"
+                walletStatus={adminWalletStatus}
+            />
+        );
+    }
+
+    // For Condo: simulate looking at "My Unit" (e.g., index 0)
+    // const visibleCondoIndex = user?.role === ROLES.CONDOMINO ? 0 : null; // null means all if showPrivateParties is true
 
     const condoWallets = Array.isArray(paymentData.wallets.condomino)
         ? paymentData.wallets.condomino
@@ -123,7 +207,7 @@ export default function PaymentsView() {
                         </div>
 
                         <Accordion type="single" collapsible className="space-y-3">
-                            {COMMONG_ROLES.filter(r => visibleCommonRoles.includes(r.id)).map((role) => {
+                            {COMMON_ROLES.filter(r => visibleCommonRoles.includes(r.id)).map((role) => {
                                 const status = paymentData.wallets[role.id];
                                 const toPay = calculateToPay(role.id);
 
