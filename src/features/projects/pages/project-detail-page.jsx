@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { History, BotMessageSquare, ChevronRight, CheckCircle2, Circle, AlertTriangle, Info } from 'lucide-react';
+import { History, BotMessageSquare, ChevronRight, CheckCircle2, Circle, AlertTriangle, Info, Check, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { PROJECTS } from '@/data/projects';
@@ -54,6 +54,14 @@ export default function ProjectDetailPage() {
 
     const availableActions = getAvailableActions();
 
+    // Determine step status relative to the current step
+    const currentStepIndex = allSteps.findIndex((s) => s.fullName === currentStatusName);
+    const getStepStatus = (index) => {
+        if (index < currentStepIndex) return 'completed';
+        if (index === currentStepIndex) return 'current';
+        return 'future';
+    };
+
     return (
         <>
             <PageHeader
@@ -75,25 +83,75 @@ export default function ProjectDetailPage() {
                                     <SheetTitle>Timeline Workflow</SheetTitle>
                                     <SheetDescription>{activeApp.label}</SheetDescription>
                                 </SheetHeader>
-                                <div className="mt-6 space-y-3">
-                                    {allSteps.map((step, i) => (
-                                        <div
-                                            key={step.id}
-                                            onClick={() => { transitionTo(step.fullName); setIsTimelineOpen(false); }}
-                                            className={`flex items-center gap-3 rounded-lg p-3 cursor-pointer transition-colors ${step.fullName === currentStatusName ? 'bg-accent/10 border border-accent/30' : 'hover:bg-muted'
-                                                }`}
-                                        >
-                                            <div className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${step.fullName === currentStatusName ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'
-                                                }`}>
-                                                {step.id}
+                                <div className="mt-6">
+                                    {allSteps.map((step, i) => {
+                                        const status = getStepStatus(i);
+                                        const isLast = i === allSteps.length - 1;
+
+                                        return (
+                                            <div
+                                                key={step.id}
+                                                onClick={() => { transitionTo(step.fullName); setIsTimelineOpen(false); }}
+                                                className="relative flex gap-4 cursor-pointer group"
+                                            >
+                                                {/* Icon + Vertical line */}
+                                                <div className="flex flex-col items-center">
+                                                    <div className={cn(
+                                                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold z-10 transition-all',
+                                                        status === 'completed' && 'bg-accent text-accent-foreground',
+                                                        status === 'current' && 'bg-orange-400 text-white shadow-md',
+                                                        status === 'future' && 'bg-muted text-muted-foreground border border-border'
+                                                    )}>
+                                                        {status === 'completed' ? (
+                                                            <Check size={14} />
+                                                        ) : status === 'current' ? (
+                                                            <Loader2 size={14} className="animate-spin" />
+                                                        ) : (
+                                                            <span>{i + 1}</span>
+                                                        )}
+                                                    </div>
+                                                    {/* Vertical connector */}
+                                                    {!isLast && (
+                                                        <div className={cn(
+                                                            'w-0.5 flex-1 min-h-[28px]',
+                                                            status === 'completed' ? 'bg-accent' : 'bg-border'
+                                                        )} />
+                                                    )}
+                                                </div>
+
+                                                {/* Content */}
+                                                <div className={cn(
+                                                    'flex-1 pb-5 pt-0.5 min-w-0',
+                                                    status === 'future' && 'opacity-50 group-hover:opacity-80'
+                                                )}>
+                                                    <div className="flex items-start justify-between gap-3">
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className={cn(
+                                                                'text-sm font-semibold leading-tight',
+                                                                status === 'current' && 'text-orange-500',
+                                                                status === 'completed' && 'text-foreground',
+                                                                status === 'future' && 'text-muted-foreground'
+                                                            )}>
+                                                                {step.fullName}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground mt-1">{step.owner}</p>
+                                                        </div>
+                                                        {/* Status badge */}
+                                                        {status === 'current' && (
+                                                            <Badge className="bg-orange-400 text-white border-none animate-pulse shrink-0">
+                                                                In corso
+                                                            </Badge>
+                                                        )}
+                                                        {status === 'completed' && (
+                                                            <Badge variant="outline" className="text-muted-foreground shrink-0">
+                                                                Completato
+                                                            </Badge>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium truncate">{step.fullName}</p>
-                                                <p className="text-xs text-muted-foreground">{step.owner}</p>
-                                            </div>
-                                            {step.fullName === currentStatusName && <ChevronRight size={14} className="text-accent" />}
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </SheetContent>
                         </Sheet>
