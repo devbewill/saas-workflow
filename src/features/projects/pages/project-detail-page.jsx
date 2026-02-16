@@ -10,7 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { History, BotMessageSquare, ChevronRight } from 'lucide-react';
+import { History, BotMessageSquare, ChevronRight, CheckCircle2, Circle, AlertTriangle, Info } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { PROJECTS } from '@/data/projects';
 
 // Lazy-loaded tab views
@@ -45,6 +47,7 @@ export default function ProjectDetailPage() {
 
     const viewConfig = useMemo(() => getViewConfig(currentStatusName), [currentStatusName]);
     const assistantConfig = viewConfig.assistantConfigKey ? getAssistantConfig(viewConfig.assistantConfigKey) : null;
+    const allRequirementsMet = assistantConfig?.requirements?.every((r) => r.checked) ?? false;
     const [activeTab, setActiveTab] = useState(viewConfig.defaultTab);
     const [isTimelineOpen, setIsTimelineOpen] = useState(false);
     const [isAssistantOpen, setIsAssistantOpen] = useState(false);
@@ -104,28 +107,87 @@ export default function ProjectDetailPage() {
                                         Assistente
                                     </Button>
                                 </SheetTrigger>
-                                <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+                                <SheetContent side="right" className="flex flex-col w-[400px] sm:w-[540px]">
                                     <SheetHeader>
-                                        <SheetTitle>{assistantConfig.title}</SheetTitle>
-                                        <SheetDescription>{assistantConfig.description}</SheetDescription>
+                                        <SheetTitle>Assistente operativo</SheetTitle>
+                                        <SheetDescription>Supporto dinamico per la lavorazione della fase corrente.</SheetDescription>
                                     </SheetHeader>
-                                    <div className="mt-6 space-y-4">
+
+                                    <div className="flex-1 overflow-y-auto space-y-6 mt-6">
+                                        {/* Phase context */}
+                                        <div className="space-y-2">
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Contesto lavorazione</p>
+                                            <Card>
+                                                <CardContent className="p-4">
+                                                    <h3 className="font-bold text-lg">{assistantConfig.title}</h3>
+                                                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{assistantConfig.description}</p>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+
+                                        {/* Requirements checklist */}
+                                        <div className="space-y-3">
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Requisiti di fase</p>
+                                            <div className="space-y-2">
+                                                {assistantConfig.requirements.map((req) => (
+                                                    <div
+                                                        key={req.id}
+                                                        className={cn(
+                                                            'flex items-center gap-3 rounded-lg border p-3 transition-colors',
+                                                            req.checked ? 'bg-primary/5 border-primary/20' : 'border-border'
+                                                        )}
+                                                    >
+                                                        {req.checked ? (
+                                                            <CheckCircle2 size={18} className="text-primary shrink-0" />
+                                                        ) : (
+                                                            <Circle size={18} className="text-muted-foreground shrink-0" />
+                                                        )}
+                                                        <span className={cn(
+                                                            'text-sm',
+                                                            req.checked ? 'font-semibold' : 'text-muted-foreground'
+                                                        )}>
+                                                            {req.label}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Warning / Info alert */}
                                         {assistantConfig.warning && (
-                                            <div className={`rounded-lg p-3 text-sm ${assistantConfig.warning.type === 'warning' ? 'bg-yellow-50 text-yellow-800 border border-yellow-200' : 'bg-blue-50 text-blue-800 border border-blue-200'
-                                                }`}>
-                                                <p className="font-semibold">{assistantConfig.warning.title}</p>
-                                                <p>{assistantConfig.warning.message}</p>
+                                            <div className={cn(
+                                                'flex gap-3 rounded-lg border p-4 text-sm',
+                                                assistantConfig.warning.type === 'warning'
+                                                    ? 'bg-yellow-50 text-yellow-900 border-yellow-200'
+                                                    : 'bg-blue-50 text-blue-900 border-blue-200'
+                                            )}>
+                                                {assistantConfig.warning.type === 'warning' ? (
+                                                    <AlertTriangle size={18} className="text-yellow-600 shrink-0 mt-0.5" />
+                                                ) : (
+                                                    <Info size={18} className="text-blue-600 shrink-0 mt-0.5" />
+                                                )}
+                                                <div className="space-y-1">
+                                                    <p className="font-semibold">{assistantConfig.warning.title}</p>
+                                                    <p className="leading-relaxed">{assistantConfig.warning.message}</p>
+                                                </div>
                                             </div>
                                         )}
-                                        <div className="space-y-3">
-                                            {assistantConfig.requirements.map((req) => (
-                                                <div key={req.id} className="flex items-center gap-3">
-                                                    <div className={`h-4 w-4 rounded border ${req.checked ? 'bg-accent border-accent' : 'border-muted-foreground'}`} />
-                                                    <span className="text-sm">{req.label}</span>
-                                                </div>
-                                            ))}
+                                    </div>
+
+                                    {/* Footer actions */}
+                                    <div className="border-t pt-4 mt-4 space-y-3">
+                                        <Button disabled={!allRequirementsMet} className="w-full gap-2">
+                                            <CheckCircle2 size={14} />
+                                            {assistantConfig.proceedLabel}
+                                        </Button>
+                                        <div className="flex gap-3">
+                                            <Button variant="destructive" className="flex-1">
+                                                Manda in KO
+                                            </Button>
+                                            <Button variant="outline" className="flex-1">
+                                                Segnala errore
+                                            </Button>
                                         </div>
-                                        <Button className="w-full">{assistantConfig.proceedLabel}</Button>
                                     </div>
                                 </SheetContent>
                             </Sheet>
