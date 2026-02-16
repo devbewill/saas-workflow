@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Bell, Search, ChevronDown, User, LogOut, Settings, RefreshCw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, Search, ChevronDown, User, LogOut, Settings, RefreshCw, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,12 +14,13 @@ import {
 
 // Mock Data (temporaneo, poi sposta in context o props)
 const USER = {
-  name: 'Stefasno Perelli',
+  name: 'Stefano Perelli',
   email: 'stefano@example.com',
   role: 'Frontoffice'
 };
 
 export function AppHeader() {
+  const navigate = useNavigate();
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/60 bg-white/60 px-8 backdrop-blur-xl">
       {/* Search Bar - Refined */}
@@ -28,7 +30,7 @@ export function AppHeader() {
           <input
             type="text"
             placeholder="Cerca pratica, perito o nota..."
-            className="h-10 w-80 rounded-full border border-border/50 bg-slate-50/50 pl-10 pr-4 text-sm transition-all placeholder:text-muted-foreground/60 focus:bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none"
+            className="h-10 w-80 rounded-md border border-border/50 bg-slate-50/50 pl-10 pr-4 text-sm transition-all placeholder:text-muted-foreground/60 focus:bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none"
           />
         </div>
       </div>
@@ -70,6 +72,14 @@ export function AppHeader() {
               <DropdownMenuItem className="flex items-center gap-2 rounded-lg py-2.5 px-3 cursor-pointer hover:bg-slate-50">
                 <Settings className="h-4 w-4 text-primary/60" />
                 <span className="font-medium">Impostazioni</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="my-1 bg-slate-50" />
+              <DropdownMenuItem
+                onClick={() => navigate('/design-system')}
+                className="flex items-center gap-2 rounded-lg py-2.5 px-3 cursor-pointer hover:bg-blue-50 text-blue-600 focus:bg-blue-50 focus:text-blue-600"
+              >
+                <Palette className="h-4 w-4" />
+                <span className="font-bold">Design System</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="my-1 bg-slate-50" />

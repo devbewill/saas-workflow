@@ -2,7 +2,7 @@ import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CheckCircle2, Circle, Loader2 } from 'lucide-react';
+import { Check, Circle, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Mock person data for each owner role
@@ -68,13 +68,13 @@ export function WorkflowTimelineSheet({ isOpen, onOpenChange, steps, currentStep
                                         <div className="flex flex-col items-center">
                                             {/* Icon Container */}
                                             <div className={cn(
-                                                "flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center z-10 transition-all duration-300 ring-4 ring-white shadow-sm",
+                                                "flex-shrink-0 h-6 w-6 rounded-sm flex items-center justify-center z-10 transition-all duration-300 shadow-sm",
                                                 status === 'completed' && "bg-accent text-accent-foreground",
-                                                status === 'current' && "bg-accent ring-2 ring-accent/20 text-white shadow-md",
+                                                status === 'current' && "bg-orange-400 text-white shadow-md",
                                                 status === 'future' && "bg-slate-50 border border-slate-200 text-slate-300"
                                             )}>
                                                 {status === 'completed' ? (
-                                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                                    <Check className="h-3.5 w-3.5" />
                                                 ) : status === 'current' ? (
                                                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                                 ) : (
@@ -85,22 +85,22 @@ export function WorkflowTimelineSheet({ isOpen, onOpenChange, steps, currentStep
                                             {/* Vertical Line */}
                                             {!isLast && (
                                                 <div className={cn(
-                                                    "w-0.5 flex-1 min-h-[50px] transition-colors duration-500",
-                                                    status === 'completed' ? "bg-accent/40" : "bg-slate-100"
+                                                    "w-0.5 flex-1 min-h-[30px] transition-colors duration-500",
+                                                    status === 'completed' ? "bg-accent" : "bg-slate-200"
                                                 )} />
                                             )}
                                         </div>
 
                                         {/* Content */}
                                         <div className={cn(
-                                            "flex-1 pb-10 pt-1 min-w-0 transition-all",
+                                            "flex-1 pb-4 pt-1 min-w-0 transition-all",
                                             status === 'current' ? "opacity-100" : "opacity-80 group-hover:opacity-100"
                                         )}>
                                             <div className="flex items-start justify-between gap-3">
                                                 <div className="flex-1 min-w-0">
                                                     <p className={cn(
                                                         "text-sm font-bold tracking-tight leading-none mb-2 transition-colors",
-                                                        status === 'current' && "text-accent",
+                                                        status === 'current' && "text-orange-400",
                                                         status === 'completed' && "text-primary",
                                                         status === 'future' && "text-slate-400"
                                                     )}>
@@ -112,12 +112,12 @@ export function WorkflowTimelineSheet({ isOpen, onOpenChange, steps, currentStep
                                                         "flex items-center gap-2 mt-3",
                                                         status === 'future' && "opacity-60"
                                                     )}>
-                                                        <Avatar className="h-6 w-6 border-2 border-white shadow-sm">
+                                                        <Avatar className="h-6 w-6 shadow-sm">
                                                             <AvatarImage src={ownerPerson.avatar} />
                                                             <AvatarFallback className={cn(
                                                                 "text-[9px] font-bold",
                                                                 status === 'completed' && "bg-accent/10 text-accent",
-                                                                status === 'current' && "bg-accent text-accent-foreground",
+                                                                status === 'current' && "bg-orange-300 text-accent-foreground",
                                                                 status === 'future' && "bg-slate-100 text-slate-400"
                                                             )}>
                                                                 {ownerPerson.initials}
@@ -141,17 +141,17 @@ export function WorkflowTimelineSheet({ isOpen, onOpenChange, steps, currentStep
                                                 </div>
 
                                                 {/* Status / Date Label */}
-                                                <div className="flex flex-col items-end gap-1">
+                                                <div className="flex flex-col items-end gap-1 text-[10px]">
                                                     {status === 'completed' && (
                                                         <>
-                                                            <span className="text-[9px] font-bold text-slate-400 tracking-widest uppercase">Completato il</span>
-                                                            <span className="text-[10px] text-slate-500 font-mono italic">
+                                                            <span className=" font-bold text-slate-400 tracking-widest uppercase">Completato il</span>
+                                                            <span className="text-slate-500 font-mono italic">
                                                                 {step.completedDate || '02/02/2026'}
                                                             </span>
                                                         </>
                                                     )}
                                                     {status === 'current' && (
-                                                        <Badge className="bg-accent text-accent-foreground text-[9px] font-bold px-2 py-0 border-none shadow-sm animate-pulse">
+                                                        <Badge className="bg-orange-400 text-accent-foreground font-bold px-2 py-0 border-none shadow-sm animate-pulse">
                                                             In corso
                                                         </Badge>
                                                     )}

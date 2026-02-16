@@ -196,7 +196,7 @@ export function DocumentsTable({ projectId }) {
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-right px-6">
-                                    <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0">
+                                    <div className="flex items-center justify-end gap-3 transition-all duration-300">
                                         {doc.isTemplate && (
                                             <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600 shadow-sm" title="Richiede compilazione">
                                                 <FilePenLine className="h-4 w-4" />

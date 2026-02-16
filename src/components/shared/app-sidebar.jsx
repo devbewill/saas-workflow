@@ -32,7 +32,7 @@ export function AppSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1.5 p-4">
-        <div className="px-2 py-2 text-[10px] font-bold tracking-widest text-sidebar-muted/60">
+        <div className="px-2 py-2 text-[10px] font-bold tracking-widest text-sidebar-muted/60 uppercase">
           Menu principale
         </div>
         {filteredNavItems.map((item) => (

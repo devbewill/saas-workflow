@@ -50,7 +50,7 @@ export default function PaymentsOverview() {
                         <input
                             type="text"
                             placeholder="Cerca progetto..."
-                            className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64 bg-white shadow-sm"
+                            className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-md focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64 bg-white shadow-sm"
                         />
                     </div>
                 </div>
