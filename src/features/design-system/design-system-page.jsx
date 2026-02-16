@@ -643,6 +643,39 @@ export default function DesignSystemPage() {
                         </Table>
                     </SectionPanel>
 
+                    {/* Condomino Dots Pattern */}
+                    <SectionPanel title="Condomino Dots" icon={Users} description="Pattern compatto per visualizzare lo stato di multipli wallet (es. condomini) in una tabella, con espansione all'hover">
+                        <div className="flex items-center gap-8 p-4 border rounded-lg">
+                            <div className="flex flex-col items-center gap-2">
+                                <span className="text-xs font-semibold text-muted-foreground">Stato Normale</span>
+                                <div className="flex -space-x-1.5 px-2 py-1">
+                                    {[1, 2, 3, 4, 5].map((_, i) => (
+                                        <div key={i} className={cn(
+                                            "w-3.5 h-3.5 rounded-full border-2 border-white ring-1 shadow-sm",
+                                            i < 3 ? "bg-emerald-500 ring-emerald-200" : "bg-amber-500 ring-amber-200"
+                                        )} />
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-2">
+                                <span className="text-xs font-semibold text-muted-foreground">Hover State (Espanso)</span>
+                                <div className="flex space-x-1 px-2 py-1 rounded-full bg-slate-100 transition-all">
+                                    {[1, 2, 3, 4, 5].map((_, i) => (
+                                        <div key={i} className={cn(
+                                            "w-3.5 h-3.5 rounded-full border-2 border-white ring-1 shadow-sm hover:scale-125 cursor-pointer",
+                                            i < 3 ? "bg-emerald-500 ring-emerald-200" : "bg-amber-500 ring-amber-200"
+                                        )} title={`Unit ${i + 1}`} />
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="text-xs text-muted-foreground max-w-[200px]">
+                                <p>Utilizzato nella vista <strong>Gestore</strong> per mostrare a colpo d'occhio lo stato di attivazione di tutti i condomini di un progetto.</p>
+                            </div>
+                        </div>
+                    </SectionPanel>
+
                 </TabsContent>
             </Tabs>
         </>

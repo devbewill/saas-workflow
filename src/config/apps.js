@@ -9,7 +9,7 @@ export const APPS = {
     HD_CEF: {
         id: 'HD_CEF',
         name: 'HD CEF',
-        label: 'Credito Extra Fondiario',
+        label: 'Credito finanziamenti',
         icon: ShieldCheck,
         version: 'v0.1',
         features: {
