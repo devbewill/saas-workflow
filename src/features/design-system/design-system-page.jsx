@@ -30,7 +30,7 @@ import { Tooltip } from '@/components/ui/tooltip';
 import {
     FileText, Settings, Heart, AlertTriangle, Inbox, ChevronDown, Users, Wallet, Info,
     Globe, Lock, MessageSquare, User, Check, Loader2, ShieldAlert, Database,
-    CheckCircle2, Circle, Upload, PenTool
+    CheckCircle2, Circle, Upload, PenTool, Terminal, Activity
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -674,6 +674,33 @@ export default function DesignSystemPage() {
                                 <p>Utilizzato nella vista <strong>Gestore</strong> per mostrare a colpo d'occhio lo stato di attivazione di tutti i condomini di un progetto.</p>
                             </div>
                         </div>
+                    </SectionPanel>
+
+                    {/* Terminal Card Pattern */}
+                    <SectionPanel title="Terminal Card" icon={Terminal} description="Card stile terminale dark per log di sistema e attività live (usato nella vista Tech)">
+                        <Card className="bg-slate-900 border-none shadow-xl text-white overflow-hidden p-5 relative min-h-[180px] max-w-md">
+                            <Terminal className="absolute bottom-[-10px] right-[-10px] opacity-10" size={100} />
+                            <div className="relative z-10">
+                                <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                    Live System Activity
+                                </h4>
+                                <div className="space-y-2 font-mono text-[10px] opacity-80">
+                                    <div className="flex gap-2">
+                                        <span className="text-slate-500">[14:32:01]</span>
+                                        <p className="text-emerald-500">Service started successfully</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span className="text-slate-500">[14:32:05]</span>
+                                        <p>Processing batch #2910...</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span className="text-slate-500">[14:32:12]</span>
+                                        <p className="text-amber-500">Warning: High latency detected</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
                     </SectionPanel>
 
                 </TabsContent>

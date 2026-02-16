@@ -8,6 +8,7 @@ import { LayoutDashboard, FileText, Settings, Wallet, Building2, Network } from 
 const COMMON_NAV = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
     { icon: FileText, label: 'Progetti', path: '/projects' },
+    { icon: Wallet, label: 'Pagamenti', path: '/payments' },
     { icon: Settings, label: 'Impostazioni', path: '/settings' },
 ];
 
