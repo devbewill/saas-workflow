@@ -24,17 +24,17 @@ export function FilterSheet({ isOpen, onOpenChange }) {
                     <div className="space-y-6 p-8">
                         <div>
                             <label className="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1.5">Codice fiscale condominio</label>
-                            <input type="text" placeholder="PRLSFN85C01G388H" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
+                            <input type="text" placeholder="PRLSFN85C01G388H" className="w-full px-4 py-2.5 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
                         </div>
 
                         <div>
                             <label className="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1.5">Nome aministratore</label>
-                            <input type="text" placeholder="Mario Rossi" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
+                            <input type="text" placeholder="Mario Rossi" className="w-full px-4 py-2.5 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
                         </div>
 
                         <div>
                             <label className="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1.5">Pratica creata da</label>
-                            <select className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-accent/10 outline-none transition-all appearance-none cursor-pointer">
+                            <select className="w-full px-4 py-2.5 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-accent/10 outline-none transition-all appearance-none cursor-pointer">
                                 <option>Tutti</option>
                                 <option>Broker</option>
                                 <option>Admin</option>
@@ -43,7 +43,7 @@ export function FilterSheet({ isOpen, onOpenChange }) {
 
                         <div>
                             <label className="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1.5">In carico a</label>
-                            <select className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-accent/10 outline-none transition-all appearance-none cursor-pointer">
+                            <select className="w-full px-4 py-2.5 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-accent/10 outline-none transition-all appearance-none cursor-pointer">
                                 <option>Tutti</option>
                                 <option>Stefano Perelli</option>
                                 <option>Mario Rossi</option>
@@ -53,11 +53,11 @@ export function FilterSheet({ isOpen, onOpenChange }) {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1.5">Importo da</label>
-                                <input type="text" placeholder="€" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
+                                <input type="text" placeholder="€" className="w-full px-4 py-2.5 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
                             </div>
                             <div>
                                 <label className="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1.5">Importo a</label>
-                                <input type="text" placeholder="€" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
+                                <input type="text" placeholder="€" className="w-full px-4 py-2.5 border border-slate-200 rounded-md text-sm  focus:ring-2 focus:ring-accent/10 outline-none transition-all" />
                             </div>
                         </div>
                     </div>
