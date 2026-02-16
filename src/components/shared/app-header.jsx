@@ -70,8 +70,8 @@ export function AppHeader() {
 
             <DropdownMenuGroup className="px-1">
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger className="flex items-center gap-2 rounded-lg py-2.5 px-3 cursor-pointer hover:bg-slate-50">
-                  <ShieldCheck className="h-4 w-4 text-primary/60" />
+                <DropdownMenuSubTrigger className="flex items-center gap-2 rounded-lg py-2.5 px-3 cursor-pointer focus:bg-primary focus:text-white data-[state=open]:bg-primary data-[state=open]:text-white group/sub">
+                  <ShieldCheck className="h-4 w-4 text-primary/60 group-focus/sub:text-white group-data-[state=open]/sub:text-white transition-colors" />
                   <span className="font-medium">Simula Ruolo</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent className="w-56 p-1 shadow-2xl">
