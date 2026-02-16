@@ -5,11 +5,97 @@ import { StatusBadge } from '@/components/composed/status-badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { DOCUMENTS } from '@/data/documents';
-import { FileText, PenTool, MessageSquare, Upload, CheckCircle2, Circle } from 'lucide-react';
+import { FileText, PenTool, MessageSquare, Upload, CheckCircle2, Circle, Globe, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+// --- Document Note Sheet with public/private switch ---
+function DocumentNoteSheet({ doc }) {
+    const [noteText, setNoteText] = useState('');
+    const [isPublic, setIsPublic] = useState(true);
+    const [notes, setNotes] = useState(
+        doc.notesCount > 0
+            ? [{ id: 1, text: 'Documento verificato e conforme.', author: 'Marco Bianchi', date: '10/01/2026 11:00', isPublic: true }]
+            : []
+    );
+
+    const handleAdd = () => {
+        if (!noteText.trim()) return;
+        setNotes((prev) => [
+            { id: Date.now(), text: noteText, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT'), isPublic },
+            ...prev,
+        ]);
+        setNoteText('');
+    };
+
+    return (
+        <Sheet>
+            <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1">
+                    <MessageSquare size={12} />
+                    {notes.length > 0 ? notes.length : '+'}
+                </Button>
+            </SheetTrigger>
+            <SheetContent>
+                <SheetHeader>
+                    <SheetTitle>Note — {doc.name}</SheetTitle>
+                    <SheetDescription>Aggiungi o consulta le note relative al documento</SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                    {/* Note input */}
+                    <Textarea
+                        placeholder="Scrivi una nota..."
+                        value={noteText}
+                        onChange={(e) => setNoteText(e.target.value)}
+                        rows={3}
+                    />
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                id={`doc-note-vis-${doc.id}`}
+                                checked={isPublic}
+                                onCheckedChange={setIsPublic}
+                            />
+                            <Label htmlFor={`doc-note-vis-${doc.id}`} className="text-xs cursor-pointer flex items-center gap-1.5">
+                                {isPublic ? <Globe size={12} /> : <Lock size={12} />}
+                                {isPublic ? 'Pubblica' : 'Privata'}
+                            </Label>
+                        </div>
+                        <Button onClick={handleAdd} disabled={!noteText.trim()} size="sm">
+                            Aggiungi nota
+                        </Button>
+                    </div>
+
+                    {/* Notes list */}
+                    <div className="space-y-3 max-h-[400px] overflow-y-auto">
+                        {notes.length === 0 ? (
+                            <p className="text-xs text-muted-foreground text-center py-6">Nessuna nota presente. Aggiungi la prima nota.</p>
+                        ) : (
+                            notes.map((note) => (
+                                <div key={note.id} className="rounded-lg border p-3 space-y-1">
+                                    <p className="text-sm">{note.text}</p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs text-muted-foreground">
+                                            {note.author} · {note.date}
+                                        </span>
+                                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                            {note.isPublic ? <Globe size={10} /> : <Lock size={10} />}
+                                            {note.isPublic ? 'Pubblica' : 'Privata'}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            </SheetContent>
+        </Sheet>
+    );
+}
 
 export default function DocumentsView() {
     const [search, setSearch] = useState('');
@@ -93,7 +179,6 @@ export default function DocumentsView() {
                                     key={doc.id}
                                     className={cn(!isUploaded && 'opacity-50')}
                                 >
-                                    {/* Upload status indicator */}
                                     <TableCell>
                                         {isUploaded ? (
                                             <CheckCircle2 size={16} className="text-green-600" />
@@ -121,27 +206,9 @@ export default function DocumentsView() {
                                             <PenTool size={14} className={doc.isSigned ? 'text-green-600' : 'text-muted-foreground'} />
                                         )}
                                     </TableCell>
+                                    {/* Notes — always show CTA */}
                                     <TableCell>
-                                        {doc.notesCount > 0 && (
-                                            <Sheet>
-                                                <SheetTrigger asChild>
-                                                    <Button variant="ghost" size="sm" className="gap-1">
-                                                        <MessageSquare size={12} />
-                                                        {doc.notesCount}
-                                                    </Button>
-                                                </SheetTrigger>
-                                                <SheetContent>
-                                                    <SheetHeader>
-                                                        <SheetTitle>Note — {doc.name}</SheetTitle>
-                                                        <SheetDescription>Note relative al documento</SheetDescription>
-                                                    </SheetHeader>
-                                                    <div className="mt-4 space-y-4">
-                                                        <Textarea placeholder="Scrivi una nota..." />
-                                                        <Button size="sm">Aggiungi nota</Button>
-                                                    </div>
-                                                </SheetContent>
-                                            </Sheet>
-                                        )}
+                                        <DocumentNoteSheet doc={doc} />
                                     </TableCell>
                                 </TableRow>
                             );
