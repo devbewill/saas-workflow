@@ -27,7 +27,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTr
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Tooltip } from '@/components/ui/tooltip';
 
-import { FileText, Settings, Heart, AlertTriangle, Inbox, ChevronDown, Users, Wallet, Info } from 'lucide-react';
+import {
+    FileText, Settings, Heart, AlertTriangle, Inbox, ChevronDown, Users, Wallet, Info,
+    Globe, Lock, MessageSquare, User, Check, Loader2, ShieldAlert, Database,
+    CheckCircle2, Circle, Upload, PenTool
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function DesignSystemPage() {
     const [checklistItems, setChecklistItems] = useState([
@@ -40,6 +45,42 @@ export default function DesignSystemPage() {
         setChecklistItems((prev) => prev.map((item) => item.id === id ? { ...item, checked } : item));
     };
 
+    // --- States for interactive demos ---
+    const [isPublic, setIsPublic] = useState(true);
+    const [demoNote, setDemoNote] = useState('');
+    const [demoNotes, setDemoNotes] = useState([
+        { id: 1, text: 'Verifica completata senza segnalazioni.', author: 'Marco Bianchi', date: '08/02/2026 14:30', isPublic: true },
+        { id: 2, text: 'Nota interna per il team legale.', author: 'Laura Rossi', date: '07/02/2026 10:15', isPublic: false },
+    ]);
+    const [riskOutcome, setRiskOutcome] = useState('arancione');
+
+    const addDemoNote = () => {
+        if (!demoNote.trim()) return;
+        setDemoNotes((prev) => [
+            { id: Date.now(), text: demoNote, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT'), isPublic },
+            ...prev,
+        ]);
+        setDemoNote('');
+    };
+
+    // Risk config helper
+    const getRiskConfig = (outcome) => {
+        if (!outcome) return { color: 'bg-muted', textColor: 'text-muted-foreground', label: 'Non valutato', icon: '?' };
+        if (outcome === 'rosso') return { color: 'bg-red-500', textColor: 'text-red-600', label: 'KO', icon: '✕' };
+        if (outcome === 'arancione') return { color: 'bg-orange-500', textColor: 'text-orange-600', label: 'Forzante', icon: '⚠' };
+        return { color: 'bg-green-500', textColor: 'text-green-600', label: 'Rischio Basso', icon: '✓' };
+    };
+    const riskConfig = getRiskConfig(riskOutcome);
+
+    // Timeline demo steps
+    const timelineSteps = [
+        { id: 1, name: 'Onboarding', owner: 'Gestore', status: 'completed' },
+        { id: 2, name: 'Verifica AML', owner: 'Back Office', status: 'completed' },
+        { id: 3, name: 'Delibera', owner: 'Commissione', status: 'current' },
+        { id: 4, name: 'Stipula', owner: 'Notaio', status: 'future' },
+        { id: 5, name: 'Erogazione', owner: 'Banca', status: 'future' },
+    ];
+
     return (
         <>
             <PageHeader title="Design System" subtitle="Catalogo completo dei componenti UI della piattaforma" />
@@ -48,6 +89,7 @@ export default function DesignSystemPage() {
                 <TabsList>
                     <TabsTrigger value="primitivi">Primitivi (shadcn/ui)</TabsTrigger>
                     <TabsTrigger value="composti">Componenti Composti</TabsTrigger>
+                    <TabsTrigger value="patterns">Pattern Applicativi</TabsTrigger>
                 </TabsList>
 
                 {/* ===== PRIMITIVI ===== */}
@@ -155,6 +197,21 @@ export default function DesignSystemPage() {
                             <div className="flex items-center gap-3">
                                 <Switch id="ds-switch" />
                                 <Label htmlFor="ds-switch">Notifiche email</Label>
+                            </div>
+                            {/* NEW: Visibility switch pattern */}
+                            <div className="flex items-center gap-3 pt-2 border-t">
+                                <Switch
+                                    id="ds-visibility"
+                                    checked={isPublic}
+                                    onCheckedChange={setIsPublic}
+                                />
+                                <Label htmlFor="ds-visibility" className="flex items-center gap-1.5 cursor-pointer">
+                                    {isPublic ? <Globe size={14} /> : <Lock size={14} />}
+                                    {isPublic ? 'Nota Pubblica' : 'Nota Privata'}
+                                </Label>
+                                <span className="text-xs text-muted-foreground ml-2">
+                                    — Pattern usato nelle note processo
+                                </span>
                             </div>
                         </div>
                     </SectionPanel>
@@ -304,14 +361,21 @@ export default function DesignSystemPage() {
                     </SectionPanel>
 
                     {/* PageHeader */}
-                    <SectionPanel title="PageHeader" description="Intestazione pagina con azioni (demo non interattiva)">
+                    <SectionPanel title="PageHeader" description="Intestazione pagina con status e owner inline">
                         <div className="bg-muted/50 rounded-lg p-4">
                             <div className="flex items-end justify-between gap-4">
                                 <div>
-                                    <h1 className="text-3xl font-bold tracking-tight">Titolo Pagina</h1>
-                                    <p className="text-muted-foreground">Sottotitolo con descrizione</p>
+                                    <h1 className="text-3xl font-bold tracking-tight">Condominio Einaudi</h1>
+                                    <span className="flex items-center gap-2 flex-wrap text-muted-foreground">
+                                        Pratica #P001 · HD - 110
+                                        <StatusBadge status="Aperta" />
+                                        <span className="text-xs text-muted-foreground">· In carico a: Marco Bianchi</span>
+                                    </span>
                                 </div>
-                                <Button>Azione</Button>
+                                <div className="flex gap-2">
+                                    <Button variant="outline" size="sm">Timeline</Button>
+                                    <Button variant="outline" size="sm">Assistente</Button>
+                                </div>
                             </div>
                         </div>
                     </SectionPanel>
@@ -350,6 +414,233 @@ export default function DesignSystemPage() {
                         actions={<Button variant="outline" size="sm">Azione</Button>}
                     >
                         <p className="text-sm text-muted-foreground">SectionPanel è il wrapper più usato nell'app per raggruppare contenuti con titolo, icona e azioni.</p>
+                    </SectionPanel>
+
+                </TabsContent>
+
+                {/* ===== PATTERN APPLICATIVI ===== */}
+                <TabsContent value="patterns" className="space-y-8">
+
+                    {/* Timeline with 3-state steps */}
+                    <SectionPanel title="Timeline Workflow" icon={Loader2} description="Rappresentazione verticale degli step con stati completato/corrente/futuro, linea di connessione e badge">
+                        <div className="max-w-md">
+                            {timelineSteps.map((step, i) => {
+                                const isLast = i === timelineSteps.length - 1;
+                                return (
+                                    <div key={step.id} className="relative flex gap-4 group">
+                                        {/* Icon + Vertical line */}
+                                        <div className="flex flex-col items-center">
+                                            <div className={cn(
+                                                'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold z-10 transition-all',
+                                                step.status === 'completed' && 'bg-accent text-accent-foreground',
+                                                step.status === 'current' && 'bg-orange-400 text-white shadow-md',
+                                                step.status === 'future' && 'bg-muted text-muted-foreground border border-border'
+                                            )}>
+                                                {step.status === 'completed' ? (
+                                                    <Check size={14} />
+                                                ) : step.status === 'current' ? (
+                                                    <Loader2 size={14} className="animate-spin" />
+                                                ) : (
+                                                    <span>{i + 1}</span>
+                                                )}
+                                            </div>
+                                            {!isLast && (
+                                                <div className={cn(
+                                                    'w-0.5 flex-1 min-h-[28px]',
+                                                    step.status === 'completed' ? 'bg-accent' : 'bg-border'
+                                                )} />
+                                            )}
+                                        </div>
+                                        {/* Content */}
+                                        <div className={cn(
+                                            'flex-1 pb-5 pt-0.5 min-w-0',
+                                            step.status === 'future' && 'opacity-50 group-hover:opacity-80'
+                                        )}>
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className={cn(
+                                                        'text-sm font-semibold leading-tight',
+                                                        step.status === 'current' && 'text-orange-500',
+                                                        step.status === 'completed' && 'text-foreground',
+                                                        step.status === 'future' && 'text-muted-foreground'
+                                                    )}>{step.name}</p>
+                                                    <p className="text-xs text-muted-foreground mt-1">{step.owner}</p>
+                                                </div>
+                                                {step.status === 'current' && (
+                                                    <Badge className="bg-orange-400 text-white border-none animate-pulse shrink-0">In corso</Badge>
+                                                )}
+                                                {step.status === 'completed' && (
+                                                    <Badge variant="outline" className="text-muted-foreground shrink-0">Completato</Badge>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </SectionPanel>
+
+                    {/* Risk Indicator */}
+                    <SectionPanel title="Indicatore di Rischio" icon={ShieldAlert} description="Cerchio colorato dinamico usato nella verifica AML e Banche Dati">
+                        <div className="flex flex-wrap items-start gap-8">
+                            {/* Interactive demo */}
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-center py-4 border-y border-dashed rounded-lg bg-muted/30 px-8">
+                                    <div className="flex flex-col items-center gap-2">
+                                        <div className={cn(
+                                            'w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-semibold shadow-lg transition-all',
+                                            riskConfig.color
+                                        )}>
+                                            {riskConfig.icon}
+                                        </div>
+                                        <span className={cn('text-xs font-bold tracking-wider', riskConfig.textColor)}>
+                                            {riskConfig.label}
+                                        </span>
+                                    </div>
+                                </div>
+                                <Select value={riskOutcome} onValueChange={setRiskOutcome}>
+                                    <SelectTrigger className="w-[220px]">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="verde">Verde — Rischio Basso</SelectItem>
+                                        <SelectItem value="arancione">Arancione — Forzante</SelectItem>
+                                        <SelectItem value="rosso">Rosso — KO</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            {/* All states side by side */}
+                            <div className="flex gap-6">
+                                {[
+                                    { color: 'bg-green-500', textColor: 'text-green-600', icon: '✓', label: 'Positivo' },
+                                    { color: 'bg-orange-500', textColor: 'text-orange-600', icon: '⚠', label: 'Forzante' },
+                                    { color: 'bg-red-500', textColor: 'text-red-600', icon: '✕', label: 'KO' },
+                                ].map((cfg) => (
+                                    <div key={cfg.label} className="flex flex-col items-center gap-1">
+                                        <div className={cn('w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold shadow', cfg.color)}>
+                                            {cfg.icon}
+                                        </div>
+                                        <span className={cn('text-[10px] font-bold', cfg.textColor)}>{cfg.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </SectionPanel>
+
+                    {/* Forzante Warning */}
+                    <SectionPanel title="Componente Forzante" icon={AlertTriangle} description="Warning alert + upload aggiuntivo visibile quando l'esito AML è 'Arancione — Forzante'">
+                        <div className="max-w-lg space-y-3">
+                            <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4 text-sm text-yellow-800">
+                                <div className="flex items-center gap-2 font-semibold mb-1">
+                                    <AlertTriangle size={16} />
+                                    Verifica Rafforzata Richiesta
+                                </div>
+                                <p>In caso di esito "Arancione — Forzante" è necessaria una verifica rafforzata con documentazione aggiuntiva obbligatoria.</p>
+                            </div>
+                            <FileUpload label="Carica documentazione rafforzata" accept=".pdf,.doc,.docx" />
+                            <Textarea placeholder="Motivazione della forzatura..." rows={3} />
+                        </div>
+                    </SectionPanel>
+
+                    {/* Note di Processo */}
+                    <SectionPanel title="Note di Processo" icon={MessageSquare} description="Sezione note con switch pubblica/privata — ogni processo (AML, Banche Dati) ha le proprie note indipendenti">
+                        <div className="max-w-lg space-y-3">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <MessageSquare size={14} className="text-primary" />
+                                    <span className="text-xs font-semibold uppercase tracking-wider">Note Verifica AML</span>
+                                </div>
+                                <Badge variant="outline" className="text-xs">{demoNotes.length} note</Badge>
+                            </div>
+                            <div className="space-y-2">
+                                <Textarea
+                                    placeholder="Scrivi una nota per il team..."
+                                    value={demoNote}
+                                    onChange={(e) => setDemoNote(e.target.value)}
+                                    rows={2}
+                                />
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Switch
+                                            id="ds-note-vis"
+                                            checked={isPublic}
+                                            onCheckedChange={setIsPublic}
+                                        />
+                                        <Label htmlFor="ds-note-vis" className="text-xs cursor-pointer flex items-center gap-1.5">
+                                            {isPublic ? <Globe size={12} /> : <Lock size={12} />}
+                                            {isPublic ? 'Pubblica' : 'Privata'}
+                                        </Label>
+                                    </div>
+                                    <Button onClick={addDemoNote} disabled={!demoNote.trim()} size="sm">
+                                        Aggiungi
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                                {demoNotes.map((note) => (
+                                    <div key={note.id} className="rounded-lg border p-3 space-y-1">
+                                        <p className="text-sm">{note.text}</p>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs text-muted-foreground">
+                                                {note.author} · {note.date}
+                                            </span>
+                                            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                                {note.isPublic ? <Globe size={10} /> : <Lock size={10} />}
+                                                {note.isPublic ? 'Pubblica' : 'Privata'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </SectionPanel>
+
+                    {/* Document Row States */}
+                    <SectionPanel title="Riga Documento" icon={FileText} description="Pattern tabellare documenti con indicatore upload, CTA note per tutti i documenti, e visibilità nota">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-10"></TableHead>
+                                    <TableHead>Documento</TableHead>
+                                    <TableHead>File</TableHead>
+                                    <TableHead>Stato</TableHead>
+                                    <TableHead>Firma</TableHead>
+                                    <TableHead>Note</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {/* Uploaded */}
+                                <TableRow>
+                                    <TableCell><CheckCircle2 size={16} className="text-green-600" /></TableCell>
+                                    <TableCell className="font-medium">Ricevuta consegna</TableCell>
+                                    <TableCell><span className="text-sm text-primary cursor-pointer hover:underline">ricevuta_consegna.pdf</span></TableCell>
+                                    <TableCell><StatusBadge status="Validato" /></TableCell>
+                                    <TableCell><PenTool size={14} className="text-green-600" /></TableCell>
+                                    <TableCell>
+                                        <Button variant="ghost" size="sm" className="gap-1">
+                                            <MessageSquare size={12} /> 2
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                                {/* Pending upload */}
+                                <TableRow className="opacity-50">
+                                    <TableCell><Circle size={16} className="text-muted-foreground" /></TableCell>
+                                    <TableCell className="font-medium">Foglio informativo</TableCell>
+                                    <TableCell>
+                                        <Button variant="outline" size="sm" className="gap-1 text-xs">
+                                            <Upload size={12} /> Carica
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell><StatusBadge status="Da caricare" /></TableCell>
+                                    <TableCell><PenTool size={14} className="text-muted-foreground" /></TableCell>
+                                    <TableCell>
+                                        <Button variant="ghost" size="sm" className="gap-1">
+                                            <MessageSquare size={12} /> +
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </SectionPanel>
 
                 </TabsContent>
