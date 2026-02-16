@@ -6,7 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ShieldAlert, Database, AlertTriangle, CheckCircle2, User, MessageSquare } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { ShieldAlert, Database, AlertTriangle, CheckCircle2, User, MessageSquare, Lock, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // --- AML outcome options ---
@@ -42,10 +43,11 @@ const getDbConfig = (outcome) => {
 // --- Inline Note Section ---
 function NoteSection({ title, notes, onAddNote }) {
     const [text, setText] = useState('');
+    const [isPublic, setIsPublic] = useState(true);
 
     const handleAdd = () => {
         if (!text.trim()) return;
-        onAddNote(text);
+        onAddNote(text, isPublic);
         setText('');
     };
 
@@ -58,17 +60,29 @@ function NoteSection({ title, notes, onAddNote }) {
                 </div>
                 <Badge variant="outline" className="text-xs">{notes.length} note</Badge>
             </div>
-            <div className="flex gap-2">
+            <div className="space-y-2">
                 <Textarea
                     placeholder="Scrivi una nota per il team..."
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="flex-1"
                     rows={2}
                 />
-                <Button onClick={handleAdd} disabled={!text.trim()} className="self-end">
-                    Aggiungi
-                </Button>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <Switch
+                            id={`${title}-visibility`}
+                            checked={isPublic}
+                            onCheckedChange={setIsPublic}
+                        />
+                        <Label htmlFor={`${title}-visibility`} className="text-xs cursor-pointer flex items-center gap-1.5">
+                            {isPublic ? <Globe size={12} /> : <Lock size={12} />}
+                            {isPublic ? 'Pubblica' : 'Privata'}
+                        </Label>
+                    </div>
+                    <Button onClick={handleAdd} disabled={!text.trim()} size="sm">
+                        Aggiungi
+                    </Button>
+                </div>
             </div>
             <div className="space-y-2 max-h-[240px] overflow-y-auto">
                 {notes.length === 0 ? (
@@ -77,11 +91,17 @@ function NoteSection({ title, notes, onAddNote }) {
                     notes.map((note) => (
                         <div key={note.id} className="rounded-lg border p-3 space-y-1">
                             <p className="text-sm">{note.text}</p>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                <User size={10} />
-                                <span>{note.author}</span>
-                                <span>·</span>
-                                <span>{note.date}</span>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <User size={10} />
+                                    <span>{note.author}</span>
+                                    <span>·</span>
+                                    <span>{note.date}</span>
+                                </div>
+                                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                    {note.isPublic ? <Globe size={10} /> : <Lock size={10} />}
+                                    {note.isPublic ? 'Pubblica' : 'Privata'}
+                                </span>
                             </div>
                         </div>
                     ))
@@ -98,22 +118,22 @@ export default function AmlView() {
 
     // Separate notes state for each process
     const [amlNotes, setAmlNotes] = useState([
-        { id: 1, text: 'Richiesta adeguata verifica rafforzata inviata via mail.', author: 'Marco Bianchi', date: '08/02/2026 14:30' },
+        { id: 1, text: 'Richiesta adeguata verifica rafforzata inviata via mail.', author: 'Marco Bianchi', date: '08/02/2026 14:30', isPublic: true },
     ]);
     const [dbNotes, setDbNotes] = useState([
-        { id: 2, text: 'Controllo CRIF effettuato con successo. Nessuna segnalazione rilevante.', author: 'Laura Rossi', date: '07/02/2026 10:15' },
+        { id: 2, text: 'Controllo CRIF effettuato con successo. Nessuna segnalazione rilevante.', author: 'Laura Rossi', date: '07/02/2026 10:15', isPublic: true },
     ]);
 
-    const addAmlNote = (text) => {
+    const addAmlNote = (text, isPublic) => {
         setAmlNotes((prev) => [
-            { id: Date.now(), text, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT') },
+            { id: Date.now(), text, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT'), isPublic },
             ...prev,
         ]);
     };
 
-    const addDbNote = (text) => {
+    const addDbNote = (text, isPublic) => {
         setDbNotes((prev) => [
-            { id: Date.now(), text, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT') },
+            { id: Date.now(), text, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT'), isPublic },
             ...prev,
         ]);
     };
