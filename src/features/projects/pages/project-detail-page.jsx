@@ -266,13 +266,8 @@ export default function ProjectDetailPage() {
                         )}
                     </div>
                 }
-            >
-                {/* Status bar beneath title */}
-                <div className="flex items-center gap-3 mt-2">
-                    <Badge variant={getStatusVariant(currentStep.state)}>{currentStatusName}</Badge>
-                    <span className="text-xs text-muted-foreground">Responsabile: {currentOwner}</span>
-                </div>
-            </PageHeader>
+            />
+
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -284,17 +279,19 @@ export default function ProjectDetailPage() {
                     ))}
                 </TabsList>
 
-                {viewConfig.availableTabs.map((tabKey) => {
-                    const ViewComponent = VIEW_COMPONENTS[tabKey] || PlaceholderView;
-                    return (
-                        <TabsContent key={tabKey} value={tabKey}>
-                            <Suspense fallback={<div className="py-8 text-center text-muted-foreground">Caricamento...</div>}>
-                                <ViewComponent tabKey={tabKey} project={project} />
-                            </Suspense>
-                        </TabsContent>
-                    );
-                })}
-            </Tabs>
+                {
+                    viewConfig.availableTabs.map((tabKey) => {
+                        const ViewComponent = VIEW_COMPONENTS[tabKey] || PlaceholderView;
+                        return (
+                            <TabsContent key={tabKey} value={tabKey}>
+                                <Suspense fallback={<div className="py-8 text-center text-muted-foreground">Caricamento...</div>}>
+                                    <ViewComponent tabKey={tabKey} project={project} />
+                                </Suspense>
+                            </TabsContent>
+                        );
+                    })
+                }
+            </Tabs >
         </>
     );
 }
