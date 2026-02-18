@@ -23,6 +23,7 @@ const AmlView = lazy(() => import('../views/aml-view'));
 const TeamView = lazy(() => import('../views/team-view'));
 const PaymentsView = lazy(() => import('../views/payments-view'));
 const PlaceholderView = lazy(() => import('../views/placeholder-view'));
+const ScoringView = lazy(() => import('../views/scoring-view'));
 
 const VIEW_COMPONENTS = {
     info: InfoView,
@@ -37,6 +38,7 @@ const VIEW_COMPONENTS = {
     finanziario: PlaceholderView,
     lavori: PlaceholderView,
     storico: PlaceholderView,
+    scoring: ScoringView,
 };
 
 export default function ProjectDetailPage() {
