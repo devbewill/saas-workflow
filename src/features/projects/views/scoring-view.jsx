@@ -28,10 +28,11 @@ export default function ScoringView({ project }) {
     const [criteria, setCriteria] = useState(INITIAL_CRITERIA);
     const [condoId, setCondoId] = useState(project?.displayId || '');
     const [isOpen, setIsOpen] = useState(false);
+    const [savedResult, setSavedResult] = useState(null);
 
     const handleVoteChange = (id, value) => {
         const numValue = parseFloat(value) || 0;
-        setCriteria(prev => prev.map(c => 
+        setCriteria(prev => prev.map(c =>
             c.id === id ? { ...c, voto: numValue, punteggio: numValue * c.peso } : c
         ));
     };
@@ -81,8 +82,8 @@ export default function ScoringView({ project }) {
                                     <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
                                         <div className="grid gap-1.5 flex-1">
                                             <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">ID Condominio</label>
-                                            <Input 
-                                                value={condoId} 
+                                            <Input
+                                                value={condoId}
                                                 onChange={(e) => setCondoId(e.target.value)}
                                                 placeholder="Es. COND-001"
                                                 className="bg-background"
@@ -129,8 +130,8 @@ export default function ScoringView({ project }) {
                                                             </Badge>
                                                         </TableCell>
                                                         <TableCell>
-                                                            <Input 
-                                                                type="number" 
+                                                            <Input
+                                                                type="number"
                                                                 step="0.1"
                                                                 className="h-8 text-center px-1"
                                                                 value={c.voto === 0 ? '' : c.voto}
@@ -194,10 +195,19 @@ export default function ScoringView({ project }) {
                                             ))}
                                         </div>
 
-                                        <Button 
-                                            disabled={!calculationResults.allFilled} 
+                                        <Button
+                                            disabled={!calculationResults.allFilled}
                                             className="w-full mt-4 gap-2 h-12 text-lg shadow-lg"
-                                            onClick={() => setIsOpen(false)}
+                                            onClick={() => {
+                                                setSavedResult({
+                                                    grade: calculationResults.grade,
+                                                    media: calculationResults.media,
+                                                    condoId,
+                                                    savedAt: new Date().toLocaleString('it-IT'),
+                                                    criteria: criteria.map(c => ({ ...c, punteggio: c.voto * c.peso })),
+                                                });
+                                                setIsOpen(false);
+                                            }}
                                         >
                                             <Save size={18} />
                                             Salva Valutazione
@@ -210,12 +220,32 @@ export default function ScoringView({ project }) {
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="flex flex-col items-center justify-center p-8 border rounded-xl bg-muted/20 border-dashed">
-                             <Calculator className="w-12 h-12 text-muted-foreground/40 mb-3" />
-                             <p className="text-sm text-muted-foreground text-center">Nessuna valutazione salvata per questo condominio.</p>
-                             <p className="text-xs text-muted-foreground/60 mt-1">Usa il tasto "Vedi Scoring" per iniziare.</p>
-                        </div>
-                        
+                        {savedResult ? (
+                            <div className="flex flex-col items-center justify-center p-8 border-2 rounded-xl bg-background gap-3" style={{ borderColor: 'hsl(var(--primary))' }}>
+                                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Rating Salvato</span>
+                                <div className={cn(
+                                    "w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black text-white shadow-xl",
+                                    savedResult.grade.color
+                                )}>
+                                    {savedResult.grade.label}
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-2xl font-bold font-mono">{savedResult.media.toFixed(2)}</p>
+                                    <p className="text-xs text-muted-foreground uppercase">Punteggio Medio</p>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                                    <CheckCircle2 size={13} className="text-primary" />
+                                    Salvato il {savedResult.savedAt}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center p-8 border rounded-xl bg-muted/20 border-dashed">
+                                <Calculator className="w-12 h-12 text-muted-foreground/40 mb-3" />
+                                <p className="text-sm text-muted-foreground text-center">Nessuna valutazione salvata per questo condominio.</p>
+                                <p className="text-xs text-muted-foreground/60 mt-1">Usa il tasto "Vedi Scoring" per iniziare.</p>
+                            </div>
+                        )}
+
                         <div className="md:col-span-2 space-y-4">
                             <h4 className="font-semibold flex items-center gap-2">
                                 <Info size={16} className="text-primary" />

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Suspense, lazy } from 'react';
+import React, { useState, useMemo, useEffect, Suspense, lazy } from 'react';
 import { useParams } from 'react-router-dom';
 import { PageHeader } from '@/components/composed/page-header';
 import { StatusBadge } from '@/components/composed/status-badge';
@@ -47,12 +47,25 @@ export default function ProjectDetailPage() {
     const project = PROJECTS.find((p) => p.id === id) || PROJECTS[0];
     const { currentStatusName, currentStep, currentOwner, allSteps, transitionTo, getAvailableActions, getStatusVariant } = useWorkflow();
 
-    const viewConfig = useMemo(() => getViewConfig(currentStatusName), [currentStatusName]);
+    const viewConfig = useMemo(() => {
+        const config = getViewConfig(currentStatusName);
+        return {
+            ...config,
+            availableTabs: config.availableTabs.filter(
+                (tab) => tab !== 'pagamenti' || activeApp.id === 'HD_RISTR'
+            ),
+        };
+    }, [currentStatusName, activeApp.id]);
     const assistantConfig = viewConfig.assistantConfigKey ? getAssistantConfig(viewConfig.assistantConfigKey) : null;
     const allRequirementsMet = assistantConfig?.requirements?.every((r) => r.checked) ?? false;
     const [activeTab, setActiveTab] = useState(viewConfig.defaultTab);
     const [isTimelineOpen, setIsTimelineOpen] = useState(false);
     const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+
+    // Reset active tab to the default whenever the workflow status changes
+    useEffect(() => {
+        setActiveTab(viewConfig.defaultTab);
+    }, [viewConfig.defaultTab]);
 
     const availableActions = getAvailableActions();
 
