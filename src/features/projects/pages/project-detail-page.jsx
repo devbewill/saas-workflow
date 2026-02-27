@@ -104,7 +104,7 @@ export default function ProjectDetailPage() {
                                     <SheetTitle>Timeline Workflow</SheetTitle>
                                     <SheetDescription>{activeApp.label}</SheetDescription>
                                 </SheetHeader>
-                                <div className="mt-6">
+                                <div className="mt-6 space-y-0">
                                     {allSteps.map((step, i) => {
                                         const status = getStepStatus(i);
                                         const isLast = i === allSteps.length - 1;
@@ -113,67 +113,50 @@ export default function ProjectDetailPage() {
                                             <div
                                                 key={step.id}
                                                 onClick={() => { transitionTo(step.fullName); setIsTimelineOpen(false); }}
-                                                className="relative flex gap-4 cursor-pointer group"
+                                                className="relative flex gap-5 cursor-pointer group"
                                             >
-                                                {/* Icon + Vertical line */}
+                                                {/* Dot + vertical line column */}
                                                 <div className="flex flex-col items-center">
+                                                    {/* Circle */}
                                                     <div className={cn(
-                                                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold z-10 transition-all',
-                                                        status === 'completed' && 'bg-primary text-primary-foreground',
-                                                        status === 'current' && 'bg-orange-400 text-white shadow-md',
-                                                        status === 'future' && 'bg-muted text-muted-foreground border border-border'
+                                                        'relative flex h-3 w-3 shrink-0 items-center justify-center rounded-full z-10 transition-all mt-1.5',
+                                                        status === 'completed' && 'bg-primary border-2 border-primary',
+                                                        status === 'current' && 'border-2 border-orange-400 bg-white shadow-[0_0_0_3px_rgba(251,146,60,0.2)]',
+                                                        status === 'future' && 'border-2 border-border bg-white'
                                                     )}>
-                                                        {status === 'completed' ? (
-                                                            <Check size={14} />
-                                                        ) : status === 'current' ? (
-                                                            <Loader2 size={14} className="animate-spin" />
-                                                        ) : (
-                                                            <span>{i + 1}</span>
-                                                        )}
+                                                        {status === 'current' && <div className="h-1.5 w-1.5 rounded-full bg-orange-400" />}
                                                     </div>
-                                                    {/* Vertical connector */}
+                                                    {/* Connector line */}
                                                     {!isLast && (
-                                                        <div className={cn(
-                                                            'w-0.5 flex-1 min-h-[28px]',
-                                                            status === 'completed' ? 'bg-primary' : 'bg-border'
-                                                        )} />
+                                                        <div className="w-px flex-1 min-h-[32px] bg-border mt-0.5" />
                                                     )}
                                                 </div>
 
                                                 {/* Content */}
                                                 <div className={cn(
-                                                    'flex-1 pb-5 pt-0.5 min-w-0',
-                                                    status === 'future' && 'opacity-50 group-hover:opacity-80'
+                                                    'flex-1 pb-3 min-w-0',
+                                                    status === 'future' && 'opacity-40 group-hover:opacity-70 transition-opacity'
                                                 )}>
-                                                    <div className="flex items-start justify-between gap-3">
-                                                        <div className="flex-1 min-w-0">
-                                                            <p className={cn(
-                                                                'text-sm font-semibold leading-tight',
-                                                                status === 'current' && 'text-orange-500',
-                                                                status === 'completed' && 'text-foreground',
-                                                                status === 'future' && 'text-muted-foreground'
-                                                            )}>
-                                                                {step.fullName}
-                                                            </p>
-                                                            <p className="text-xs text-muted-foreground mt-1">{step.owner}</p>
-                                                        </div>
-                                                        {/* Status badge */}
-                                                        {status === 'current' && (
-                                                            <Badge className="bg-orange-400 text-white border-none animate-pulse shrink-0">
-                                                                In corso
-                                                            </Badge>
-                                                        )}
-                                                        {status === 'completed' && (
-                                                            <Badge variant="outline" className="text-muted-foreground shrink-0">
-                                                                Completato
-                                                            </Badge>
-                                                        )}
-                                                    </div>
+                                                    <p className={cn(
+                                                        'text-sm leading-tight',
+                                                        status === 'current' && 'font-semibold text-orange-500',
+                                                        status !== 'current' && 'font-normal text-foreground'
+                                                    )}>
+                                                        {step.fullName}
+                                                    </p>
+                                                    <p className="text-xs text-muted-foreground mt-0.5">{step.owner}</p>
+                                                    {status === 'current' && (
+                                                        <span className="inline-flex items-center gap-1 mt-1.5 text-[10px] font-semibold text-orange-500 uppercase tracking-wider">
+                                                            <span className="h-1.5 w-1.5 rounded-full bg-orange-400 animate-pulse" />
+                                                            In corso
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         );
                                     })}
                                 </div>
+
                             </SheetContent>
                         </Sheet>
 
