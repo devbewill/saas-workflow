@@ -1,37 +1,37 @@
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import { getStatusColors } from '@/config/status-colors';
+import { cn } from '@/lib/utils';
 
 /**
- * StatusBadge — Semantic badge for displaying statuses.
- * Maps status strings to shadcn Badge variants.
+ * StatusBadge — Badge semantico per stati del workflow e dei documenti.
+ * Per gli stati workflow usa la mappa status-colors.js (colori per state base).
+ * Per stati documenti (Validato, Da validare, Da caricare) usa classi dedicate.
  */
 
-const STATUS_MAP = {
-    // Document statuses
-    'Validato': 'default',
-    'Da validare': 'secondary',
-    'Da caricare': 'outline',
-    // Project statuses
-    'Aperta': 'default',
-    'Caricata': 'default',
-    'Esame': 'destructive',
-    'Approvata': 'outline',
-    'Perfezionata': 'secondary',
-    // Wallet statuses
-    'attivo': 'default',
-    'in_attesa': 'secondary',
-    'da_attivare': 'outline',
-    // Payment statuses
-    'paid': 'default',
-    'pending': 'secondary',
+const DOC_STATUS_STYLES = {
+    'Validato': { bg: 'bg-green-50', text: 'text-green-700' },
+    'Da validare': { bg: 'bg-amber-50', text: 'text-amber-700' },
+    'Da caricare': { bg: 'bg-slate-100', text: 'text-slate-500' },
+    // Wallet
+    'attivo': { bg: 'bg-green-50', text: 'text-green-700' },
+    'in_attesa': { bg: 'bg-amber-50', text: 'text-amber-700' },
+    'da_attivare': { bg: 'bg-slate-100', text: 'text-slate-500' },
+    // Payment
+    'paid': { bg: 'bg-green-50', text: 'text-green-700' },
+    'pending': { bg: 'bg-amber-50', text: 'text-amber-700' },
 };
 
 export function StatusBadge({ status, children }) {
-    const variant = STATUS_MAP[status] || 'outline';
+    const docStyle = DOC_STATUS_STYLES[status];
+    const colors = docStyle || getStatusColors(status);
 
     return (
-        <Badge variant={variant}>
+        <span className={cn(
+            'inline-flex items-center rounded-sm px-2 py-0.5 text-xs font-semibold',
+            colors.bg,
+            colors.text
+        )}>
             {children || status}
-        </Badge>
+        </span>
     );
 }
