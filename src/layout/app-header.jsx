@@ -40,7 +40,7 @@ export function AppHeader() {
                     <DropdownMenuTrigger asChild>
                         <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted focus:outline-none">
                             <Avatar className="h-8 w-8">
-                                <AvatarFallback className="text-xs bg-accent text-accent-foreground font-semibold">
+                                <AvatarFallback className="text-xs bg-primary text-primary-foreground font-semibold">
                                     {getInitials(user.name)}
                                 </AvatarFallback>
                             </Avatar>
@@ -67,7 +67,7 @@ export function AppHeader() {
                                     <DropdownMenuItem
                                         key={roleKey}
                                         onClick={() => setUserRole(roleKey)}
-                                        className={cn(user.role === roleKey && 'bg-accent/10 font-semibold')}
+                                        className={cn(user.role === roleKey && 'bg-primary/10 text-primary font-semibold')}
                                     >
                                         {policy.label}
                                     </DropdownMenuItem>

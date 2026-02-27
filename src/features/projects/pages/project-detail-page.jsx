@@ -119,7 +119,7 @@ export default function ProjectDetailPage() {
                                                 <div className="flex flex-col items-center">
                                                     <div className={cn(
                                                         'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold z-10 transition-all',
-                                                        status === 'completed' && 'bg-accent text-accent-foreground',
+                                                        status === 'completed' && 'bg-primary text-primary-foreground',
                                                         status === 'current' && 'bg-orange-400 text-white shadow-md',
                                                         status === 'future' && 'bg-muted text-muted-foreground border border-border'
                                                     )}>
@@ -135,7 +135,7 @@ export default function ProjectDetailPage() {
                                                     {!isLast && (
                                                         <div className={cn(
                                                             'w-0.5 flex-1 min-h-[28px]',
-                                                            status === 'completed' ? 'bg-accent' : 'bg-border'
+                                                            status === 'completed' ? 'bg-primary' : 'bg-border'
                                                         )} />
                                                     )}
                                                 </div>

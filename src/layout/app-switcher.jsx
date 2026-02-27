@@ -17,7 +17,7 @@ export function AppSwitcher() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted focus:outline-none">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-accent-foreground">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                         <activeApp.icon size={18} strokeWidth={2.5} />
                     </div>
                     <div className="flex flex-col items-start leading-tight">
@@ -35,12 +35,12 @@ export function AppSwitcher() {
                         onClick={() => setActiveApp(app)}
                         className={cn(
                             'flex items-center gap-3 cursor-pointer',
-                            activeApp.id === app.id && 'bg-accent/10'
+                            activeApp.id === app.id && 'bg-primary/10'
                         )}
                     >
                         <div className={cn(
                             'flex h-7 w-7 items-center justify-center rounded-md',
-                            activeApp.id === app.id ? 'bg-accent text-accent-foreground' : 'bg-muted'
+                            activeApp.id === app.id ? 'bg-primary text-primary-foreground' : 'bg-muted'
                         )}>
                             <app.icon size={14} />
                         </div>
