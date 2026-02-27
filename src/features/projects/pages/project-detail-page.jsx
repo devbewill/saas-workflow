@@ -272,13 +272,7 @@ export default function ProjectDetailPage() {
                             </Sheet>
                         )}
 
-                        {/* Primary action */}
-                        {availableActions.length > 0 && (
-                            <Button onClick={() => transitionTo(availableActions[0])} className="gap-2">
-                                <ChevronRight size={14} />
-                                {viewConfig.primaryAction || 'Avanza'}
-                            </Button>
-                        )}
+
                     </div>
                 }
             />
