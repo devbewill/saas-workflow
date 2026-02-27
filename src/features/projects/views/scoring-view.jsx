@@ -10,18 +10,18 @@ import { Info, Calculator, Save, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils';
 
 const INITIAL_CRITERIA = [
-    { id: 1, domanda: `Percentuale proprietari/affittuari`, description: `Rapporto tra proprietari residenti e affittuari.`, peso: 1.0, voto: 0, tooltipData: [`100% -> 1`, `<25% -> 5`] },
-    { id: 2, domanda: `Grandezza condominio`, description: `Numero di unità abitative totali.`, peso: 1.0, voto: 0, tooltipData: [`≤8 unità -> 2`, `9-60 -> 4`, `>60 -> 2`] },
-    { id: 3, domanda: `Zona di riferimento`, description: `Prestigio e contesto della zona urbana.`, peso: 1.0, voto: 0, tooltipData: [`Degradata -> 2`, `Normale -> 3`, `Lusso -> 5`] },
-    { id: 4, domanda: `Ceto dei proprietari`, description: `Profilo socio-economico prevalente.`, peso: 1.0, voto: 0, tooltipData: [`Basso -> 2`, `Medio -> 3`, `Alto -> 4`] },
-    { id: 5, domanda: `Andamento dei bilanci`, description: `Situazione finanziaria e deficit.`, peso: 1.5, voto: 0, tooltipData: [`>20% deficit -> -5`, `<0% -> 4`] },
-    { id: 6, domanda: `Presenza decreti ingiuntivi`, description: `Azioni legali in corso contro il condominio.`, peso: 1.5, voto: 0, tooltipData: [`Sì -> -5`, `No -> 3`] },
-    { id: 7, domanda: `% morosità condomini`, description: `Percentuale di condomini non in regola con i pagamenti.`, peso: 2.0, voto: 0, tooltipData: [`>20% -> -5`, `0-5% -> 3`] },
-    { id: 8, domanda: `Risparmio per lavoro svolto`, description: `Efficienza economica dell'intervento.`, peso: 1.5, voto: 0, tooltipData: [`0-5% -> 0`, `>50% -> 5`] },
+    { id: 1, domanda: `Percentuale proprietari/affittuari`, description: `Rapporto tra proprietari residenti e affittuari.`, peso: 1.0, voto: 1, tooltipData: [`100% -> 1`, `<25% -> 5`] },
+    { id: 2, domanda: `Grandezza condominio`, description: `Numero di unità abitative totali.`, peso: 1.0, voto: 3, tooltipData: [`≤8 unità -> 2`, `9-60 -> 4`, `>60 -> 2`] },
+    { id: 3, domanda: `Zona di riferimento`, description: `Prestigio e contesto della zona urbana.`, peso: 1.0, voto: 4, tooltipData: [`Degradata -> 2`, `Normale -> 3`, `Lusso -> 5`] },
+    { id: 4, domanda: `Ceto dei proprietari`, description: `Profilo socio-economico prevalente.`, peso: 1.0, voto: 3, tooltipData: [`Basso -> 2`, `Medio -> 3`, `Alto -> 4`] },
+    { id: 5, domanda: `Andamento dei bilanci`, description: `Situazione finanziaria e deficit.`, peso: 1.5, voto: 5, tooltipData: [`>20% deficit -> -5`, `<0% -> 4`] },
+    { id: 6, domanda: `Presenza decreti ingiuntivi`, description: `Azioni legali in corso contro il condominio.`, peso: 1.5, voto: 4, tooltipData: [`Sì -> -5`, `No -> 3`] },
+    { id: 7, domanda: `% morosità condomini`, description: `Percentuale di condomini non in regola con i pagamenti.`, peso: 2.0, voto: 1, tooltipData: [`>20% -> -5`, `0-5% -> 3`] },
+    { id: 8, domanda: `Risparmio per lavoro svolto`, description: `Efficienza economica dell'intervento.`, peso: 1.5, voto: 4, tooltipData: [`0-5% -> 0`, `>50% -> 5`] },
     { id: 9, domanda: `Valore medio mq`, description: `Prezzo di mercato al metro quadro.`, peso: 1.0, voto: 0, tooltipData: [`<1500€ -> 1`, `≥8000€ -> 5`] },
-    { id: 10, domanda: `Classe energetica POST`, description: `Classe energetica prevista a fine lavori.`, peso: 1.0, voto: 0, tooltipData: [`A -> 5`, `G -> 0`] },
-    { id: 11, domanda: `Quota spesa condòmino`, description: `Impatto economico medio per singola unità.`, peso: 1.0, voto: 0, tooltipData: [`>20k€ -> 2`, `≤20k€ -> 4`] },
-    { id: 12, domanda: `Spesa riscaldamento annua`, description: `Costi energetici medi annui.`, peso: 1.0, voto: 0, tooltipData: [`<500€ -> 2`, `>2000€ -> 4`] },
+    { id: 10, domanda: `Classe energetica POST`, description: `Classe energetica prevista a fine lavori.`, peso: 1.0, voto: 3, tooltipData: [`A -> 5`, `G -> 0`] },
+    { id: 11, domanda: `Quota spesa condòmino`, description: `Impatto economico medio per singola unità.`, peso: 1.0, voto: 2, tooltipData: [`>20k€ -> 2`, `≤20k€ -> 4`] },
+    { id: 12, domanda: `Spesa riscaldamento annua`, description: `Costi energetici medi annui.`, peso: 1.0, voto: 1, tooltipData: [`<500€ -> 2`, `>2000€ -> 4`] },
 ];
 
 export default function ScoringView({ project }) {

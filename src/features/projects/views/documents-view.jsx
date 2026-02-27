@@ -10,23 +10,24 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTr
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { DOCUMENTS } from '@/data/documents';
-import { FileText, PenTool, MessageSquare, Upload, CheckCircle2, Circle, Globe, Lock } from 'lucide-react';
+import { FileText, PenTool, MessageSquare, Upload, CheckCircle2, Circle, Globe, Lock, Building2, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// --- Document Note Sheet with public/private switch ---
+// --- Document Note Sheet with public/private and internal/external switches ---
 function DocumentNoteSheet({ doc }) {
     const [noteText, setNoteText] = useState('');
     const [isPublic, setIsPublic] = useState(true);
+    const [isInternal, setIsInternal] = useState(true);
     const [notes, setNotes] = useState(
         doc.notesCount > 0
-            ? [{ id: 1, text: 'Documento verificato e conforme.', author: 'Marco Bianchi', date: '10/01/2026 11:00', isPublic: true }]
+            ? [{ id: 1, text: 'Documento verificato e conforme.', author: 'Marco Bianchi', date: '10/01/2026 11:00', isPublic: true, isInternal: true }]
             : []
     );
 
     const handleAdd = () => {
         if (!noteText.trim()) return;
         setNotes((prev) => [
-            { id: Date.now(), text: noteText, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT'), isPublic },
+            { id: Date.now(), text: noteText, author: 'Stefano Perelli', date: new Date().toLocaleString('it-IT'), isPublic, isInternal },
             ...prev,
         ]);
         setNoteText('');
@@ -53,18 +54,54 @@ function DocumentNoteSheet({ doc }) {
                         onChange={(e) => setNoteText(e.target.value)}
                         rows={3}
                     />
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+
+                    {/* Switches card */}
+                    <div className="rounded-md border bg-muted/30 p-3 space-y-3">
+                        {/* Switch 1 — Pubblica / Privata */}
+                        <div className="flex items-start gap-3">
                             <Switch
                                 id={`doc-note-vis-${doc.id}`}
                                 checked={isPublic}
                                 onCheckedChange={setIsPublic}
+                                className="mt-0.5 shrink-0"
                             />
-                            <Label htmlFor={`doc-note-vis-${doc.id}`} className="text-xs cursor-pointer flex items-center gap-1.5">
-                                {isPublic ? <Globe size={12} /> : <Lock size={12} />}
-                                {isPublic ? 'Pubblica' : 'Privata'}
-                            </Label>
+                            <div className="space-y-0.5">
+                                <Label htmlFor={`doc-note-vis-${doc.id}`} className="text-xs font-medium cursor-pointer flex items-center gap-1.5">
+                                    {isPublic ? <Globe size={12} /> : <Lock size={12} />}
+                                    {isPublic ? 'Pubblica' : 'Privata'}
+                                </Label>
+                                <p className="text-xs text-muted-foreground leading-tight">
+                                    {isPublic
+                                        ? 'La nota è condivisa in tutte le applicazioni che condividono questo documento.'
+                                        : "La nota è visibile solo nell'applicazione in cui viene creata."}
+                                </p>
+                            </div>
                         </div>
+                        {/* Divider */}
+                        <div className="border-t" />
+                        {/* Switch 2 — Interna / Esterna */}
+                        <div className="flex items-start gap-3">
+                            <Switch
+                                id={`doc-note-aud-${doc.id}`}
+                                checked={isInternal}
+                                onCheckedChange={setIsInternal}
+                                className="mt-0.5 shrink-0"
+                            />
+                            <div className="space-y-0.5">
+                                <Label htmlFor={`doc-note-aud-${doc.id}`} className="text-xs font-medium cursor-pointer flex items-center gap-1.5">
+                                    {isInternal ? <Building2 size={12} /> : <Users size={12} />}
+                                    {isInternal ? 'Interna' : 'Esterna'}
+                                </Label>
+                                <p className="text-xs text-muted-foreground leading-tight">
+                                    {isInternal
+                                        ? "La nota è visibile solo alle persone interne all'azienda."
+                                        : "La nota è visibile anche agli utenti esterni all'azienda."}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end">
                         <Button onClick={handleAdd} disabled={!noteText.trim()} size="sm">
                             Aggiungi nota
                         </Button>
@@ -82,10 +119,17 @@ function DocumentNoteSheet({ doc }) {
                                         <span className="text-xs text-muted-foreground">
                                             {note.author} · {note.date}
                                         </span>
-                                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                                            {note.isPublic ? <Globe size={10} /> : <Lock size={10} />}
-                                            {note.isPublic ? 'Pubblica' : 'Privata'}
-                                        </span>
+                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                            <span className="flex items-center gap-1">
+                                                {note.isPublic ? <Globe size={10} /> : <Lock size={10} />}
+                                                {note.isPublic ? 'Pubblica' : 'Privata'}
+                                            </span>
+                                            <span>·</span>
+                                            <span className="flex items-center gap-1">
+                                                {note.isInternal ? <Building2 size={10} /> : <Users size={10} />}
+                                                {note.isInternal ? 'Interna' : 'Esterna'}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             ))
