@@ -19,7 +19,7 @@ export const WORKFLOW_VIEW_CONFIG = {
         assistantConfigKey: 'preliminary_check',
         primaryAction: 'Conferma Verifica',
     },
-    'Aperta - Validazione documenti': {
+    'Caricata - Validazione documenti': {
         availableTabs: ['documenti', 'fascicoli', 'pagamenti', 'info', 'team', 'scoring'],
         defaultTab: 'documenti',
         showAssistant: true,
@@ -33,46 +33,39 @@ export const WORKFLOW_VIEW_CONFIG = {
         assistantConfigKey: 'aml_check',
         primaryAction: 'Conferma Esito AML',
     },
-    'Caricata - Valutazione istruttoria': {
+    'Caricata - Valutazioni finali istruttoria': {
         availableTabs: ['documenti', 'fascicoli', 'info', 'team', 'scoring'],
         defaultTab: 'documenti',
         showAssistant: true,
         assistantConfigKey: 'evaluation',
-        primaryAction: 'Invia a Valutazione',
+        primaryAction: 'Invia a Valutazione Crediti',
     },
-    'Caricata - Valutazione rating condominio': {
-        availableTabs: ['documenti', 'fascicoli', 'info', 'team', 'scoring'],
-        defaultTab: 'documenti',
-        showAssistant: false,
-        assistantConfigKey: null,
-        primaryAction: null,
-    },
-    'Caricata - Valutazione crediti': {
+    'Caricata - Pronta per valutazione Crediti': {
         availableTabs: ['crediti', 'finanziario', 'documenti', 'scoring'],
         defaultTab: 'crediti',
         showAssistant: true,
         assistantConfigKey: 'credit_check',
-        primaryAction: 'Approva Credito',
+        primaryAction: 'Conferma Esito UC',
     },
-    'Esame - Valutazione organo deliberante': {
+    'Esame - Inviata a organo deliberante': {
         availableTabs: ['delibera', 'finanziario', 'documenti', 'scoring'],
         defaultTab: 'delibera',
         showAssistant: true,
         assistantConfigKey: 'deliberation',
-        primaryAction: 'Delibera Approvazione',
+        primaryAction: 'Registra Delibera',
     },
     'Approvata - Delibera OK': {
         availableTabs: ['info', 'documenti', 'finanziario', 'scoring'],
         defaultTab: 'info',
-        showAssistant: false,
-        assistantConfigKey: null,
+        showAssistant: true,
+        assistantConfigKey: 'delibera_ok',
         primaryAction: 'Avvia Lavori',
     },
     'In attesa - Esecuzione lavori in corso': {
         availableTabs: ['lavori', 'documenti', 'info', 'scoring'],
         defaultTab: 'lavori',
-        showAssistant: false,
-        assistantConfigKey: null,
+        showAssistant: true,
+        assistantConfigKey: 'works_in_progress',
         primaryAction: 'Segnala Fine Lavori',
     },
     'Approvata – Valutazione post fine lavori': {
@@ -92,8 +85,8 @@ export const WORKFLOW_VIEW_CONFIG = {
     'Approvata – Inviato contratto in firma': {
         availableTabs: ['contratto', 'documenti', 'scoring'],
         defaultTab: 'contratto',
-        showAssistant: false,
-        assistantConfigKey: null,
+        showAssistant: true,
+        assistantConfigKey: 'contract_sent',
         primaryAction: null,
     },
     'Approvata – Contratto firmato': {
@@ -113,8 +106,15 @@ export const WORKFLOW_VIEW_CONFIG = {
     'Perfezionata – Liquidata': {
         availableTabs: ['finanziario', 'documenti', 'info', 'storico', 'scoring'],
         defaultTab: 'finanziario',
-        showAssistant: false,
-        assistantConfigKey: null,
+        showAssistant: true,
+        assistantConfigKey: 'liquidated',
+        primaryAction: null,
+    },
+    'Ceduta - Cessione completata': {
+        availableTabs: ['finanziario', 'documenti', 'info', 'storico', 'scoring'],
+        defaultTab: 'finanziario',
+        showAssistant: true,
+        assistantConfigKey: 'ceduta',
         primaryAction: null,
         isFinal: true,
     },

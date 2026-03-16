@@ -2,7 +2,7 @@
   "workflow": {
     "name": "Flusso Pratica Standard (aggiornato)",
     "description": "Processo dalla bozza alla liquidazione",
-    "version": "1.0",
+    "version": "1.1",
     "steps": [
       {
         "id": 1,
@@ -11,7 +11,7 @@
         "color": "Bozza",
         "subState": null,
         "owner": "Supervisor",
-        "nextPossible": ["Aperta – verifica preliminare"],
+        "nextPossible": ["Aperta – Verifica preliminare"],
         "isStart": true,
         "isFinal": false
       },
@@ -22,14 +22,14 @@
         "color": "Aperta",
         "subState": "Verifica preliminare",
         "owner": "Front office",
-        "nextPossible": ["Aperta - Validazione documenti"],
+        "nextPossible": ["Caricata - Validazione documenti"],
         "isFinal": false
       },
       {
         "id": 3,
-        "fullName": "Aperta - Validazione documenti",
-        "state": "Aperta",
-        "color": "Aperta",
+        "fullName": "Caricata - Validazione documenti",
+        "state": "Caricata",
+        "color": "Caricata",
         "subState": "Validazione documenti",
         "owner": "Back office",
         "nextPossible": ["Caricata - Lavorazione AML e Banche Dati"],
@@ -42,52 +42,41 @@
         "color": "Caricata",
         "subState": "Lavorazione AML e Banche Dati",
         "owner": "Back office",
-        "nextPossible": ["Caricata - Valutazione istruttoria"],
+        "nextPossible": ["Caricata - Valutazioni finali istruttoria"],
         "isFinal": false
       },
       {
         "id": 5,
-        "fullName": "Caricata - Valutazione istruttoria",
+        "fullName": "Caricata - Valutazioni finali istruttoria",
         "state": "Caricata",
         "color": "Caricata",
-        "subState": "Valutazione istruttoria",
+        "subState": "Valutazioni finali istruttoria",
         "owner": "Middle office",
-        "nextPossible": ["Caricata - Valutazione rating condominio", "Caricata - Valutazione crediti"],
+        "nextPossible": ["Caricata - Pronta per valutazione Crediti"],
         "isFinal": false
       },
       {
         "id": 6,
-        "fullName": "Caricata - Valutazione rating condominio",
+        "fullName": "Caricata - Pronta per valutazione Crediti",
         "state": "Caricata",
         "color": "Caricata",
-        "subState": "Valutazione rating condominio",
-        "owner": "Back office",
-        "nextPossible": ["Caricata - Valutazione crediti"],
-        "isFinal": false,
-        "note": "stato probabilmente automatico / senza assegnatario fisso"
-      },
-      {
-        "id": 7,
-        "fullName": "Caricata - Valutazione crediti",
-        "state": "Caricata",
-        "color": "Caricata",
-        "subState": "Valutazione crediti",
+        "subState": "Pronta per valutazione Crediti",
         "owner": "Ufficio crediti",
-        "nextPossible": ["Esame - Valutazione organo deliberante"],
+        "nextPossible": ["Esame - Inviata a organo deliberante"],
         "isFinal": false
       },
       {
-        "id": 8,
-        "fullName": "Esame - Valutazione organo deliberante",
+        "id": 7,
+        "fullName": "Esame - Inviata a organo deliberante",
         "state": "Esame",
         "color": "Esame",
-        "subState": "Valutazione organo deliberante",
+        "subState": "Inviata a organo deliberante",
         "owner": "Organo deliberante",
         "nextPossible": ["Approvata - Delibera OK"],
         "isFinal": false
       },
       {
-        "id": 9,
+        "id": 8,
         "fullName": "Approvata - Delibera OK",
         "state": "Approvata",
         "color": "Approvata",
@@ -97,17 +86,17 @@
         "isFinal": false
       },
       {
-        "id": 10,
+        "id": 9,
         "fullName": "In attesa - Esecuzione lavori in corso",
         "state": "In attesa",
         "color": "In attesa",
         "subState": "Esecuzione lavori in corso",
-        "owner": "Front office",
+        "owner": "Back office",
         "nextPossible": ["Approvata – Valutazione post fine lavori"],
         "isFinal": false
       },
       {
-        "id": 11,
+        "id": 10,
         "fullName": "Approvata – Valutazione post fine lavori",
         "state": "Approvata",
         "color": "Approvata",
@@ -117,55 +106,66 @@
         "isFinal": false
       },
       {
-        "id": 12,
+        "id": 11,
         "fullName": "Approvata – Pronta per stampa contratto",
         "state": "Approvata",
         "color": "Approvata",
         "subState": "Pronta per stampa contratto",
-        "owner": "Middle office",
+        "owner": "Back office",
         "nextPossible": ["Approvata – Inviato contratto in firma"],
         "isFinal": false
       },
       {
-        "id": 13,
+        "id": 12,
         "fullName": "Approvata – Inviato contratto in firma",
         "state": "Approvata",
         "color": "Approvata",
         "subState": "Inviato contratto in firma",
-        "owner": "Amministratore",
+        "owner": "Back office",
         "nextPossible": ["Approvata – Contratto firmato"],
         "isFinal": false
       },
       {
-        "id": 14,
+        "id": 13,
         "fullName": "Approvata – Contratto firmato",
         "state": "Approvata",
         "color": "Approvata",
         "subState": "Contratto firmato",
-        "owner": "Middle office",
+        "owner": "Back Office",
         "nextPossible": ["Perfezionata – Da liquidare"],
         "isFinal": false
       },
       {
-        "id": 15,
+        "id": 14,
         "fullName": "Perfezionata – Da liquidare",
         "state": "Perfezionata",
         "color": "Perfezionata",
         "subState": "Da liquidare",
-        "owner": "Back office",
+        "owner": "Middle office",
         "nextPossible": ["Perfezionata – Liquidata"],
         "isFinal": false
       },
       {
-        "id": 16,
+        "id": 15,
         "fullName": "Perfezionata – Liquidata",
         "state": "Perfezionata",
         "color": "Perfezionata",
         "subState": "Liquidata",
         "owner": "Back office",
+        "nextPossible": ["Ceduta - Cessione completata"],
+        "isFinal": false,
+        "isSuccess": true
+      },
+      {
+        "id": 16,
+        "fullName": "Ceduta - Cessione completata",
+        "state": "Ceduta",
+        "color": "Ceduta",
+        "subState": "Cessione completata",
+        "owner": "Sistema",
+        "nextPossible": [],
         "isFinal": true,
-        "isSuccess": true,
-        "note": ""
+        "isSuccess": true
       }
     ]
   }

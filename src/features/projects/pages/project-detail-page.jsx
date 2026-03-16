@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { History, BotMessageSquare, ChevronRight, CheckCircle2, Circle, AlertTriangle, Info, Check, Loader2 } from 'lucide-react';
+import { History, BotMessageSquare, ChevronLeft, ChevronRight, CheckCircle2, Circle, AlertTriangle, Info, Check, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { PROJECTS } from '@/data/projects';
@@ -71,6 +71,9 @@ export default function ProjectDetailPage() {
 
     // Determine step status relative to the current step
     const currentStepIndex = allSteps.findIndex((s) => s.fullName === currentStatusName);
+    const prevStep = currentStepIndex > 0 ? allSteps[currentStepIndex - 1] : null;
+    const nextStep = currentStepIndex < allSteps.length - 1 ? allSteps[currentStepIndex + 1] : null;
+
     const getStepStatus = (index) => {
         if (index < currentStepIndex) return 'completed';
         if (index === currentStepIndex) return 'current';
@@ -90,7 +93,40 @@ export default function ProjectDetailPage() {
                 }
                 backLabel="Torna ai progetti"
                 actions={
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
+                        {/* PREV / NEXT step navigation */}
+                        <div className="flex items-center rounded-md border border-border overflow-hidden">
+                            <button
+                                onClick={() => prevStep && transitionTo(prevStep.fullName)}
+                                disabled={!prevStep}
+                                title={prevStep ? `← ${prevStep.fullName}` : 'Primo stato'}
+                                className={cn(
+                                    'flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors',
+                                    prevStep
+                                        ? 'text-foreground hover:bg-muted cursor-pointer'
+                                        : 'text-muted-foreground/40 cursor-not-allowed bg-muted/30'
+                                )}
+                            >
+                                <ChevronLeft size={13} />
+                                Prev
+                            </button>
+                            <div className="w-px h-5 bg-border" />
+                            <button
+                                onClick={() => nextStep && transitionTo(nextStep.fullName)}
+                                disabled={!nextStep}
+                                title={nextStep ? `${nextStep.fullName} →` : 'Ultimo stato'}
+                                className={cn(
+                                    'flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors',
+                                    nextStep
+                                        ? 'text-foreground hover:bg-muted cursor-pointer'
+                                        : 'text-muted-foreground/40 cursor-not-allowed bg-muted/30'
+                                )}
+                            >
+                                Next
+                                <ChevronRight size={13} />
+                            </button>
+                        </div>
+
                         {/* Timeline sheet */}
                         <Sheet open={isTimelineOpen} onOpenChange={setIsTimelineOpen}>
                             <SheetTrigger asChild>
