@@ -1,325 +1,435 @@
-import React, { useState, useMemo, useEffect, Suspense, lazy } from 'react';
-import { useParams } from 'react-router-dom';
-import { PageHeader } from '@/components/composed/page-header';
-import { StatusBadge } from '@/components/composed/status-badge';
-import { useWorkflow } from '@/hooks/use-workflow';
-import { useAppContext } from '@/context/app-context';
-import { getViewConfig, TAB_LABELS } from '@/config/workflow-views';
-import { getAssistantConfig } from '@/config/assistant-steps';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { History, BotMessageSquare, ChevronLeft, ChevronRight, CheckCircle2, Circle, AlertTriangle, Info, Check, Loader2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { PROJECTS } from '@/data/projects';
+import React, { useState, useMemo, useEffect, Suspense, lazy } from "react";
+import { useParams } from "react-router-dom";
+import { PageHeader } from "@/components/composed/page-header";
+import { StatusBadge } from "@/components/composed/status-badge";
+import { useWorkflow } from "@/hooks/use-workflow";
+import { useAppContext } from "@/context/app-context";
+import { getViewConfig, TAB_LABELS } from "@/config/workflow-views";
+import { getAssistantConfig } from "@/config/assistant-steps";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  History,
+  BotMessageSquare,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  Circle,
+  AlertTriangle,
+  Info,
+  Check,
+  Loader2,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { PROJECTS } from "@/data/projects";
 
 // Lazy-loaded tab views
-const InfoView = lazy(() => import('../views/info-view'));
-const DocumentsView = lazy(() => import('../views/documents-view'));
-const FascicoliView = lazy(() => import('../views/fascicoli-view'));
-const AmlView = lazy(() => import('../views/aml-view'));
-const TeamView = lazy(() => import('../views/team-view'));
-const PaymentsView = lazy(() => import('../views/payments-view'));
-const PlaceholderView = lazy(() => import('../views/placeholder-view'));
-const ScoringView = lazy(() => import('../views/scoring-view'));
+const InfoView = lazy(() => import("../views/info-view"));
+const DocumentsView = lazy(() => import("../views/documents-view"));
+const FascicoliView = lazy(() => import("../views/fascicoli-view"));
+const AmlView = lazy(() => import("../views/aml-view"));
+const TeamView = lazy(() => import("../views/team-view"));
+const PaymentsView = lazy(() => import("../views/payments-view"));
+const PlaceholderView = lazy(() => import("../views/placeholder-view"));
+const ScoringView = lazy(() => import("../views/scoring-view"));
 
 const VIEW_COMPONENTS = {
-    info: InfoView,
-    documenti: DocumentsView,
-    fascicoli: FascicoliView,
-    aml: AmlView,
-    team: TeamView,
-    pagamenti: PaymentsView,
-    crediti: PlaceholderView,
-    delibera: PlaceholderView,
-    contratto: PlaceholderView,
-    finanziario: PlaceholderView,
-    lavori: PlaceholderView,
-    storico: PlaceholderView,
-    scoring: ScoringView,
+  info: InfoView,
+  documenti: DocumentsView,
+  fascicoli: FascicoliView,
+  aml: AmlView,
+  team: TeamView,
+  pagamenti: PaymentsView,
+  crediti: PlaceholderView,
+  delibera: PlaceholderView,
+  contratto: PlaceholderView,
+  finanziario: PlaceholderView,
+  lavori: PlaceholderView,
+  storico: PlaceholderView,
+  scoring: ScoringView,
 };
 
 export default function ProjectDetailPage() {
-    const { id } = useParams();
-    const { activeApp } = useAppContext();
-    const project = PROJECTS.find((p) => p.id === id) || PROJECTS[0];
-    const { currentStatusName, currentStep, currentOwner, allSteps, transitionTo, getAvailableActions, getStatusVariant } = useWorkflow();
+  const { id } = useParams();
+  const { activeApp } = useAppContext();
+  const project = PROJECTS.find((p) => p.id === id) || PROJECTS[0];
+  const {
+    currentStatusName,
+    currentStep,
+    currentOwner,
+    allSteps,
+    transitionTo,
+    getAvailableActions,
+    getStatusVariant,
+  } = useWorkflow();
 
-    const viewConfig = useMemo(() => {
-        const config = getViewConfig(currentStatusName);
-        return {
-            ...config,
-            availableTabs: config.availableTabs.filter(
-                (tab) => tab !== 'pagamenti' || activeApp.id === 'HD_RISTR'
-            ),
-        };
-    }, [currentStatusName, activeApp.id]);
-    const assistantConfig = viewConfig.assistantConfigKey ? getAssistantConfig(viewConfig.assistantConfigKey) : null;
-    const allRequirementsMet = assistantConfig?.requirements?.every((r) => r.checked) ?? false;
-    const [activeTab, setActiveTab] = useState(viewConfig.defaultTab);
-    const [isTimelineOpen, setIsTimelineOpen] = useState(false);
-    const [isAssistantOpen, setIsAssistantOpen] = useState(false);
-
-    // Reset active tab to the default whenever the workflow status changes
-    useEffect(() => {
-        setActiveTab(viewConfig.defaultTab);
-    }, [viewConfig.defaultTab]);
-
-    const availableActions = getAvailableActions();
-
-    // Determine step status relative to the current step
-    const currentStepIndex = allSteps.findIndex((s) => s.fullName === currentStatusName);
-    const prevStep = currentStepIndex > 0 ? allSteps[currentStepIndex - 1] : null;
-    const nextStep = currentStepIndex < allSteps.length - 1 ? allSteps[currentStepIndex + 1] : null;
-
-    const getStepStatus = (index) => {
-        if (index < currentStepIndex) return 'completed';
-        if (index === currentStepIndex) return 'current';
-        return 'future';
+  const viewConfig = useMemo(() => {
+    const config = getViewConfig(currentStatusName);
+    return {
+      ...config,
+      availableTabs: config.availableTabs.filter(
+        (tab) => tab !== "pagamenti" || activeApp.id === "HD_RISTR",
+      ),
     };
+  }, [currentStatusName, activeApp.id]);
+  const assistantConfig = viewConfig.assistantConfigKey
+    ? getAssistantConfig(viewConfig.assistantConfigKey)
+    : null;
+  const allRequirementsMet =
+    assistantConfig?.requirements?.every((r) => r.checked) ?? false;
+  const [activeTab, setActiveTab] = useState(viewConfig.defaultTab);
+  const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
 
-    return (
-        <>
-            <PageHeader
-                title={project.name}
-                subtitle={
-                    <span className="flex items-center gap-2 flex-wrap">
-                        Pratica #{project.displayId} · {activeApp.name}
-                        <StatusBadge status={currentStatusName} />
-                        <span className="text-xs text-muted-foreground">· In carico a: {currentOwner}</span>
-                    </span>
-                }
-                backLabel="Torna ai progetti"
-                actions={
-                    <div className="flex items-center gap-2">
-                        {/* PREV / NEXT step navigation */}
-                        <div className="flex items-center rounded-md border border-border overflow-hidden">
-                            <button
-                                onClick={() => prevStep && transitionTo(prevStep.fullName)}
-                                disabled={!prevStep}
-                                title={prevStep ? `← ${prevStep.fullName}` : 'Primo stato'}
-                                className={cn(
-                                    'flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors',
-                                    prevStep
-                                        ? 'text-foreground hover:bg-muted cursor-pointer'
-                                        : 'text-muted-foreground/40 cursor-not-allowed bg-muted/30'
-                                )}
-                            >
-                                <ChevronLeft size={13} />
-                                Prev
-                            </button>
-                            <div className="w-px h-5 bg-border" />
-                            <button
-                                onClick={() => nextStep && transitionTo(nextStep.fullName)}
-                                disabled={!nextStep}
-                                title={nextStep ? `${nextStep.fullName} →` : 'Ultimo stato'}
-                                className={cn(
-                                    'flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors',
-                                    nextStep
-                                        ? 'text-foreground hover:bg-muted cursor-pointer'
-                                        : 'text-muted-foreground/40 cursor-not-allowed bg-muted/30'
-                                )}
-                            >
-                                Next
-                                <ChevronRight size={13} />
-                            </button>
+  // Reset active tab to the default whenever the workflow status changes
+  useEffect(() => {
+    setActiveTab(viewConfig.defaultTab);
+  }, [viewConfig.defaultTab]);
+
+  const availableActions = getAvailableActions();
+
+  // Determine step status relative to the current step
+  const currentStepIndex = allSteps.findIndex(
+    (s) => s.fullName === currentStatusName,
+  );
+  const prevStep = currentStepIndex > 0 ? allSteps[currentStepIndex - 1] : null;
+  const nextStep =
+    currentStepIndex < allSteps.length - 1
+      ? allSteps[currentStepIndex + 1]
+      : null;
+
+  const getStepStatus = (index) => {
+    if (index < currentStepIndex) return "completed";
+    if (index === currentStepIndex) return "current";
+    return "future";
+  };
+
+  return (
+    <>
+      <PageHeader
+        title={project.name}
+        subtitle={
+          <span className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm">
+              ID Progetto: <strong>{project.displayId}</strong>
+            </span>
+            <span className="text-muted-foreground">·</span>
+            <span className="text-sm">
+              ID Broker: <strong>{project.brokerId}</strong>
+            </span>
+            <span className="text-muted-foreground">·</span>
+            <span className="text-sm">
+              ID Pratica OCS: <strong>{project.ocsId}</strong>
+            </span>
+            <span className="text-muted-foreground">·</span>
+            <StatusBadge status={currentStatusName} />
+            <span className="text-xs text-muted-foreground">
+              · In carico a: {currentOwner}
+            </span>
+          </span>
+        }
+        backLabel="Torna ai progetti"
+        actions={
+          <div className="flex items-center gap-2">
+            {/* PREV / NEXT step navigation */}
+            <div className="flex items-center rounded-md border border-border overflow-hidden">
+              <button
+                onClick={() => prevStep && transitionTo(prevStep.fullName)}
+                disabled={!prevStep}
+                title={prevStep ? `← ${prevStep.fullName}` : "Primo stato"}
+                className={cn(
+                  "flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors",
+                  prevStep
+                    ? "text-foreground hover:bg-muted cursor-pointer"
+                    : "text-muted-foreground/40 cursor-not-allowed bg-muted/30",
+                )}
+              >
+                <ChevronLeft size={13} />
+                Prev
+              </button>
+              <div className="w-px h-5 bg-border" />
+              <button
+                onClick={() => nextStep && transitionTo(nextStep.fullName)}
+                disabled={!nextStep}
+                title={nextStep ? `${nextStep.fullName} →` : "Ultimo stato"}
+                className={cn(
+                  "flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors",
+                  nextStep
+                    ? "text-foreground hover:bg-muted cursor-pointer"
+                    : "text-muted-foreground/40 cursor-not-allowed bg-muted/30",
+                )}
+              >
+                Next
+                <ChevronRight size={13} />
+              </button>
+            </div>
+
+            {/* Timeline sheet */}
+            <Sheet open={isTimelineOpen} onOpenChange={setIsTimelineOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <History size={14} />
+                  Timeline
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+                <SheetHeader>
+                  <SheetTitle>Timeline Workflow</SheetTitle>
+                  <SheetDescription>{activeApp.label}</SheetDescription>
+                </SheetHeader>
+                <div className="mt-6 space-y-0">
+                  {allSteps.map((step, i) => {
+                    const status = getStepStatus(i);
+                    const isLast = i === allSteps.length - 1;
+
+                    return (
+                      <div
+                        key={step.id}
+                        onClick={() => {
+                          transitionTo(step.fullName);
+                          setIsTimelineOpen(false);
+                        }}
+                        className="relative flex gap-5 cursor-pointer group"
+                      >
+                        {/* Dot + vertical line column */}
+                        <div className="flex flex-col items-center">
+                          {/* Circle */}
+                          <div
+                            className={cn(
+                              "relative flex h-3 w-3 shrink-0 items-center justify-center rounded-full z-10 transition-all mt-1.5",
+                              status === "completed" &&
+                                "bg-primary border-2 border-primary",
+                              status === "current" &&
+                                "border-2 border-orange-400 bg-white shadow-[0_0_0_3px_rgba(251,146,60,0.2)]",
+                              status === "future" &&
+                                "border-2 border-border bg-white",
+                            )}
+                          >
+                            {status === "current" && (
+                              <div className="h-1.5 w-1.5 rounded-full bg-orange-400" />
+                            )}
+                          </div>
+                          {/* Connector line */}
+                          {!isLast && (
+                            <div className="w-px flex-1 min-h-[32px] bg-border mt-0.5" />
+                          )}
                         </div>
 
-                        {/* Timeline sheet */}
-                        <Sheet open={isTimelineOpen} onOpenChange={setIsTimelineOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="outline" size="sm" className="gap-2">
-                                    <History size={14} />
-                                    Timeline
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="right" className="w-[400px] sm:w-[540px]">
-                                <SheetHeader>
-                                    <SheetTitle>Timeline Workflow</SheetTitle>
-                                    <SheetDescription>{activeApp.label}</SheetDescription>
-                                </SheetHeader>
-                                <div className="mt-6 space-y-0">
-                                    {allSteps.map((step, i) => {
-                                        const status = getStepStatus(i);
-                                        const isLast = i === allSteps.length - 1;
+                        {/* Content */}
+                        <div
+                          className={cn(
+                            "flex-1 pb-3 min-w-0",
+                            status === "future" &&
+                              "opacity-40 group-hover:opacity-70 transition-opacity",
+                          )}
+                        >
+                          <p
+                            className={cn(
+                              "text-sm leading-tight",
+                              status === "current" &&
+                                "font-semibold text-orange-500",
+                              status !== "current" &&
+                                "font-normal text-foreground",
+                            )}
+                          >
+                            {step.fullName}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {step.owner}
+                          </p>
+                          {status === "current" && (
+                            <span className="inline-flex items-center gap-1 mt-1.5 text-[10px] font-semibold text-orange-500 uppercase tracking-wider">
+                              <span className="h-1.5 w-1.5 rounded-full bg-orange-400 animate-pulse" />
+                              In corso
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </SheetContent>
+            </Sheet>
 
-                                        return (
-                                            <div
-                                                key={step.id}
-                                                onClick={() => { transitionTo(step.fullName); setIsTimelineOpen(false); }}
-                                                className="relative flex gap-5 cursor-pointer group"
-                                            >
-                                                {/* Dot + vertical line column */}
-                                                <div className="flex flex-col items-center">
-                                                    {/* Circle */}
-                                                    <div className={cn(
-                                                        'relative flex h-3 w-3 shrink-0 items-center justify-center rounded-full z-10 transition-all mt-1.5',
-                                                        status === 'completed' && 'bg-primary border-2 border-primary',
-                                                        status === 'current' && 'border-2 border-orange-400 bg-white shadow-[0_0_0_3px_rgba(251,146,60,0.2)]',
-                                                        status === 'future' && 'border-2 border-border bg-white'
-                                                    )}>
-                                                        {status === 'current' && <div className="h-1.5 w-1.5 rounded-full bg-orange-400" />}
-                                                    </div>
-                                                    {/* Connector line */}
-                                                    {!isLast && (
-                                                        <div className="w-px flex-1 min-h-[32px] bg-border mt-0.5" />
-                                                    )}
-                                                </div>
+            {/* Assistant sheet */}
+            {viewConfig.showAssistant && assistantConfig && (
+              <Sheet open={isAssistantOpen} onOpenChange={setIsAssistantOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <BotMessageSquare size={14} />
+                    Assistente
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="flex flex-col w-[400px] sm:w-[540px]"
+                >
+                  <SheetHeader>
+                    <SheetTitle>Assistente operativo</SheetTitle>
+                    <SheetDescription>
+                      Supporto dinamico per la lavorazione della fase corrente.
+                    </SheetDescription>
+                  </SheetHeader>
 
-                                                {/* Content */}
-                                                <div className={cn(
-                                                    'flex-1 pb-3 min-w-0',
-                                                    status === 'future' && 'opacity-40 group-hover:opacity-70 transition-opacity'
-                                                )}>
-                                                    <p className={cn(
-                                                        'text-sm leading-tight',
-                                                        status === 'current' && 'font-semibold text-orange-500',
-                                                        status !== 'current' && 'font-normal text-foreground'
-                                                    )}>
-                                                        {step.fullName}
-                                                    </p>
-                                                    <p className="text-xs text-muted-foreground mt-0.5">{step.owner}</p>
-                                                    {status === 'current' && (
-                                                        <span className="inline-flex items-center gap-1 mt-1.5 text-[10px] font-semibold text-orange-500 uppercase tracking-wider">
-                                                            <span className="h-1.5 w-1.5 rounded-full bg-orange-400 animate-pulse" />
-                                                            In corso
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-
-                            </SheetContent>
-                        </Sheet>
-
-                        {/* Assistant sheet */}
-                        {viewConfig.showAssistant && assistantConfig && (
-                            <Sheet open={isAssistantOpen} onOpenChange={setIsAssistantOpen}>
-                                <SheetTrigger asChild>
-                                    <Button variant="outline" size="sm" className="gap-2">
-                                        <BotMessageSquare size={14} />
-                                        Assistente
-                                    </Button>
-                                </SheetTrigger>
-                                <SheetContent side="right" className="flex flex-col w-[400px] sm:w-[540px]">
-                                    <SheetHeader>
-                                        <SheetTitle>Assistente operativo</SheetTitle>
-                                        <SheetDescription>Supporto dinamico per la lavorazione della fase corrente.</SheetDescription>
-                                    </SheetHeader>
-
-                                    <div className="flex-1 overflow-y-auto space-y-6 mt-6">
-                                        {/* Phase context */}
-                                        <div className="space-y-2">
-                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Contesto lavorazione</p>
-                                            <Card>
-                                                <CardContent className="p-4">
-                                                    <h3 className="font-bold text-lg">{assistantConfig.title}</h3>
-                                                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{assistantConfig.description}</p>
-                                                </CardContent>
-                                            </Card>
-                                        </div>
-
-                                        {/* Requirements checklist */}
-                                        <div className="space-y-3">
-                                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Requisiti di fase</p>
-                                            <div className="space-y-2">
-                                                {assistantConfig.requirements.map((req) => (
-                                                    <div
-                                                        key={req.id}
-                                                        className={cn(
-                                                            'flex items-center gap-3 rounded-lg border p-3 transition-colors',
-                                                            req.checked ? 'bg-primary/5 border-primary/20' : 'border-border'
-                                                        )}
-                                                    >
-                                                        {req.checked ? (
-                                                            <CheckCircle2 size={18} className="text-primary shrink-0" />
-                                                        ) : (
-                                                            <Circle size={18} className="text-muted-foreground shrink-0" />
-                                                        )}
-                                                        <span className={cn(
-                                                            'text-sm',
-                                                            req.checked ? 'font-semibold' : 'text-muted-foreground'
-                                                        )}>
-                                                            {req.label}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* Warning / Info alert */}
-                                        {assistantConfig.warning && (
-                                            <div className={cn(
-                                                'flex gap-3 rounded-lg border p-4 text-sm',
-                                                assistantConfig.warning.type === 'warning'
-                                                    ? 'bg-yellow-50 text-yellow-900 border-yellow-200'
-                                                    : 'bg-blue-50 text-blue-900 border-blue-200'
-                                            )}>
-                                                {assistantConfig.warning.type === 'warning' ? (
-                                                    <AlertTriangle size={18} className="text-yellow-600 shrink-0 mt-0.5" />
-                                                ) : (
-                                                    <Info size={18} className="text-blue-600 shrink-0 mt-0.5" />
-                                                )}
-                                                <div className="space-y-1">
-                                                    <p className="font-semibold">{assistantConfig.warning.title}</p>
-                                                    <p className="leading-relaxed">{assistantConfig.warning.message}</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Footer actions */}
-                                    <div className="border-t pt-4 mt-4 space-y-3">
-                                        <Button disabled={!allRequirementsMet} className="w-full gap-2">
-                                            <CheckCircle2 size={14} />
-                                            {assistantConfig.proceedLabel}
-                                        </Button>
-                                        <div className="flex gap-3">
-                                            <Button variant="destructive" className="flex-1">
-                                                Manda in KO
-                                            </Button>
-                                            <Button variant="outline" className="flex-1">
-                                                Segnala errore
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </SheetContent>
-                            </Sheet>
-                        )}
-
-
+                  <div className="flex-1 overflow-y-auto space-y-6 mt-6">
+                    {/* Phase context */}
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        Contesto lavorazione
+                      </p>
+                      <Card>
+                        <CardContent className="p-4">
+                          <h3 className="font-bold text-lg">
+                            {assistantConfig.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                            {assistantConfig.description}
+                          </p>
+                        </CardContent>
+                      </Card>
                     </div>
+
+                    {/* Requirements checklist */}
+                    <div className="space-y-3">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        Requisiti di fase
+                      </p>
+                      <div className="space-y-2">
+                        {assistantConfig.requirements.map((req) => (
+                          <div
+                            key={req.id}
+                            className={cn(
+                              "flex items-center gap-3 rounded-lg border p-3 transition-colors",
+                              req.checked
+                                ? "bg-primary/5 border-primary/20"
+                                : "border-border",
+                            )}
+                          >
+                            {req.checked ? (
+                              <CheckCircle2
+                                size={18}
+                                className="text-primary shrink-0"
+                              />
+                            ) : (
+                              <Circle
+                                size={18}
+                                className="text-muted-foreground shrink-0"
+                              />
+                            )}
+                            <span
+                              className={cn(
+                                "text-sm",
+                                req.checked
+                                  ? "font-semibold"
+                                  : "text-muted-foreground",
+                              )}
+                            >
+                              {req.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Warning / Info alert */}
+                    {assistantConfig.warning && (
+                      <div
+                        className={cn(
+                          "flex gap-3 rounded-lg border p-4 text-sm",
+                          assistantConfig.warning.type === "warning"
+                            ? "bg-yellow-50 text-yellow-900 border-yellow-200"
+                            : "bg-blue-50 text-blue-900 border-blue-200",
+                        )}
+                      >
+                        {assistantConfig.warning.type === "warning" ? (
+                          <AlertTriangle
+                            size={18}
+                            className="text-yellow-600 shrink-0 mt-0.5"
+                          />
+                        ) : (
+                          <Info
+                            size={18}
+                            className="text-blue-600 shrink-0 mt-0.5"
+                          />
+                        )}
+                        <div className="space-y-1">
+                          <p className="font-semibold">
+                            {assistantConfig.warning.title}
+                          </p>
+                          <p className="leading-relaxed">
+                            {assistantConfig.warning.message}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Footer actions */}
+                  <div className="border-t pt-4 mt-4 space-y-3">
+                    <Button
+                      disabled={!allRequirementsMet}
+                      className="w-full gap-2"
+                    >
+                      <CheckCircle2 size={14} />
+                      {assistantConfig.proceedLabel}
+                    </Button>
+                    <div className="flex gap-3">
+                      <Button variant="destructive" className="flex-1">
+                        Manda in KO
+                      </Button>
+                      <Button variant="outline" className="flex-1">
+                        Segnala errore
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            )}
+          </div>
+        }
+      />
+
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          {viewConfig.availableTabs.map((tabKey) => (
+            <TabsTrigger key={tabKey} value={tabKey}>
+              {TAB_LABELS[tabKey] || tabKey}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {viewConfig.availableTabs.map((tabKey) => {
+          const ViewComponent = VIEW_COMPONENTS[tabKey] || PlaceholderView;
+          return (
+            <TabsContent key={tabKey} value={tabKey}>
+              <Suspense
+                fallback={
+                  <div className="py-8 text-center text-muted-foreground">
+                    Caricamento...
+                  </div>
                 }
-            />
-
-
-            {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
-                    {viewConfig.availableTabs.map((tabKey) => (
-                        <TabsTrigger key={tabKey} value={tabKey}>
-                            {TAB_LABELS[tabKey] || tabKey}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-
-                {
-                    viewConfig.availableTabs.map((tabKey) => {
-                        const ViewComponent = VIEW_COMPONENTS[tabKey] || PlaceholderView;
-                        return (
-                            <TabsContent key={tabKey} value={tabKey}>
-                                <Suspense fallback={<div className="py-8 text-center text-muted-foreground">Caricamento...</div>}>
-                                    <ViewComponent tabKey={tabKey} project={project} />
-                                </Suspense>
-                            </TabsContent>
-                        );
-                    })
-                }
-            </Tabs >
-        </>
-    );
+              >
+                <ViewComponent
+                  tabKey={tabKey}
+                  project={project}
+                  activeApp={activeApp}
+                />
+              </Suspense>
+            </TabsContent>
+          );
+        })}
+      </Tabs>
+    </>
+  );
 }

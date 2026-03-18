@@ -200,7 +200,7 @@ function DocumentNoteSheet({ doc }) {
   );
 }
 
-export default function DocumentsView() {
+export default function DocumentsView({ activeApp }) {
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState(null);
 

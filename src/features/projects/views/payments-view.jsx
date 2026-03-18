@@ -62,7 +62,7 @@ const COMMON_ROLES = [
   },
 ];
 
-export default function PaymentsView() {
+export default function PaymentsView({ activeApp }) {
   const { id } = useParams();
   const { user } = useAppContext();
 
